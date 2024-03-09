@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrganizacaoFinanceira.Objetos
 {
-    internal class LancamentoRecorrente
+    public class LancamentoRecorrente
     {
         public int chave {  get; set; }
         public int chaveCategoria { get; set; }

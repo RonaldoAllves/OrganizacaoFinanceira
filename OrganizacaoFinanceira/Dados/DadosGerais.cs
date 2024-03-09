@@ -1,0 +1,35 @@
+﻿using FireSharp;
+using FireSharp.Config;
+using FireSharp.Interfaces;
+using FireSharp.Response;
+using OrganizacaoFinanceira.Objetos;
+using OrganizacaoFinanceira.Recursos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OrganizacaoFinanceira.Dados
+{
+    public static class DadosGerais
+    {
+        public static IFirebaseConfig config = new FirebaseConfig
+        {
+            AuthSecret = "WIjBhJwJ5rlUBzzPRFEkvY3Ib35hKZpbWHkTqO9n",
+            BasePath = "https://organizacaofinanceira-9160c-default-rtdb.firebaseio.com/"
+        };
+
+        public static IFirebaseClient client;
+
+        public static SortableBindingList<ContaBanco> contas;
+        public static SortableBindingList<Saida> saidas;
+        public static SortableBindingList<Entrada> entradas;
+        public static SortableBindingList<Categoria> categorias;
+        public static SortableBindingList<Mes> meses;
+        public static SortableBindingList<LancamentoRecorrente> lancamentosRecorrentes;
+        public static List<MesFuturo> mesesFuturos;
+
+        
+    }
+}

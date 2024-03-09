@@ -107,6 +107,7 @@
             radioButton1 = new RadioButton();
             rbtFiltroSaidaLancRecorrente = new RadioButton();
             panelLancRecorrente = new Panel();
+            chkLancObrigatorio = new CheckBox();
             tbxIdLancRecorrente = new TextBox();
             groupBox3 = new GroupBox();
             rbtEntradaLancRecorrente = new RadioButton();
@@ -126,7 +127,11 @@
             groupBox4 = new GroupBox();
             rbtMedia = new RadioButton();
             rbtLancamentoFuturo = new RadioButton();
-            chkLancObrigatorio = new CheckBox();
+            menu = new MenuStrip();
+            lançamentosToolStripMenuItem = new ToolStripMenuItem();
+            categoriasToolStripMenuItem = new ToolStripMenuItem();
+            mesesFuturoToolStripMenuItem = new ToolStripMenuItem();
+            geralToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dgvContas).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvLancamentos).BeginInit();
             groupBox1.SuspendLayout();
@@ -141,6 +146,7 @@
             groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).BeginInit();
             groupBox4.SuspendLayout();
+            menu.SuspendLayout();
             SuspendLayout();
             // 
             // dgvContas
@@ -148,7 +154,7 @@
             dgvContas.BackgroundColor = SystemColors.ControlLightLight;
             dgvContas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvContas.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvContas.Location = new Point(12, 67);
+            dgvContas.Location = new Point(12, 101);
             dgvContas.MultiSelect = false;
             dgvContas.Name = "dgvContas";
             dgvContas.RowHeadersWidth = 51;
@@ -161,7 +167,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(65, 17);
+            label1.Location = new Point(65, 51);
             label1.Name = "label1";
             label1.Size = new Size(40, 15);
             label1.TabIndex = 1;
@@ -169,14 +175,14 @@
             // 
             // txBanco
             // 
-            txBanco.Location = new Point(65, 35);
+            txBanco.Location = new Point(65, 69);
             txBanco.Name = "txBanco";
             txBanco.Size = new Size(100, 23);
             txBanco.TabIndex = 2;
             // 
             // txUsuario
             // 
-            txUsuario.Location = new Point(171, 35);
+            txUsuario.Location = new Point(171, 69);
             txUsuario.Name = "txUsuario";
             txUsuario.Size = new Size(100, 23);
             txUsuario.TabIndex = 4;
@@ -184,7 +190,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(171, 17);
+            label2.Location = new Point(171, 51);
             label2.Name = "label2";
             label2.Size = new Size(47, 15);
             label2.TabIndex = 3;
@@ -192,7 +198,7 @@
             // 
             // txDataFechamento
             // 
-            txDataFechamento.Location = new Point(277, 35);
+            txDataFechamento.Location = new Point(277, 69);
             txDataFechamento.Name = "txDataFechamento";
             txDataFechamento.Size = new Size(100, 23);
             txDataFechamento.TabIndex = 6;
@@ -200,7 +206,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(277, 17);
+            label3.Location = new Point(277, 51);
             label3.Name = "label3";
             label3.Size = new Size(98, 15);
             label3.TabIndex = 5;
@@ -208,7 +214,7 @@
             // 
             // txValorInicial
             // 
-            txValorInicial.Location = new Point(383, 35);
+            txValorInicial.Location = new Point(383, 69);
             txValorInicial.Name = "txValorInicial";
             txValorInicial.Size = new Size(100, 23);
             txValorInicial.TabIndex = 8;
@@ -216,7 +222,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(383, 17);
+            label4.Location = new Point(383, 51);
             label4.Name = "label4";
             label4.Size = new Size(67, 15);
             label4.TabIndex = 7;
@@ -224,7 +230,7 @@
             // 
             // btnSalvar
             // 
-            btnSalvar.Location = new Point(506, 35);
+            btnSalvar.Location = new Point(506, 69);
             btnSalvar.Name = "btnSalvar";
             btnSalvar.Size = new Size(75, 23);
             btnSalvar.TabIndex = 9;
@@ -236,7 +242,7 @@
             // 
             dgvLancamentos.BackgroundColor = SystemColors.ControlLightLight;
             dgvLancamentos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvLancamentos.Location = new Point(683, 67);
+            dgvLancamentos.Location = new Point(683, 101);
             dgvLancamentos.Name = "dgvLancamentos";
             dgvLancamentos.RowHeadersWidth = 51;
             dgvLancamentos.RowTemplate.Height = 25;
@@ -250,7 +256,7 @@
             // dtpMesReferencia
             // 
             dtpMesReferencia.Format = DateTimePickerFormat.Custom;
-            dtpMesReferencia.Location = new Point(925, 32);
+            dtpMesReferencia.Location = new Point(925, 66);
             dtpMesReferencia.Name = "dtpMesReferencia";
             dtpMesReferencia.Size = new Size(104, 23);
             dtpMesReferencia.TabIndex = 11;
@@ -258,7 +264,7 @@
             // 
             // tbxTotalLancamento
             // 
-            tbxTotalLancamento.Location = new Point(1040, 32);
+            tbxTotalLancamento.Location = new Point(1040, 66);
             tbxTotalLancamento.Name = "tbxTotalLancamento";
             tbxTotalLancamento.Size = new Size(120, 23);
             tbxTotalLancamento.TabIndex = 12;
@@ -266,7 +272,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(1040, 14);
+            label5.Location = new Point(1040, 48);
             label5.Name = "label5";
             label5.Size = new Size(98, 15);
             label5.TabIndex = 13;
@@ -275,7 +281,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(921, 14);
+            label6.Location = new Point(921, 48);
             label6.Name = "label6";
             label6.Size = new Size(100, 15);
             label6.TabIndex = 14;
@@ -297,7 +303,7 @@
             // 
             groupBox1.Controls.Add(radioButton2);
             groupBox1.Controls.Add(rbtSaidas);
-            groupBox1.Location = new Point(761, 14);
+            groupBox1.Location = new Point(761, 48);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(158, 48);
             groupBox1.TabIndex = 16;
@@ -528,7 +534,7 @@
             // tbxChaveConta
             // 
             tbxChaveConta.Enabled = false;
-            tbxChaveConta.Location = new Point(12, 35);
+            tbxChaveConta.Location = new Point(12, 69);
             tbxChaveConta.Name = "tbxChaveConta";
             tbxChaveConta.Size = new Size(47, 23);
             tbxChaveConta.TabIndex = 42;
@@ -536,7 +542,7 @@
             // label18
             // 
             label18.AutoSize = true;
-            label18.Location = new Point(12, 18);
+            label18.Location = new Point(12, 52);
             label18.Name = "label18";
             label18.Size = new Size(18, 15);
             label18.TabIndex = 41;
@@ -563,7 +569,7 @@
             // chxCredito
             // 
             chxCredito.AutoSize = true;
-            chxCredito.Location = new Point(1199, 35);
+            chxCredito.Location = new Point(1199, 69);
             chxCredito.Name = "chxCredito";
             chxCredito.Size = new Size(65, 19);
             chxCredito.TabIndex = 45;
@@ -574,7 +580,7 @@
             // chxDinheiro
             // 
             chxDinheiro.AutoSize = true;
-            chxDinheiro.Location = new Point(1270, 35);
+            chxDinheiro.Location = new Point(1270, 69);
             chxDinheiro.Name = "chxDinheiro";
             chxDinheiro.Size = new Size(71, 19);
             chxDinheiro.TabIndex = 46;
@@ -617,7 +623,7 @@
             panelLancamento.Controls.Add(cbxContas);
             panelLancamento.Controls.Add(dtpMesReferenciaLancamento);
             panelLancamento.Controls.Add(label15);
-            panelLancamento.Location = new Point(798, 126);
+            panelLancamento.Location = new Point(798, 160);
             panelLancamento.Name = "panelLancamento";
             panelLancamento.Size = new Size(543, 303);
             panelLancamento.TabIndex = 48;
@@ -645,7 +651,7 @@
             // 
             // btnNovoLancamento
             // 
-            btnNovoLancamento.Location = new Point(1445, 34);
+            btnNovoLancamento.Location = new Point(1445, 68);
             btnNovoLancamento.Margin = new Padding(3, 2, 3, 2);
             btnNovoLancamento.Name = "btnNovoLancamento";
             btnNovoLancamento.Size = new Size(82, 22);
@@ -657,7 +663,7 @@
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new Point(1037, 271);
+            label20.Location = new Point(1037, 305);
             label20.Name = "label20";
             label20.Size = new Size(100, 15);
             label20.TabIndex = 51;
@@ -666,7 +672,7 @@
             // dtpMesCategoria
             // 
             dtpMesCategoria.Format = DateTimePickerFormat.Custom;
-            dtpMesCategoria.Location = new Point(1040, 289);
+            dtpMesCategoria.Location = new Point(1040, 323);
             dtpMesCategoria.Name = "dtpMesCategoria";
             dtpMesCategoria.Size = new Size(104, 23);
             dtpMesCategoria.TabIndex = 50;
@@ -677,7 +683,7 @@
             dgvCategorias.BackgroundColor = SystemColors.ControlLightLight;
             dgvCategorias.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvCategorias.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvCategorias.Location = new Point(12, 317);
+            dgvCategorias.Location = new Point(12, 351);
             dgvCategorias.MultiSelect = false;
             dgvCategorias.Name = "dgvCategorias";
             dgvCategorias.RowHeadersWidth = 51;
@@ -690,7 +696,7 @@
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(61, 273);
+            label21.Location = new Point(61, 307);
             label21.Name = "label21";
             label21.Size = new Size(58, 15);
             label21.TabIndex = 53;
@@ -698,7 +704,7 @@
             // 
             // tbxDescCategoria
             // 
-            tbxDescCategoria.Location = new Point(65, 290);
+            tbxDescCategoria.Location = new Point(65, 324);
             tbxDescCategoria.Margin = new Padding(3, 2, 3, 2);
             tbxDescCategoria.Name = "tbxDescCategoria";
             tbxDescCategoria.Size = new Size(153, 23);
@@ -706,7 +712,7 @@
             // 
             // tbxVerbaPadraoCat
             // 
-            tbxVerbaPadraoCat.Location = new Point(222, 290);
+            tbxVerbaPadraoCat.Location = new Point(222, 324);
             tbxVerbaPadraoCat.Margin = new Padding(3, 2, 3, 2);
             tbxVerbaPadraoCat.Name = "tbxVerbaPadraoCat";
             tbxVerbaPadraoCat.Size = new Size(131, 23);
@@ -715,7 +721,7 @@
             // label22
             // 
             label22.AutoSize = true;
-            label22.Location = new Point(219, 273);
+            label22.Location = new Point(219, 307);
             label22.Name = "label22";
             label22.Size = new Size(76, 15);
             label22.TabIndex = 55;
@@ -723,7 +729,7 @@
             // 
             // tbxVerbaMesCategoria
             // 
-            tbxVerbaMesCategoria.Location = new Point(736, 290);
+            tbxVerbaMesCategoria.Location = new Point(736, 324);
             tbxVerbaMesCategoria.Margin = new Padding(3, 2, 3, 2);
             tbxVerbaMesCategoria.Name = "tbxVerbaMesCategoria";
             tbxVerbaMesCategoria.Size = new Size(76, 23);
@@ -732,7 +738,7 @@
             // label23
             // 
             label23.AutoSize = true;
-            label23.Location = new Point(733, 273);
+            label23.Location = new Point(733, 307);
             label23.Name = "label23";
             label23.Size = new Size(61, 15);
             label23.TabIndex = 57;
@@ -740,7 +746,7 @@
             // 
             // btnSalvarCategoria
             // 
-            btnSalvarCategoria.Location = new Point(359, 291);
+            btnSalvarCategoria.Location = new Point(359, 325);
             btnSalvarCategoria.Name = "btnSalvarCategoria";
             btnSalvarCategoria.Size = new Size(75, 23);
             btnSalvarCategoria.TabIndex = 59;
@@ -750,7 +756,7 @@
             // 
             // btnCriarMes
             // 
-            btnCriarMes.Location = new Point(817, 290);
+            btnCriarMes.Location = new Point(817, 324);
             btnCriarMes.Margin = new Padding(3, 2, 3, 2);
             btnCriarMes.Name = "btnCriarMes";
             btnCriarMes.Size = new Size(102, 22);
@@ -764,7 +770,7 @@
             dgvMeses.BackgroundColor = SystemColors.ControlLightLight;
             dgvMeses.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMeses.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvMeses.Location = new Point(683, 317);
+            dgvMeses.Location = new Point(683, 351);
             dgvMeses.MultiSelect = false;
             dgvMeses.Name = "dgvMeses";
             dgvMeses.RowHeadersWidth = 51;
@@ -777,7 +783,7 @@
             // tbxIdCategoria
             // 
             tbxIdCategoria.Enabled = false;
-            tbxIdCategoria.Location = new Point(12, 290);
+            tbxIdCategoria.Location = new Point(12, 324);
             tbxIdCategoria.Name = "tbxIdCategoria";
             tbxIdCategoria.Size = new Size(47, 23);
             tbxIdCategoria.TabIndex = 63;
@@ -785,7 +791,7 @@
             // label24
             // 
             label24.AutoSize = true;
-            label24.Location = new Point(12, 273);
+            label24.Location = new Point(12, 307);
             label24.Name = "label24";
             label24.Size = new Size(18, 15);
             label24.TabIndex = 62;
@@ -793,7 +799,7 @@
             // 
             // btnNovaConta
             // 
-            btnNovaConta.Location = new Point(587, 35);
+            btnNovaConta.Location = new Point(587, 69);
             btnNovaConta.Name = "btnNovaConta";
             btnNovaConta.Size = new Size(75, 23);
             btnNovaConta.TabIndex = 64;
@@ -803,7 +809,7 @@
             // 
             // btnNovaCategoria
             // 
-            btnNovaCategoria.Location = new Point(440, 290);
+            btnNovaCategoria.Location = new Point(440, 324);
             btnNovaCategoria.Name = "btnNovaCategoria";
             btnNovaCategoria.Size = new Size(75, 23);
             btnNovaCategoria.TabIndex = 65;
@@ -814,7 +820,7 @@
             // tbxIdMes
             // 
             tbxIdMes.Enabled = false;
-            tbxIdMes.Location = new Point(683, 290);
+            tbxIdMes.Location = new Point(683, 324);
             tbxIdMes.Name = "tbxIdMes";
             tbxIdMes.Size = new Size(47, 23);
             tbxIdMes.TabIndex = 67;
@@ -822,7 +828,7 @@
             // label25
             // 
             label25.AutoSize = true;
-            label25.Location = new Point(683, 273);
+            label25.Location = new Point(683, 307);
             label25.Name = "label25";
             label25.Size = new Size(18, 15);
             label25.TabIndex = 66;
@@ -830,7 +836,7 @@
             // 
             // btnLimparMes
             // 
-            btnLimparMes.Location = new Point(925, 290);
+            btnLimparMes.Location = new Point(925, 324);
             btnLimparMes.Name = "btnLimparMes";
             btnLimparMes.Size = new Size(75, 22);
             btnLimparMes.TabIndex = 68;
@@ -841,7 +847,7 @@
             // chxTodosMeses
             // 
             chxTodosMeses.AutoSize = true;
-            chxTodosMeses.Location = new Point(1199, 291);
+            chxTodosMeses.Location = new Point(1199, 325);
             chxTodosMeses.Margin = new Padding(3, 2, 3, 2);
             chxTodosMeses.Name = "chxTodosMeses";
             chxTodosMeses.Size = new Size(93, 19);
@@ -852,7 +858,7 @@
             // 
             // btnNovoLancRecorrente
             // 
-            btnNovoLancRecorrente.Location = new Point(587, 533);
+            btnNovoLancRecorrente.Location = new Point(587, 567);
             btnNovoLancRecorrente.Name = "btnNovoLancRecorrente";
             btnNovoLancRecorrente.Size = new Size(75, 23);
             btnNovoLancRecorrente.TabIndex = 78;
@@ -865,7 +871,7 @@
             dgvLancamentosRecorrentes.BackgroundColor = SystemColors.ControlLightLight;
             dgvLancamentosRecorrentes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvLancamentosRecorrentes.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvLancamentosRecorrentes.Location = new Point(12, 562);
+            dgvLancamentosRecorrentes.Location = new Point(12, 596);
             dgvLancamentosRecorrentes.MultiSelect = false;
             dgvLancamentosRecorrentes.Name = "dgvLancamentosRecorrentes";
             dgvLancamentosRecorrentes.RowHeadersWidth = 51;
@@ -880,7 +886,7 @@
             // 
             groupBox2.Controls.Add(radioButton1);
             groupBox2.Controls.Add(rbtFiltroSaidaLancRecorrente);
-            groupBox2.Location = new Point(12, 515);
+            groupBox2.Location = new Point(12, 549);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(259, 42);
             groupBox2.TabIndex = 80;
@@ -926,11 +932,21 @@
             panelLancRecorrente.Controls.Add(label31);
             panelLancRecorrente.Controls.Add(cbxCategoriaLancRecorrente);
             panelLancRecorrente.Controls.Add(label37);
-            panelLancRecorrente.Location = new Point(125, 122);
+            panelLancRecorrente.Location = new Point(125, 156);
             panelLancRecorrente.Name = "panelLancRecorrente";
             panelLancRecorrente.Size = new Size(454, 233);
             panelLancRecorrente.TabIndex = 49;
             panelLancRecorrente.Visible = false;
+            // 
+            // chkLancObrigatorio
+            // 
+            chkLancObrigatorio.AutoSize = true;
+            chkLancObrigatorio.Location = new Point(30, 154);
+            chkLancObrigatorio.Name = "chkLancObrigatorio";
+            chkLancObrigatorio.Size = new Size(87, 19);
+            chkLancObrigatorio.TabIndex = 83;
+            chkLancObrigatorio.Text = "Obrigatório";
+            chkLancObrigatorio.UseVisualStyleBackColor = true;
             // 
             // tbxIdLancRecorrente
             // 
@@ -1076,7 +1092,7 @@
             dgvMesesFuturos.BackgroundColor = SystemColors.ControlLightLight;
             dgvMesesFuturos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMesesFuturos.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvMesesFuturos.Location = new Point(683, 562);
+            dgvMesesFuturos.Location = new Point(683, 596);
             dgvMesesFuturos.MultiSelect = false;
             dgvMesesFuturos.Name = "dgvMesesFuturos";
             dgvMesesFuturos.RowHeadersWidth = 51;
@@ -1088,7 +1104,7 @@
             // 
             groupBox4.Controls.Add(rbtMedia);
             groupBox4.Controls.Add(rbtLancamentoFuturo);
-            groupBox4.Location = new Point(683, 509);
+            groupBox4.Location = new Point(683, 543);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(236, 48);
             groupBox4.TabIndex = 84;
@@ -1117,15 +1133,39 @@
             rbtLancamentoFuturo.Text = "Lançamentos recorrentes";
             rbtLancamentoFuturo.UseVisualStyleBackColor = true;
             // 
-            // chkLancObrigatorio
+            // menu
             // 
-            chkLancObrigatorio.AutoSize = true;
-            chkLancObrigatorio.Location = new Point(30, 154);
-            chkLancObrigatorio.Name = "chkLancObrigatorio";
-            chkLancObrigatorio.Size = new Size(87, 19);
-            chkLancObrigatorio.TabIndex = 83;
-            chkLancObrigatorio.Text = "Obrigatório";
-            chkLancObrigatorio.UseVisualStyleBackColor = true;
+            menu.Items.AddRange(new ToolStripItem[] { lançamentosToolStripMenuItem, categoriasToolStripMenuItem, mesesFuturoToolStripMenuItem, geralToolStripMenuItem });
+            menu.Location = new Point(0, 0);
+            menu.Name = "menu";
+            menu.Size = new Size(1537, 24);
+            menu.TabIndex = 85;
+            menu.Text = "menuStrip1";
+            // 
+            // lançamentosToolStripMenuItem
+            // 
+            lançamentosToolStripMenuItem.Name = "lançamentosToolStripMenuItem";
+            lançamentosToolStripMenuItem.Size = new Size(90, 20);
+            lançamentosToolStripMenuItem.Text = "Lançamentos";
+            // 
+            // categoriasToolStripMenuItem
+            // 
+            categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
+            categoriasToolStripMenuItem.Size = new Size(75, 20);
+            categoriasToolStripMenuItem.Text = "Categorias";
+            // 
+            // mesesFuturoToolStripMenuItem
+            // 
+            mesesFuturoToolStripMenuItem.Name = "mesesFuturoToolStripMenuItem";
+            mesesFuturoToolStripMenuItem.Size = new Size(88, 20);
+            mesesFuturoToolStripMenuItem.Text = "Meses futuro";
+            // 
+            // geralToolStripMenuItem
+            // 
+            geralToolStripMenuItem.Name = "geralToolStripMenuItem";
+            geralToolStripMenuItem.Size = new Size(46, 20);
+            geralToolStripMenuItem.Text = "Geral";
+            geralToolStripMenuItem.Click += geralToolStripMenuItem_Click;
             // 
             // TelaPrincipal
             // 
@@ -1180,6 +1220,8 @@
             Controls.Add(txBanco);
             Controls.Add(label1);
             Controls.Add(dgvContas);
+            Controls.Add(menu);
+            MainMenuStrip = menu;
             Name = "TelaPrincipal";
             Text = "TelaPrincipal";
             Load += TelaPrincipal_Load;
@@ -1205,6 +1247,8 @@
             ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).EndInit();
             groupBox4.ResumeLayout(false);
             groupBox4.PerformLayout();
+            menu.ResumeLayout(false);
+            menu.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1313,5 +1357,10 @@
         private RadioButton rbtLancamentoFuturo;
         private TextBox tbxNumParcela;
         private CheckBox chkLancObrigatorio;
+        private MenuStrip menu;
+        private ToolStripMenuItem lançamentosToolStripMenuItem;
+        private ToolStripMenuItem categoriasToolStripMenuItem;
+        private ToolStripMenuItem mesesFuturoToolStripMenuItem;
+        private ToolStripMenuItem geralToolStripMenuItem;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using OrganizacaoFinanceira.Objetos;
 using OrganizacaoFinanceira.Recursos;
+using OrganizacaoFinanceira.Dados;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,15 +24,8 @@ using System.Reflection;
 namespace OrganizacaoFinanceira
 {
     public partial class TelaPrincipal : Form
-    {
-        IFirebaseConfig config = new FirebaseConfig
-        {
-            AuthSecret = "WIjBhJwJ5rlUBzzPRFEkvY3Ib35hKZpbWHkTqO9n",
-            BasePath = "https://organizacaofinanceira-9160c-default-rtdb.firebaseio.com/"
-        };
-
-        IFirebaseClient client;
-
+    {       
+        CRUD CRUD = new CRUD();
         string mensagemValorAtualConta = "";
 
         BindingSource bindingSourceContas = new BindingSource();
@@ -40,15 +34,7 @@ namespace OrganizacaoFinanceira
         BindingSource bindingSourceCategorias = new BindingSource();
         BindingSource bindingSourceMeses = new BindingSource();
         BindingSource bindingSourceLancRecorrentes = new BindingSource();
-        BindingSource bindingSourceMesesFuturos = new BindingSource();
-
-        SortableBindingList<ContaBanco> contas;
-        SortableBindingList<Saida> saidas;
-        SortableBindingList<Entrada> entradas;
-        SortableBindingList<Categoria> categorias;
-        SortableBindingList<Mes> meses;
-        SortableBindingList<LancamentoRecorrente> lancamentosRecorrentes;
-        List<MesFuturo> mesesFuturos;
+        BindingSource bindingSourceMesesFuturos = new BindingSource();        
 
         ContaBanco contaSelecionada;
         Saida saidaSelecionada;
@@ -65,6 +51,8 @@ namespace OrganizacaoFinanceira
 
         public TelaPrincipal()
         {
+            
+
             InitializeComponent();
 
             this.WindowState = FormWindowState.Maximized;
@@ -76,20 +64,15 @@ namespace OrganizacaoFinanceira
 
         private async void TelaPrincipal_Load(object sender, EventArgs e)
         {
-            client = new FirebaseClient(config);
-            if (client == null)
-            {
-                MessageBox.Show("Falha de conexão com o servidor!");
-                return;
-            }
+            this.Enabled = false;
 
+            await CRUD.BuscarTodosDados();
             InicializarDatas();
-
-            await BuscarTodosDados();
-
             InicializarContas();
             InicializarCategorias();
             InicializarLancamentosRecorrentes();
+
+            this.Enabled = true;
         }
 
         private void InicializarDatas()
@@ -102,17 +85,7 @@ namespace OrganizacaoFinanceira
 
             dtpMesCategoria.CustomFormat = "MM/yyyy";
             dtpMesCategoria.ShowUpDown = true;
-        }
-
-        private async Task BuscarTodosDados()
-        {
-            contas = await BuscarContas();
-            saidas = await BuscarSaidas();
-            entradas = await BuscarEntradas();
-            meses = await BuscarMeses();
-            categorias = await BuscarCategorias();
-            lancamentosRecorrentes = await BuscarLancamentosRecorrentes();
-        }
+        }        
 
         private void TelaPrincipal_Resize(object sender, EventArgs e)
         {
@@ -131,10 +104,10 @@ namespace OrganizacaoFinanceira
         {
             List<Task<SetResponse>> tasks = new List<Task<SetResponse>>();
 
-            foreach (Saida saida in saidas)
+            foreach (Saida saida in DadosGerais.saidas)
             {
                 // Inicie a tarefa e adicione à lista de tarefas
-                Task<SetResponse> task = client.SetTaskAsync("Saidas/chave-" + saida.chave, saida);
+                Task<SetResponse> task = DadosGerais.client.SetTaskAsync("Saidas/chave-" + saida.chave, saida);
                 tasks.Add(task);
             }
 
@@ -142,7 +115,7 @@ namespace OrganizacaoFinanceira
             await Task.WhenAll(tasks);
 
             MessageBox.Show("Atualização concluída");
-            saidas = await BuscarSaidas();
+            DadosGerais.saidas = await CRUD.BuscarSaidas();
         }
 
         #endregion
@@ -155,7 +128,7 @@ namespace OrganizacaoFinanceira
             funcoesGrid.ConfigurarGrid(dgvContas, bindingSourceContas, funcoesGrid.ColunasGridContas(), false);
             dgvContas.Columns[3].ToolTipText = mensagemValorAtualConta;
 
-            bindingSourceContas.DataSource = contas;
+            bindingSourceContas.DataSource = DadosGerais.contas;
 
             if (dgvContas.Rows.Count > 0)
             {
@@ -172,12 +145,12 @@ namespace OrganizacaoFinanceira
             double saidasConta;
             double entradasConta;
             double creditoMesAtual;
-            foreach (ContaBanco conta in contas)
+            foreach (ContaBanco conta in DadosGerais.contas)
             {
-                saidasConta = saidas.Where(x => x.chaveConta == conta.chave && DataMenorIgual(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valorParcela);
-                entradasConta = entradas.Where(x => x.chaveConta == conta.chave).Sum(x => x.valor);
+                saidasConta = DadosGerais.saidas.Where(x => x.chaveConta == conta.chave && DataMenorIgual(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valorParcela);
+                entradasConta = DadosGerais.entradas.Where(x => x.chaveConta == conta.chave).Sum(x => x.valor);
 
-                creditoMesAtual = saidas.Where(x => x.chaveConta == conta.chave && x.tipoSaida == 0 && DatasIguais(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valorParcela);
+                creditoMesAtual = DadosGerais.saidas.Where(x => x.chaveConta == conta.chave && x.tipoSaida == 0 && DatasIguais(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valorParcela);
                 saidasConta -= creditoMesAtual;
 
                 conta.valorAtual = conta.valorInicial - saidasConta + entradasConta;
@@ -202,28 +175,7 @@ namespace OrganizacaoFinanceira
             return data1SemDia == data2SemDia;
         }
 
-        private async Task<SortableBindingList<ContaBanco>> BuscarContas()
-        {
-            try
-            {
-                List<ContaBanco> contasAux;
-                Dictionary<string, ContaBanco> chavesContas;
-
-                FirebaseResponse firebaseResponse = await client.GetTaskAsync("Contas");
-                if (firebaseResponse.Body == "null") return new SortableBindingList<ContaBanco>();
-
-                chavesContas = firebaseResponse.ResultAs<Dictionary<string, ContaBanco>>();
-                contasAux = chavesContas.Select(x => x.Value).ToList();
-
-                return new SortableBindingList<ContaBanco>(contasAux);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao buscar as contas.\n\n" + ex.Message);
-                return new SortableBindingList<ContaBanco>(); ;
-            }
-
-        }
+        
 
         private void btnNovaConta_Click(object sender, EventArgs e)
         {
@@ -250,14 +202,14 @@ namespace OrganizacaoFinanceira
                     // Se o usuário confirmar a exclusão, exclua a conta
                     if (result == DialogResult.Yes)
                     {
-                        if (saidas.Where(x => x.chaveConta == contaSelecionada.chave).Count() > 0 || entradas.Where(x => x.chaveConta == contaSelecionada.chave).Count() > 0)
+                        if (DadosGerais.saidas.Where(x => x.chaveConta == contaSelecionada.chave).Count() > 0 || DadosGerais.entradas.Where(x => x.chaveConta == contaSelecionada.chave).Count() > 0)
                         {
                             MessageBox.Show("Para excluir a conta deve excluir todas as entradas e saídas vinculadas");
                             return;
                         }
 
                         // Realiza a operação de exclusão no banco de dados Firebase
-                        FirebaseResponse response = await client.DeleteTaskAsync("Contas/" + "chave-" + contaSelecionada.chave);
+                        FirebaseResponse response = await DadosGerais.client.DeleteTaskAsync("Contas/" + "chave-" + contaSelecionada.chave);
 
                         // Verifica se a exclusão foi bem-sucedida
                         if (response.Exception == null)
@@ -265,8 +217,8 @@ namespace OrganizacaoFinanceira
                             MessageBox.Show("Conta excluída com sucesso.");
 
                             // Atualiza a lista de contas exibida na interface
-                            contas = await BuscarContas();
-                            bindingSourceContas.DataSource = contas;
+                            DadosGerais.contas = await CRUD.BuscarContas();
+                            bindingSourceContas.DataSource = DadosGerais.contas;
                             PreencherComboBoxContas();
                         }
                         else
@@ -290,17 +242,17 @@ namespace OrganizacaoFinanceira
 
             if (tbxChaveConta.Text.Trim() == "")
             {
-                if (contas != null && contas.Count > 0)
-                    conta.chave = contas.Max(x => x.chave) + 1;
+                if (DadosGerais.contas != null && DadosGerais.contas.Count > 0)
+                    conta.chave = DadosGerais.contas.Max(x => x.chave) + 1;
                 else
                     conta.chave = 1;
             }
             else
                 conta.chave = Convert.ToInt32(tbxChaveConta.Text);
 
-            if (contas.Any(x => x.chave == conta.chave))
+            if (DadosGerais.contas.Any(x => x.chave == conta.chave))
             {
-                ContaBanco contaOld = contas.FirstOrDefault(x => x.chave == conta.chave);
+                ContaBanco contaOld = DadosGerais.contas.FirstOrDefault(x => x.chave == conta.chave);
                 conta.dataCriacao = contaOld.dataCriacao;
                 conta.dataAlteracao = DateTime.Now;
             }
@@ -310,14 +262,14 @@ namespace OrganizacaoFinanceira
                 conta.dataAlteracao = DateTime.Now;
             }
 
-            SetResponse response = await client.SetTaskAsync("Contas/" + "chave-" + conta.chave, conta);
+            SetResponse response = await DadosGerais.client.SetTaskAsync("Contas/" + "chave-" + conta.chave, conta);
 
             ContaBanco result = response.ResultAs<ContaBanco>();
 
             MessageBox.Show("Conta gravada. " + result.chave);
 
-            contas = await BuscarContas();
-            bindingSourceContas.DataSource = contas;
+            DadosGerais.contas = await CRUD.BuscarContas();
+            bindingSourceContas.DataSource = DadosGerais.contas;
             PreencherComboBoxContas();
 
             LimparConta();
@@ -457,7 +409,7 @@ namespace OrganizacaoFinanceira
             {
                 funcoesGrid.ConfigurarGrid(dgvLancamentos, bindingSourceEntradas, funcoesGrid.ColunasGridEntradas(), false);
 
-                if (entradas == null) entradas = await BuscarEntradas();
+                if (DadosGerais.entradas == null) DadosGerais.entradas = await CRUD.BuscarEntradas();
 
                 saidasDaConta = null;
                 bindingSourceSaidas.DataSource = saidasDaConta;
@@ -467,13 +419,13 @@ namespace OrganizacaoFinanceira
 
         private void FiltrarSaidas()
         {
-            if (contas == null || contas.Count == 0 || saidas == null) return;
+            if (DadosGerais.contas == null || DadosGerais.contas.Count == 0 || DadosGerais.saidas == null) return;
 
             List<Saida> saidasAux;
 
             if (contaSelecionada != null)
             {
-                saidasAux = saidas.Where(x => x.chaveConta == contaSelecionada.chave && x.mesReferencia.Year == dtpMesReferencia.Value.Year && x.mesReferencia.Month == dtpMesReferencia.Value.Month).ToList();
+                saidasAux = DadosGerais.saidas.Where(x => x.chaveConta == contaSelecionada.chave && x.mesReferencia.Year == dtpMesReferencia.Value.Year && x.mesReferencia.Month == dtpMesReferencia.Value.Month).ToList();
 
                 saidasAux = saidasAux.Where(x => (chxCredito.Checked && x.tipoSaida == 0) ||
                                                 (chxDinheiro.Checked && x.tipoSaida == 1)).ToList();
@@ -490,51 +442,9 @@ namespace OrganizacaoFinanceira
             LimparLancamento();
         }
 
-        private async Task<SortableBindingList<Saida>> BuscarSaidas()
-        {
-            try
-            {
-                List<Saida> saidasAux;
-                Dictionary<string, Saida> chavesSaidas;
+        
 
-                FirebaseResponse firebaseResponse = await client.GetTaskAsync("Saidas");
-                if (firebaseResponse.Body == "null") return new SortableBindingList<Saida>();
-
-                chavesSaidas = firebaseResponse.ResultAs<Dictionary<string, Saida>>();
-                saidasAux = chavesSaidas.Select(x => x.Value).ToList();
-
-                return new SortableBindingList<Saida>(saidasAux);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao buscar as saídas.\n\n" + ex.Message);
-                return new SortableBindingList<Saida>();
-            }
-
-        }
-
-        private async Task<SortableBindingList<Entrada>> BuscarEntradas()
-        {
-            try
-            {
-                List<Entrada> entradasAux;
-                Dictionary<string, Entrada> chavesEntradas;
-
-                FirebaseResponse firebaseResponse = await client.GetTaskAsync("Entradas");
-                if (firebaseResponse.Body == "null") return new SortableBindingList<Entrada>();
-
-                chavesEntradas = firebaseResponse.ResultAs<Dictionary<string, Entrada>>();
-                entradasAux = chavesEntradas.Select(x => x.Value).ToList();
-
-                return new SortableBindingList<Entrada>(entradasAux);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao buscar as entradas.\n\n" + ex.Message);
-                return new SortableBindingList<Entrada>();
-            }
-
-        }
+        
 
 
 
@@ -545,13 +455,13 @@ namespace OrganizacaoFinanceira
 
         private void FiltrarEntradas()
         {
-            if (contas == null || contas.Count == 0 || entradas == null) return;
+            if (DadosGerais.contas == null || DadosGerais.contas.Count == 0 || DadosGerais.entradas == null) return;
 
             List<Entrada> entradaAux;
 
             if (contaSelecionada != null)
             {
-                entradaAux = entradas.Where(x => x.chaveConta == contaSelecionada.chave && x.mesReferencia.Year == dtpMesReferencia.Value.Year && x.mesReferencia.Month == dtpMesReferencia.Value.Month).ToList();
+                entradaAux = DadosGerais.entradas.Where(x => x.chaveConta == contaSelecionada.chave && x.mesReferencia.Year == dtpMesReferencia.Value.Year && x.mesReferencia.Month == dtpMesReferencia.Value.Month).ToList();
 
                 entradasDaConta = new(entradaAux);
             }
@@ -612,14 +522,14 @@ namespace OrganizacaoFinanceira
 
             if (tbxChaveLancamento.Text.Trim() == "")
             {
-                if (saidas != null && saidas.Count > 0)
-                    saida.chave = saidas.Max(x => x.chave) + 1;
+                if (DadosGerais.saidas != null && DadosGerais.saidas.Count > 0)
+                    saida.chave = DadosGerais.saidas.Max(x => x.chave) + 1;
                 else
                     saida.chave = 1;
             }
             else
             {
-                saidaOld = saidas.FirstOrDefault(x => x.chave == Convert.ToInt32(tbxChaveLancamento.Text));
+                saidaOld = DadosGerais.saidas.FirstOrDefault(x => x.chave == Convert.ToInt32(tbxChaveLancamento.Text));
                 saida.chave = saidaOld.chave;
                 saida.dataCadastro = saidaOld.dataCadastro;
             }
@@ -634,7 +544,7 @@ namespace OrganizacaoFinanceira
                 saida.dataAlteracao = DateTime.Now;
             }
 
-            SetResponse response = await client.SetTaskAsync("Saidas/" + "chave-" + saida.chave, saida);
+            SetResponse response = await DadosGerais.client.SetTaskAsync("Saidas/" + "chave-" + saida.chave, saida);
 
             if (response.Exception == null)
             {
@@ -642,7 +552,7 @@ namespace OrganizacaoFinanceira
 
                 MessageBox.Show("Saída gravada. " + saida.chave);
 
-                saidas = await BuscarSaidas();
+                DadosGerais.saidas = await CRUD.BuscarSaidas();
                 FiltrarSaidas();
                 LimparLancamento();
                 AtualizarCategorias();
@@ -670,7 +580,7 @@ namespace OrganizacaoFinanceira
                 parcela.data = (new DateTime(saida.mesReferencia.Year, saida.mesReferencia.Month, 1)).AddMonths(i);
                 parcela.mesReferencia = parcela.data;
 
-                SetResponse response = await client.SetTaskAsync("Saidas/" + chave, parcela);
+                SetResponse response = await DadosGerais.client.SetTaskAsync("Saidas/" + chave, parcela);
             }
         }
 
@@ -685,12 +595,12 @@ namespace OrganizacaoFinanceira
             entrada.descricao = tbxDescricao.Text.Trim();
             entrada.valor = Convert.ToDouble(tbxValor.Text);
             entrada.data = dtpDataLancamento.Value.Date;
-            entrada.chaveCategoria = cbxCategoria.SelectedValue == null? 0 : (int)cbxCategoria.SelectedValue;
+            entrada.chaveCategoria = cbxCategoria.SelectedValue == null ? 0 : (int)cbxCategoria.SelectedValue;
             entrada.mesReferencia = dtpMesReferenciaLancamento.Value;
             entrada.chaveConta = conta.chave;
             entrada.valor = Convert.ToDouble(tbxValor.Text);
 
-            if (entradas != null && entradas.Count > 0 && entradas.Any(x => x.chave == entrada.chave))
+            if (DadosGerais.entradas != null && DadosGerais.entradas.Count > 0 && DadosGerais.entradas.Any(x => x.chave == entrada.chave))
             {
                 entrada.dataAlteracao = DateTime.Now;
             }
@@ -702,18 +612,18 @@ namespace OrganizacaoFinanceira
 
             if (tbxChaveLancamento.Text.Trim() == "")
             {
-                if (entradas != null && entradas.Count > 0)
-                    entrada.chave = entradas.Max(x => x.chave) + 1;
+                if (DadosGerais.entradas != null && DadosGerais.entradas.Count > 0)
+                    entrada.chave = DadosGerais.entradas.Max(x => x.chave) + 1;
                 else entrada.chave = 1;
             }
             else
             {
                 entrada.chave = Convert.ToInt32(tbxChaveLancamento.Text);
-                entradaOld = entradas.FirstOrDefault(x => x.chave == entrada.chave);
+                entradaOld = DadosGerais.entradas.FirstOrDefault(x => x.chave == entrada.chave);
             }
 
 
-            SetResponse response = await client.SetTaskAsync("Entradas/" + "chave-" + entrada.chave, entrada);
+            SetResponse response = await DadosGerais.client.SetTaskAsync("Entradas/" + "chave-" + entrada.chave, entrada);
 
             if (response.Exception == null)
             {
@@ -724,7 +634,7 @@ namespace OrganizacaoFinanceira
 
                 MessageBox.Show("Entrada gravada. " + entrada.chave);
 
-                entradas = await BuscarEntradas();
+                DadosGerais.entradas = await CRUD.BuscarEntradas();
                 FiltrarEntradas();
                 LimparLancamento();
                 AtualizarCategorias();
@@ -740,9 +650,9 @@ namespace OrganizacaoFinanceira
         private async Task AdicionarVerbaMes(Entrada entrada)
         {
             Mes mes;
-            if (meses != null && meses.Count > 0 && entrada != null)
+            if (DadosGerais.meses != null && DadosGerais.meses.Count > 0 && entrada != null)
             {
-                mes = meses.FirstOrDefault(x => x.chaveCategoria == entrada.chaveCategoria && entrada.mesReferencia.Month == x.mes.Month && entrada.mesReferencia.Year == x.mes.Year);
+                mes = DadosGerais.meses.FirstOrDefault(x => x.chaveCategoria == entrada.chaveCategoria && entrada.mesReferencia.Month == x.mes.Month && entrada.mesReferencia.Year == x.mes.Year);
                 if (mes != null)
                 {
                     mes.verbaAdicional += entrada.valor;
@@ -781,9 +691,9 @@ namespace OrganizacaoFinanceira
                 sb.AppendLine("Para registrar uma saída parcelada é necessário informar somente a primeira parcela, ou seja, o mês de referência deve ser igual ao mês da primeira parcela.");
             }*/
 
-            if (cbxCategoria.SelectedValue != null && (meses == null || meses.Count == 0 || meses.Where(x => x.mes.Month == dtpMesReferenciaLancamento.Value.Month && x.mes.Year == dtpMesReferenciaLancamento.Value.Year && x.chaveCategoria == (int)cbxCategoria.SelectedValue).Count() == 0))
+            if (cbxCategoria.SelectedValue != null && (DadosGerais.meses == null || DadosGerais.meses.Count == 0 || DadosGerais.meses.Where(x => x.mes.Month == dtpMesReferenciaLancamento.Value.Month && x.mes.Year == dtpMesReferenciaLancamento.Value.Year && x.chaveCategoria == (int)cbxCategoria.SelectedValue).Count() == 0))
             {
-                Categoria categoria = categorias.FirstOrDefault(x => x.chave == (int)cbxCategoria.SelectedValue);
+                Categoria categoria = DadosGerais.categorias.FirstOrDefault(x => x.chave == (int)cbxCategoria.SelectedValue);
                 Mes mesNovo = new();
 
                 mesNovo.verbaOriginal = categoria.verbaPadrao;
@@ -823,9 +733,9 @@ namespace OrganizacaoFinanceira
             cbxContas.DataSource = null;
             cbxContas.Items.Clear();
 
-            if (contas != null && contas.Count > 0)
+            if (DadosGerais.contas != null && DadosGerais.contas.Count > 0)
             {
-                BindingList<ContaBanco> bindingList = new BindingList<ContaBanco>(contas);
+                BindingList<ContaBanco> bindingList = new BindingList<ContaBanco>(DadosGerais.contas);
                 cbxContas.DataSource = bindingList;
 
                 cbxContas.DisplayMember = "descricaoConta";
@@ -838,9 +748,9 @@ namespace OrganizacaoFinanceira
             cbxCategoria.DataSource = null;
             cbxCategoria.Items.Clear();
 
-            if (categorias != null && categorias.Count > 0)
+            if (DadosGerais.categorias != null && DadosGerais.categorias.Count > 0)
             {
-                BindingList<Categoria> bindingList = new BindingList<Categoria>(categorias);
+                BindingList<Categoria> bindingList = new BindingList<Categoria>(DadosGerais.categorias);
                 cbxCategoria.DataSource = bindingList;
 
                 cbxCategoria.DisplayMember = "descricao";
@@ -857,9 +767,9 @@ namespace OrganizacaoFinanceira
             cbxCategoriaLancRecorrente.DataSource = null;
             cbxCategoriaLancRecorrente.Items.Clear();
 
-            if (categorias != null && categorias.Count > 0)
+            if (DadosGerais.categorias != null && DadosGerais.categorias.Count > 0)
             {
-                BindingList<Categoria> bindingList = new BindingList<Categoria>(categorias);
+                BindingList<Categoria> bindingList = new BindingList<Categoria>(DadosGerais.categorias);
                 cbxCategoriaLancRecorrente.DataSource = bindingList;
 
                 cbxCategoriaLancRecorrente.DisplayMember = "descricao";
@@ -871,7 +781,7 @@ namespace OrganizacaoFinanceira
 
         private void SelecionarValorComboboxContas()
         {
-            if (cbxContas.Items.Count > 0 && cbxContas.DataBindings != null && contas != null && contas.Count > 0)
+            if (cbxContas.Items.Count > 0 && cbxContas.DataBindings != null && DadosGerais.contas != null && DadosGerais.contas.Count > 0)
             {
                 if (contaSelecionada != null) cbxContas.SelectedValue = contaSelecionada.chave;
             }
@@ -904,7 +814,7 @@ namespace OrganizacaoFinanceira
             {
                 string descricao = "";
                 int chave = (int)e.Value;
-                if (categorias != null) descricao = categorias.Where(x => x.chave == chave).Select(x => x.descricao).FirstOrDefault();
+                if (DadosGerais.categorias != null) descricao = DadosGerais.categorias.Where(x => x.chave == chave).Select(x => x.descricao).FirstOrDefault();
                 e.Value = descricao == null ? "" : descricao;
 
                 // Define o formato de exibição da célula como texto
@@ -1033,7 +943,7 @@ namespace OrganizacaoFinanceira
                         {
                             Saida saidaSelecionada = lancamento.DataBoundItem as Saida;
 
-                            FirebaseResponse response = await client.DeleteTaskAsync("Saidas/" + "chave-" + saidaSelecionada.chave);
+                            FirebaseResponse response = await DadosGerais.client.DeleteTaskAsync("Saidas/" + "chave-" + saidaSelecionada.chave);
 
                             if (response.Exception != null)
                             {
@@ -1044,7 +954,7 @@ namespace OrganizacaoFinanceira
                         {
                             Entrada entradaSelecionada = lancamento.DataBoundItem as Entrada;
 
-                            FirebaseResponse response = await client.DeleteTaskAsync("Entradas/" + "chave-" + entradaSelecionada.chave);
+                            FirebaseResponse response = await DadosGerais.client.DeleteTaskAsync("Entradas/" + "chave-" + entradaSelecionada.chave);
 
                             if (response.Exception != null)
                             {
@@ -1054,8 +964,8 @@ namespace OrganizacaoFinanceira
                     }
 
                     MessageBox.Show("Lançamento(s) excluído(s) com sucesso.");
-                    saidas = await BuscarSaidas();
-                    entradas = await BuscarEntradas();
+                    DadosGerais.saidas = await CRUD.BuscarSaidas();
+                    DadosGerais.entradas = await CRUD.BuscarEntradas();
 
                     FiltrarLancamentos();
                     AtualizarValorTotalConta();
@@ -1073,7 +983,7 @@ namespace OrganizacaoFinanceira
             PreencherSaldoTotalCategoria();
 
             funcoesGrid.ConfigurarGrid(dgvCategorias, bindingSourceCategorias, funcoesGrid.ColunasGridCategorias(), false);
-            bindingSourceCategorias.DataSource = categorias;
+            bindingSourceCategorias.DataSource = DadosGerais.categorias;
 
             funcoesGrid.ConfigurarGrid(dgvMeses, bindingSourceMeses, funcoesGrid.ColunasGridMeses(), false);
             FiltrarMeses();
@@ -1083,7 +993,7 @@ namespace OrganizacaoFinanceira
         private void AtualizarCategorias()
         {
             PreencherSaldoTotalCategoria();
-            bindingSourceCategorias.DataSource = categorias;
+            bindingSourceCategorias.DataSource = DadosGerais.categorias;
             dgvCategorias.Refresh();
         }
 
@@ -1102,7 +1012,7 @@ namespace OrganizacaoFinanceira
                                                           MessageBoxButtons.YesNo,
                                                           MessageBoxIcon.Question);
 
-                    if (saidas.Any(x => x.chaveCategoria == categoriaSelecionada.chave) || entradas.Any(x => x.chaveCategoria == categoriaSelecionada.chave) || lancamentosRecorrentes.Any(x => x.chaveCategoria == categoriaSelecionada.chave))
+                    if (DadosGerais.saidas.Any(x => x.chaveCategoria == categoriaSelecionada.chave) || DadosGerais.entradas.Any(x => x.chaveCategoria == categoriaSelecionada.chave) || DadosGerais.lancamentosRecorrentes.Any(x => x.chaveCategoria == categoriaSelecionada.chave))
                     {
                         MessageBox.Show("Para excluir uma categoria não deve ter saídas, entradas ou lançamentos recorrentes vinculados. Verifique.");
                         return;
@@ -1112,7 +1022,7 @@ namespace OrganizacaoFinanceira
                     if (result == DialogResult.Yes)
                     {
                         // Realiza a operação de exclusão no banco de dados Firebase
-                        FirebaseResponse response = await client.DeleteTaskAsync("Categorias/" + "chave-" + categoriaSelecionada.chave);
+                        FirebaseResponse response = await DadosGerais.client.DeleteTaskAsync("Categorias/" + "chave-" + categoriaSelecionada.chave);
 
                         // Verifica se a exclusão foi bem-sucedida
                         if (response.Exception == null)
@@ -1120,9 +1030,9 @@ namespace OrganizacaoFinanceira
                             MessageBox.Show("Categoria excluída com sucesso.");
 
                             // Atualiza a lista de contas exibida na interface
-                            categorias = await BuscarCategorias();
+                            DadosGerais.categorias = await CRUD.BuscarCategorias();
                             funcoesGrid.ConfigurarGrid(dgvCategorias, bindingSourceCategorias, funcoesGrid.ColunasGridCategorias(), false);
-                            bindingSourceCategorias.DataSource = categorias;
+                            bindingSourceCategorias.DataSource = DadosGerais.categorias;
 
                             FiltrarMeses();
                         }
@@ -1151,16 +1061,16 @@ namespace OrganizacaoFinanceira
         private void PreencherSaldoTotalCategoria()
         {
             double verbaTotal;
-            foreach (Categoria categoria in categorias)
+            foreach (Categoria categoria in DadosGerais.categorias)
             {
-                verbaTotal = meses.Where(x => x.chaveCategoria == categoria.chave && DataMenorIgual(x.mes.Date, DateTime.Now.Date)).Sum(x => x.verbaMes);
-                categoria.saldoTotal = verbaTotal - (saidas == null ? 0 : saidas.Where(x => x.chaveCategoria == categoria.chave).Sum(x => x.valorParcela));
+                verbaTotal = DadosGerais.meses.Where(x => x.chaveCategoria == categoria.chave && DataMenorIgual(x.mes.Date, DateTime.Now.Date)).Sum(x => x.verbaMes);
+                categoria.saldoTotal = verbaTotal - (DadosGerais.saidas == null ? 0 : DadosGerais.saidas.Where(x => x.chaveCategoria == categoria.chave).Sum(x => x.valorParcela));
             }
         }
 
         private void PreencherValoresTodosMeses()
         {
-            foreach (Mes mes in meses)
+            foreach (Mes mes in DadosGerais.meses)
             {
                 PreencherValoresMes(mes);
             }
@@ -1168,11 +1078,11 @@ namespace OrganizacaoFinanceira
 
         private void FiltrarMeses()
         {
-            if (categorias == null || categorias.Count == 0 || meses == null || categoriaSelecionada == null) return;
+            if (DadosGerais.categorias == null || DadosGerais.categorias.Count == 0 || DadosGerais.meses == null || categoriaSelecionada == null) return;
 
             List<Mes> mesesAux;
 
-            mesesAux = meses.Where(x => x.chaveCategoria == categoriaSelecionada.chave).ToList();
+            mesesAux = DadosGerais.meses.Where(x => x.chaveCategoria == categoriaSelecionada.chave).ToList();
             if (!chxTodosMeses.Checked)
             {
                 mesesAux = mesesAux.Where(x => x.mes.Month == dtpMesCategoria.Value.Month && x.mes.Year == dtpMesCategoria.Value.Year).ToList();
@@ -1200,59 +1110,17 @@ namespace OrganizacaoFinanceira
             List<Saida> saidasCategoria = new();
             List<Saida> saidasMes = new();
 
-            if (saidas != null)
+            if (DadosGerais.saidas != null)
             {
-                saidasCategoria = saidas.Where(x => x.chaveCategoria == mes.chaveCategoria).ToList();
+                saidasCategoria = DadosGerais.saidas.Where(x => x.chaveCategoria == mes.chaveCategoria).ToList();
                 saidasMes = saidasCategoria.Where(x => x.mesReferencia.Month == mes.mes.Month && x.mesReferencia.Year == mes.mes.Year).ToList();
                 mes.saldoMes = mes.verbaMes - saidasMes.Sum(x => x.valorParcela);
             }
         }
 
-        private async Task<SortableBindingList<Mes>> BuscarMeses()
-        {
-            try
-            {
-                List<Mes> mesesAux;
-                Dictionary<string, Mes> chavesMeses;
+        
 
-                FirebaseResponse firebaseResponse = await client.GetTaskAsync("Meses");
-                if (firebaseResponse.Body == "null") return new SortableBindingList<Mes>();
-
-                chavesMeses = firebaseResponse.ResultAs<Dictionary<string, Mes>>();
-                mesesAux = chavesMeses.Select(x => x.Value).ToList();
-
-                return new SortableBindingList<Mes>(mesesAux);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao buscar os meses.\n\n" + ex.Message);
-                return new SortableBindingList<Mes>();
-            }
-
-        }
-
-        private async Task<SortableBindingList<Categoria>> BuscarCategorias()
-        {
-            try
-            {
-                List<Categoria> categoriasAux;
-                Dictionary<string, Categoria> chavesCategorias;
-
-                FirebaseResponse firebaseResponse = await client.GetTaskAsync("Categorias");
-                if (firebaseResponse.Body == "null") return new SortableBindingList<Categoria>();
-
-                chavesCategorias = firebaseResponse.ResultAs<Dictionary<string, Categoria>>();
-                categoriasAux = chavesCategorias.Select(x => x.Value).ToList();
-
-                return new SortableBindingList<Categoria>(categoriasAux);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao buscar as categorias.\n\n" + ex.Message);
-                return new SortableBindingList<Categoria>();
-            }
-
-        }
+        
 
         private async void btnCriarMes_Click(object sender, EventArgs e)
         {
@@ -1268,20 +1136,20 @@ namespace OrganizacaoFinanceira
 
         private void CriarMes(Mes mesNovo, Categoria categoria, DateTime mes)
         {
-            if (categorias == null || categorias.Count == 0 || categoria == null)
+            if (DadosGerais.categorias == null || DadosGerais.categorias.Count == 0 || categoria == null)
             {
                 MessageBox.Show("Deve criar primeiro as categorias.");
                 return;
             }
 
-            if (meses == null || meses.Count == 0)
+            if (DadosGerais.meses == null || DadosGerais.meses.Count == 0)
             {
                 mesNovo.chave = 1;
 
             }
             else
             {
-                Mes mesOld = meses.FirstOrDefault(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year && x.chaveCategoria == categoria.chave);
+                Mes mesOld = DadosGerais.meses.FirstOrDefault(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year && x.chaveCategoria == categoria.chave);
                 if (mesOld != null)
                 {
                     if (mesOld.verbaOriginal == mesNovo.verbaOriginal)
@@ -1293,7 +1161,7 @@ namespace OrganizacaoFinanceira
                     mesNovo.verbaAdicional = mesOld.verbaAdicional;
                 }
                 else
-                    mesNovo.chave = meses.Max(x => x.chave) + 1;
+                    mesNovo.chave = DadosGerais.meses.Max(x => x.chave) + 1;
             }
 
             mesNovo.mes = mes.Date;
@@ -1304,14 +1172,14 @@ namespace OrganizacaoFinanceira
 
         private async Task SalvarMes(Mes mesNovo, bool mostrarMensagem)
         {
-            SetResponse response = await client.SetTaskAsync("Meses/" + "chave-" + mesNovo.chave.ToString(), mesNovo);
+            SetResponse response = await DadosGerais.client.SetTaskAsync("Meses/" + "chave-" + mesNovo.chave.ToString(), mesNovo);
 
             if (response.Exception == null)
             {
                 if (mostrarMensagem) MessageBox.Show("Mes gravado.");
                 LimparMes();
 
-                meses = await BuscarMeses();
+                DadosGerais.meses = await CRUD.BuscarMeses();
                 AtualizarCategorias();
                 FiltrarMeses();
             }
@@ -1350,21 +1218,21 @@ namespace OrganizacaoFinanceira
             }
             else
             {
-                if (categorias == null || categorias.Count == 0)
+                if (DadosGerais.categorias == null || DadosGerais.categorias.Count == 0)
                     categoriaNova.chave = 1;
                 else
-                    categoriaNova.chave = categorias.Max(x => x.chave) + 1;
+                    categoriaNova.chave = DadosGerais.categorias.Max(x => x.chave) + 1;
             }
 
-            SetResponse response = await client.SetTaskAsync("Categorias/" + "chave-" + categoriaNova.chave.ToString(), categoriaNova);
+            SetResponse response = await DadosGerais.client.SetTaskAsync("Categorias/" + "chave-" + categoriaNova.chave.ToString(), categoriaNova);
 
             if (response.Exception == null)
             {
                 MessageBox.Show("Categoria gravada.");
 
-                categorias = await BuscarCategorias();
+                DadosGerais.categorias = await CRUD.BuscarCategorias();
                 funcoesGrid.ConfigurarGrid(dgvCategorias, bindingSourceCategorias, funcoesGrid.ColunasGridCategorias(), false);
-                bindingSourceCategorias.DataSource = categorias;
+                bindingSourceCategorias.DataSource = DadosGerais.categorias;
 
                 PreencherComboBoxCategorias();
                 AtualizarCategorias();
@@ -1456,32 +1324,11 @@ namespace OrganizacaoFinanceira
         private void InicializarLancamentosRecorrentes()
         {
             funcoesGrid.ConfigurarGrid(dgvLancamentosRecorrentes, bindingSourceLancRecorrentes, funcoesGrid.ColunasGridLancamentosRecorrentes(), false);
-            bindingSourceLancRecorrentes.DataSource = lancamentosRecorrentes;
+            bindingSourceLancRecorrentes.DataSource = DadosGerais.lancamentosRecorrentes;
             FiltrarLancamentosRecorrentes();
         }
 
-        private async Task<SortableBindingList<LancamentoRecorrente>> BuscarLancamentosRecorrentes()
-        {
-            try
-            {
-                List<LancamentoRecorrente> lancRecorrentesAux;
-                Dictionary<string, LancamentoRecorrente> chavesLancRecorrentes;
-
-                FirebaseResponse firebaseResponse = await client.GetTaskAsync("LancamentosRecorrentes");
-                if (firebaseResponse.Body == "null") return new SortableBindingList<LancamentoRecorrente>();
-
-                chavesLancRecorrentes = firebaseResponse.ResultAs<Dictionary<string, LancamentoRecorrente>>();
-                lancRecorrentesAux = chavesLancRecorrentes.Select(x => x.Value).ToList();
-
-                return new SortableBindingList<LancamentoRecorrente>(lancRecorrentesAux);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro ao buscar os lançamentos recorrentes.\n\n" + ex.Message);
-                return new SortableBindingList<LancamentoRecorrente>();
-            }
-
-        }
+        
 
         private async void btnSalvarLancRecorrente_Click(object sender, EventArgs e)
         {
@@ -1499,19 +1346,19 @@ namespace OrganizacaoFinanceira
             }
             else
             {
-                if (lancamentosRecorrentes == null || lancamentosRecorrentes.Count == 0)
+                if (DadosGerais.lancamentosRecorrentes == null || DadosGerais.lancamentosRecorrentes.Count == 0)
                     lancRecorrenteNovo.chave = 1;
                 else
-                    lancRecorrenteNovo.chave = lancamentosRecorrentes.Max(x => x.chave) + 1;
+                    lancRecorrenteNovo.chave = DadosGerais.lancamentosRecorrentes.Max(x => x.chave) + 1;
             }
 
-            SetResponse response = await client.SetTaskAsync("LancamentosRecorrentes/" + "chave-" + lancRecorrenteNovo.chave.ToString(), lancRecorrenteNovo);
+            SetResponse response = await DadosGerais.client.SetTaskAsync("LancamentosRecorrentes/" + "chave-" + lancRecorrenteNovo.chave.ToString(), lancRecorrenteNovo);
 
             if (response.Exception == null)
             {
                 MessageBox.Show("Lançamento recorrente gravado.");
 
-                lancamentosRecorrentes = await BuscarLancamentosRecorrentes();
+                DadosGerais.lancamentosRecorrentes = await CRUD.BuscarLancamentosRecorrentes();
                 FiltrarLancamentosRecorrentes();
 
                 LimparLancamentoRecorrente();
@@ -1589,7 +1436,7 @@ namespace OrganizacaoFinanceira
             {
                 string descricao = "";
                 int chave = (int)e.Value;
-                if (lancamentosRecorrentes != null) descricao = categorias.Where(x => x.chave == chave).Select(x => x.descricao).FirstOrDefault();
+                if (DadosGerais.lancamentosRecorrentes != null) descricao = DadosGerais.categorias.Where(x => x.chave == chave).Select(x => x.descricao).FirstOrDefault();
                 e.Value = descricao == null ? "" : descricao;
 
                 // Define o formato de exibição da célula como texto
@@ -1609,8 +1456,8 @@ namespace OrganizacaoFinanceira
 
         private void FiltrarLancamentosRecorrentes()
         {
-            if (lancamentosRecorrentes == null) return;
-            SortableBindingList<LancamentoRecorrente> lancamentosFiltro = new(lancamentosRecorrentes.Where(x => x.tipoLancamento == (rbtFiltroSaidaLancRecorrente.Checked ? 0 : 1)).ToList());
+            if (DadosGerais.lancamentosRecorrentes == null) return;
+            SortableBindingList<LancamentoRecorrente> lancamentosFiltro = new(DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == (rbtFiltroSaidaLancRecorrente.Checked ? 0 : 1)).ToList());
             bindingSourceLancRecorrentes.DataSource = lancamentosFiltro;
             dgvLancamentosRecorrentes.Columns[2].Visible = rbtFiltroSaidaLancRecorrente.Checked;
             InicializarMesesFuturos();
@@ -1622,45 +1469,46 @@ namespace OrganizacaoFinanceira
 
         private void InicializarMesesFuturos()
         {
-            mesesFuturos = new();
-            double valorAtualContas = contas.Sum(x => x.valorAtual);
+            DadosGerais.mesesFuturos = new();
+            double valorAtualContas = DadosGerais.contas.Sum(x => x.valorAtual);
 
             //Feito isso, pois o valor atual não considera as compras no crédito do mês atual, pois ainda não foram pagas.
-            if (saidas!=null && saidas.Count>0) {
-                valorAtualContas -= saidas.Where(x => x.tipoSaida == 0 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valorParcela);
+            if (DadosGerais.saidas != null && DadosGerais.saidas.Count > 0)
+            {
+                valorAtualContas -= DadosGerais.saidas.Where(x => x.tipoSaida == 0 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valorParcela);
             }
 
-            if (rbtLancamentoFuturo.Checked)            
+            if (rbtLancamentoFuturo.Checked)
             {
-                double entradasTotaisRecorrente = lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).Sum(x => x.valor);
+                double entradasTotaisRecorrente = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).Sum(x => x.valor);
                 double saidasParceladas;
                 double entradasMesAtual;
                 for (int i = 0; i < 11; i++)
                 {
-                    mesesFuturos.Add(new MesFuturo());
-                    mesesFuturos[i].mes = DateTime.Now.AddMonths(i+1);
+                    DadosGerais.mesesFuturos.Add(new MesFuturo());
+                    DadosGerais.mesesFuturos[i].mes = DateTime.Now.AddMonths(i + 1);
 
                     saidasParceladas = 0;
                     entradasMesAtual = 0;
 
-                    if (saidas != null && saidas.Count > 0)
+                    if (DadosGerais.saidas != null && DadosGerais.saidas.Count > 0)
                     {
-                        saidasParceladas = saidas.Where(x => x.qtdParcelas > 1 && x.mesReferencia.Month == mesesFuturos[i].mes.Month && x.mesReferencia.Year == mesesFuturos[i].mes.Year).Sum(x => x.valorParcela);
+                        saidasParceladas = DadosGerais.saidas.Where(x => x.qtdParcelas > 1 && x.mesReferencia.Month == DadosGerais.mesesFuturos[i].mes.Month && x.mesReferencia.Year == DadosGerais.mesesFuturos[i].mes.Year).Sum(x => x.valorParcela);
                     }
 
-                    if (entradas != null && entradas.Count > 0)
+                    if (DadosGerais.entradas != null && DadosGerais.entradas.Count > 0)
                     {
-                        entradasMesAtual = entradas.Where(x => x.mesReferencia.Month == mesesFuturos[i].mes.Month && x.mesReferencia.Year == mesesFuturos[i].mes.Year).Sum(x => x.valor);
+                        entradasMesAtual = DadosGerais.entradas.Where(x => x.mesReferencia.Month == DadosGerais.mesesFuturos[i].mes.Month && x.mesReferencia.Year == DadosGerais.mesesFuturos[i].mes.Year).Sum(x => x.valor);
                     }
 
                     double saidatotal = 0;
                     double saidasCategoria;
                     double saidasMesCategoria;
-                    foreach (Categoria categoria in categorias)
+                    foreach (Categoria categoria in DadosGerais.categorias)
                     {
-                        saidatotal += lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave).Sum(x => x.valor);
-                        saidasCategoria = lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && !x.obrigatorio && x.chaveCategoria == categoria.chave).Sum(x => x.valor);
-                        saidasMesCategoria = saidas.Where(x => x.tipoSaida == 0 && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == mesesFuturos[i].mes.Month && x.mesReferencia.Year == mesesFuturos[i].mes.Year).Sum(x => x.valorParcela);
+                        saidatotal += DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave).Sum(x => x.valor);
+                        saidasCategoria = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && !x.obrigatorio && x.chaveCategoria == categoria.chave).Sum(x => x.valor);
+                        saidasMesCategoria = DadosGerais.saidas.Where(x => x.tipoSaida == 0 && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == DadosGerais.mesesFuturos[i].mes.Month && x.mesReferencia.Year == DadosGerais.mesesFuturos[i].mes.Year).Sum(x => x.valorParcela);
 
                         if (saidasMesCategoria >= saidasCategoria)
                         {
@@ -1672,16 +1520,16 @@ namespace OrganizacaoFinanceira
                         }
                     }
 
-                    mesesFuturos[i].saidasTotais = saidatotal;
-                    mesesFuturos[i].entradasTotais = entradasTotaisRecorrente;
-                    mesesFuturos[i].saidasParceladas = saidasParceladas;
-                    mesesFuturos[i].saldoGeral = valorAtualContas + entradasTotaisRecorrente - saidatotal - entradasMesAtual;
-                    valorAtualContas = mesesFuturos[i].saldoGeral;
+                    DadosGerais.mesesFuturos[i].saidasTotais = saidatotal;
+                    DadosGerais.mesesFuturos[i].entradasTotais = entradasTotaisRecorrente;
+                    DadosGerais.mesesFuturos[i].saidasParceladas = saidasParceladas;
+                    DadosGerais.mesesFuturos[i].saldoGeral = valorAtualContas + entradasTotaisRecorrente - saidatotal - entradasMesAtual;
+                    valorAtualContas = DadosGerais.mesesFuturos[i].saldoGeral;
                 }
             }
 
             funcoesGrid.ConfigurarGrid(dgvMesesFuturos, bindingSourceMesesFuturos, funcoesGrid.ColunasGridMesesFuturos(), false);
-            bindingSourceMesesFuturos.DataSource = mesesFuturos;
+            bindingSourceMesesFuturos.DataSource = DadosGerais.mesesFuturos;
 
         }
         private void dgvMesesFuturos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -1712,13 +1560,13 @@ namespace OrganizacaoFinanceira
 
                     if (result == DialogResult.Yes)
                     {
-                        FirebaseResponse response = await client.DeleteTaskAsync("LancamentosRecorrentes/" + "chave-" + lancRecorrenteSelecionado.chave);
+                        FirebaseResponse response = await DadosGerais.client.DeleteTaskAsync("LancamentosRecorrentes/" + "chave-" + lancRecorrenteSelecionado.chave);
 
                         if (response.Exception == null)
                         {
                             MessageBox.Show("Lançamento recorrente excluído com sucesso.");
 
-                            lancamentosRecorrentes = await BuscarLancamentosRecorrentes();
+                            DadosGerais.lancamentosRecorrentes = await CRUD.BuscarLancamentosRecorrentes();
                             FiltrarLancamentosRecorrentes();
                         }
                         else
@@ -1728,6 +1576,13 @@ namespace OrganizacaoFinanceira
                     }
                 }
             }
+        }
+
+        private void geralToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TelaGeral telaGeral = new();
+            telaGeral.Show();
+            this.Hide();
         }
     }
 }

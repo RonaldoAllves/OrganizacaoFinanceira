@@ -100,8 +100,8 @@ namespace OrganizacaoFinanceira.Recursos
             List<(string, string, DataGridViewContentAlignment, int, bool)> colunas = new List<(string, string, DataGridViewContentAlignment, int, bool)>
             {
                 ("descricao", "Descrição", DataGridViewContentAlignment.MiddleCenter, 150, false),
-                ("saldoTotal", "Saldo geral", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("verbaPadrao", "Verba padrão", DataGridViewContentAlignment.MiddleCenter, 150, true),
+                ("saldoTotal", "Saldo geral", DataGridViewContentAlignment.MiddleCenter, 150, true),
             };
             return colunas;
         }

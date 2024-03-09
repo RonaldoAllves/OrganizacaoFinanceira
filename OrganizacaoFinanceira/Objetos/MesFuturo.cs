@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OrganizacaoFinanceira.Objetos
 {
-    internal class MesFuturo
+    public class MesFuturo
     {
         public DateTime mes {  get; set; }
         public double entradasTotais { get; set; }
