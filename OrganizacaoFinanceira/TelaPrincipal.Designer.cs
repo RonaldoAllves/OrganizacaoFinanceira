@@ -101,32 +101,6 @@
             label25 = new Label();
             btnLimparMes = new Button();
             chxTodosMeses = new CheckBox();
-            btnNovoLancRecorrente = new Button();
-            dgvLancamentosRecorrentes = new DataGridView();
-            groupBox2 = new GroupBox();
-            radioButton1 = new RadioButton();
-            rbtFiltroSaidaLancRecorrente = new RadioButton();
-            panelLancRecorrente = new Panel();
-            chkLancObrigatorio = new CheckBox();
-            tbxIdLancRecorrente = new TextBox();
-            groupBox3 = new GroupBox();
-            rbtEntradaLancRecorrente = new RadioButton();
-            rbtSaidaLancRecorrente = new RadioButton();
-            btnFecharLancRecorrente = new Button();
-            label26 = new Label();
-            btnLimparLancRecorrente = new Button();
-            tbxDescLancRecorrente = new TextBox();
-            label27 = new Label();
-            label28 = new Label();
-            tbxValorLancRecorrente = new TextBox();
-            btnSalvarLancRecorrente = new Button();
-            label31 = new Label();
-            cbxCategoriaLancRecorrente = new ComboBox();
-            label37 = new Label();
-            dgvMesesFuturos = new DataGridView();
-            groupBox4 = new GroupBox();
-            rbtMedia = new RadioButton();
-            rbtLancamentoFuturo = new RadioButton();
             menu = new MenuStrip();
             lançamentosToolStripMenuItem = new ToolStripMenuItem();
             categoriasToolStripMenuItem = new ToolStripMenuItem();
@@ -140,12 +114,6 @@
             panelLancamento.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvMeses).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dgvLancamentosRecorrentes).BeginInit();
-            groupBox2.SuspendLayout();
-            panelLancRecorrente.SuspendLayout();
-            groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).BeginInit();
-            groupBox4.SuspendLayout();
             menu.SuspendLayout();
             SuspendLayout();
             // 
@@ -856,283 +824,6 @@
             chxTodosMeses.UseVisualStyleBackColor = true;
             chxTodosMeses.CheckedChanged += chxTodosMeses_CheckedChanged;
             // 
-            // btnNovoLancRecorrente
-            // 
-            btnNovoLancRecorrente.Location = new Point(587, 567);
-            btnNovoLancRecorrente.Name = "btnNovoLancRecorrente";
-            btnNovoLancRecorrente.Size = new Size(75, 23);
-            btnNovoLancRecorrente.TabIndex = 78;
-            btnNovoLancRecorrente.Text = "Novo";
-            btnNovoLancRecorrente.UseVisualStyleBackColor = true;
-            btnNovoLancRecorrente.Click += btnNovoLancRecorrente_Click;
-            // 
-            // dgvLancamentosRecorrentes
-            // 
-            dgvLancamentosRecorrentes.BackgroundColor = SystemColors.ControlLightLight;
-            dgvLancamentosRecorrentes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvLancamentosRecorrentes.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvLancamentosRecorrentes.Location = new Point(12, 596);
-            dgvLancamentosRecorrentes.MultiSelect = false;
-            dgvLancamentosRecorrentes.Name = "dgvLancamentosRecorrentes";
-            dgvLancamentosRecorrentes.RowHeadersWidth = 51;
-            dgvLancamentosRecorrentes.Size = new Size(650, 184);
-            dgvLancamentosRecorrentes.TabIndex = 79;
-            dgvLancamentosRecorrentes.CellDoubleClick += dgvLancamentosRecorrentes_CellDoubleClick;
-            dgvLancamentosRecorrentes.CellFormatting += dgvLancamentosRecorrentes_CellFormatting;
-            dgvLancamentosRecorrentes.SelectionChanged += dgvLancamentosRecorrentes_SelectionChanged;
-            dgvLancamentosRecorrentes.KeyDown += dgvLancamentosRecorrentes_KeyDown;
-            // 
-            // groupBox2
-            // 
-            groupBox2.Controls.Add(radioButton1);
-            groupBox2.Controls.Add(rbtFiltroSaidaLancRecorrente);
-            groupBox2.Location = new Point(12, 549);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(259, 42);
-            groupBox2.TabIndex = 80;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Tipo de lançamento recorrente";
-            // 
-            // radioButton1
-            // 
-            radioButton1.AutoSize = true;
-            radioButton1.Location = new Point(159, 17);
-            radioButton1.Name = "radioButton1";
-            radioButton1.Size = new Size(70, 19);
-            radioButton1.TabIndex = 16;
-            radioButton1.Text = "Entradas";
-            radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // rbtFiltroSaidaLancRecorrente
-            // 
-            rbtFiltroSaidaLancRecorrente.AutoSize = true;
-            rbtFiltroSaidaLancRecorrente.Location = new Point(37, 19);
-            rbtFiltroSaidaLancRecorrente.Name = "rbtFiltroSaidaLancRecorrente";
-            rbtFiltroSaidaLancRecorrente.Size = new Size(58, 19);
-            rbtFiltroSaidaLancRecorrente.TabIndex = 15;
-            rbtFiltroSaidaLancRecorrente.Text = "Saídas";
-            rbtFiltroSaidaLancRecorrente.UseVisualStyleBackColor = true;
-            rbtFiltroSaidaLancRecorrente.CheckedChanged += rbtFiltroSaidaLancRecorrente_CheckedChanged;
-            // 
-            // panelLancRecorrente
-            // 
-            panelLancRecorrente.BackColor = Color.FromArgb(255, 224, 192);
-            panelLancRecorrente.BorderStyle = BorderStyle.FixedSingle;
-            panelLancRecorrente.Controls.Add(chkLancObrigatorio);
-            panelLancRecorrente.Controls.Add(tbxIdLancRecorrente);
-            panelLancRecorrente.Controls.Add(groupBox3);
-            panelLancRecorrente.Controls.Add(btnFecharLancRecorrente);
-            panelLancRecorrente.Controls.Add(label26);
-            panelLancRecorrente.Controls.Add(btnLimparLancRecorrente);
-            panelLancRecorrente.Controls.Add(tbxDescLancRecorrente);
-            panelLancRecorrente.Controls.Add(label27);
-            panelLancRecorrente.Controls.Add(label28);
-            panelLancRecorrente.Controls.Add(tbxValorLancRecorrente);
-            panelLancRecorrente.Controls.Add(btnSalvarLancRecorrente);
-            panelLancRecorrente.Controls.Add(label31);
-            panelLancRecorrente.Controls.Add(cbxCategoriaLancRecorrente);
-            panelLancRecorrente.Controls.Add(label37);
-            panelLancRecorrente.Location = new Point(125, 156);
-            panelLancRecorrente.Name = "panelLancRecorrente";
-            panelLancRecorrente.Size = new Size(454, 233);
-            panelLancRecorrente.TabIndex = 49;
-            panelLancRecorrente.Visible = false;
-            // 
-            // chkLancObrigatorio
-            // 
-            chkLancObrigatorio.AutoSize = true;
-            chkLancObrigatorio.Location = new Point(30, 154);
-            chkLancObrigatorio.Name = "chkLancObrigatorio";
-            chkLancObrigatorio.Size = new Size(87, 19);
-            chkLancObrigatorio.TabIndex = 83;
-            chkLancObrigatorio.Text = "Obrigatório";
-            chkLancObrigatorio.UseVisualStyleBackColor = true;
-            // 
-            // tbxIdLancRecorrente
-            // 
-            tbxIdLancRecorrente.Enabled = false;
-            tbxIdLancRecorrente.Location = new Point(30, 69);
-            tbxIdLancRecorrente.Name = "tbxIdLancRecorrente";
-            tbxIdLancRecorrente.Size = new Size(47, 23);
-            tbxIdLancRecorrente.TabIndex = 82;
-            // 
-            // groupBox3
-            // 
-            groupBox3.Controls.Add(rbtEntradaLancRecorrente);
-            groupBox3.Controls.Add(rbtSaidaLancRecorrente);
-            groupBox3.Location = new Point(170, 106);
-            groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(226, 42);
-            groupBox3.TabIndex = 81;
-            groupBox3.TabStop = false;
-            groupBox3.Text = "Tipo de lançamento recorrente";
-            // 
-            // rbtEntradaLancRecorrente
-            // 
-            rbtEntradaLancRecorrente.AutoSize = true;
-            rbtEntradaLancRecorrente.Location = new Point(132, 17);
-            rbtEntradaLancRecorrente.Name = "rbtEntradaLancRecorrente";
-            rbtEntradaLancRecorrente.Size = new Size(70, 19);
-            rbtEntradaLancRecorrente.TabIndex = 16;
-            rbtEntradaLancRecorrente.TabStop = true;
-            rbtEntradaLancRecorrente.Text = "Entradas";
-            rbtEntradaLancRecorrente.UseVisualStyleBackColor = true;
-            // 
-            // rbtSaidaLancRecorrente
-            // 
-            rbtSaidaLancRecorrente.AutoSize = true;
-            rbtSaidaLancRecorrente.Location = new Point(29, 18);
-            rbtSaidaLancRecorrente.Name = "rbtSaidaLancRecorrente";
-            rbtSaidaLancRecorrente.Size = new Size(58, 19);
-            rbtSaidaLancRecorrente.TabIndex = 15;
-            rbtSaidaLancRecorrente.TabStop = true;
-            rbtSaidaLancRecorrente.Text = "Saídas";
-            rbtSaidaLancRecorrente.UseVisualStyleBackColor = true;
-            // 
-            // btnFecharLancRecorrente
-            // 
-            btnFecharLancRecorrente.Location = new Point(409, 3);
-            btnFecharLancRecorrente.Name = "btnFecharLancRecorrente";
-            btnFecharLancRecorrente.Size = new Size(29, 23);
-            btnFecharLancRecorrente.TabIndex = 48;
-            btnFecharLancRecorrente.Text = "X";
-            btnFecharLancRecorrente.UseVisualStyleBackColor = true;
-            btnFecharLancRecorrente.Click += btnFecharLancRecorrente_Click;
-            // 
-            // label26
-            // 
-            label26.AutoSize = true;
-            label26.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
-            label26.Location = new Point(83, 10);
-            label26.Name = "label26";
-            label26.Size = new Size(289, 20);
-            label26.TabIndex = 41;
-            label26.Text = "Cadastrar/Alterar lançamentos recorrentes";
-            // 
-            // btnLimparLancRecorrente
-            // 
-            btnLimparLancRecorrente.Location = new Point(304, 179);
-            btnLimparLancRecorrente.Name = "btnLimparLancRecorrente";
-            btnLimparLancRecorrente.Size = new Size(75, 23);
-            btnLimparLancRecorrente.TabIndex = 47;
-            btnLimparLancRecorrente.Text = "Limpar";
-            btnLimparLancRecorrente.UseVisualStyleBackColor = true;
-            btnLimparLancRecorrente.Click += btnLimparLancRecorrente_Click;
-            // 
-            // tbxDescLancRecorrente
-            // 
-            tbxDescLancRecorrente.Location = new Point(83, 69);
-            tbxDescLancRecorrente.Name = "tbxDescLancRecorrente";
-            tbxDescLancRecorrente.Size = new Size(191, 23);
-            tbxDescLancRecorrente.TabIndex = 18;
-            // 
-            // label27
-            // 
-            label27.AutoSize = true;
-            label27.Location = new Point(83, 51);
-            label27.Name = "label27";
-            label27.Size = new Size(58, 15);
-            label27.TabIndex = 17;
-            label27.Text = "Descrição";
-            // 
-            // label28
-            // 
-            label28.AutoSize = true;
-            label28.Location = new Point(280, 51);
-            label28.Name = "label28";
-            label28.Size = new Size(33, 15);
-            label28.TabIndex = 19;
-            label28.Text = "Valor";
-            // 
-            // tbxValorLancRecorrente
-            // 
-            tbxValorLancRecorrente.Location = new Point(280, 69);
-            tbxValorLancRecorrente.Name = "tbxValorLancRecorrente";
-            tbxValorLancRecorrente.Size = new Size(116, 23);
-            tbxValorLancRecorrente.TabIndex = 20;
-            // 
-            // btnSalvarLancRecorrente
-            // 
-            btnSalvarLancRecorrente.Location = new Point(95, 179);
-            btnSalvarLancRecorrente.Name = "btnSalvarLancRecorrente";
-            btnSalvarLancRecorrente.Size = new Size(75, 23);
-            btnSalvarLancRecorrente.TabIndex = 38;
-            btnSalvarLancRecorrente.Text = "Salvar";
-            btnSalvarLancRecorrente.UseVisualStyleBackColor = true;
-            btnSalvarLancRecorrente.Click += btnSalvarLancRecorrente_Click;
-            // 
-            // label31
-            // 
-            label31.AutoSize = true;
-            label31.Location = new Point(30, 52);
-            label31.Name = "label31";
-            label31.Size = new Size(18, 15);
-            label31.TabIndex = 39;
-            label31.Text = "ID";
-            // 
-            // cbxCategoriaLancRecorrente
-            // 
-            cbxCategoriaLancRecorrente.FormattingEnabled = true;
-            cbxCategoriaLancRecorrente.Location = new Point(30, 122);
-            cbxCategoriaLancRecorrente.Name = "cbxCategoriaLancRecorrente";
-            cbxCategoriaLancRecorrente.Size = new Size(121, 23);
-            cbxCategoriaLancRecorrente.TabIndex = 25;
-            // 
-            // label37
-            // 
-            label37.AutoSize = true;
-            label37.Location = new Point(30, 105);
-            label37.Name = "label37";
-            label37.Size = new Size(58, 15);
-            label37.TabIndex = 26;
-            label37.Text = "Categoria";
-            // 
-            // dgvMesesFuturos
-            // 
-            dgvMesesFuturos.BackgroundColor = SystemColors.ControlLightLight;
-            dgvMesesFuturos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvMesesFuturos.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvMesesFuturos.Location = new Point(683, 596);
-            dgvMesesFuturos.MultiSelect = false;
-            dgvMesesFuturos.Name = "dgvMesesFuturos";
-            dgvMesesFuturos.RowHeadersWidth = 51;
-            dgvMesesFuturos.Size = new Size(844, 184);
-            dgvMesesFuturos.TabIndex = 81;
-            dgvMesesFuturos.CellFormatting += dgvMesesFuturos_CellFormatting;
-            // 
-            // groupBox4
-            // 
-            groupBox4.Controls.Add(rbtMedia);
-            groupBox4.Controls.Add(rbtLancamentoFuturo);
-            groupBox4.Location = new Point(683, 543);
-            groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(236, 48);
-            groupBox4.TabIndex = 84;
-            groupBox4.TabStop = false;
-            groupBox4.Text = "Tipo previsão";
-            // 
-            // rbtMedia
-            // 
-            rbtMedia.AutoSize = true;
-            rbtMedia.Location = new Point(170, 18);
-            rbtMedia.Name = "rbtMedia";
-            rbtMedia.Size = new Size(58, 19);
-            rbtMedia.TabIndex = 16;
-            rbtMedia.TabStop = true;
-            rbtMedia.Text = "Média";
-            rbtMedia.UseVisualStyleBackColor = true;
-            // 
-            // rbtLancamentoFuturo
-            // 
-            rbtLancamentoFuturo.AutoSize = true;
-            rbtLancamentoFuturo.Location = new Point(6, 18);
-            rbtLancamentoFuturo.Name = "rbtLancamentoFuturo";
-            rbtLancamentoFuturo.Size = new Size(158, 19);
-            rbtLancamentoFuturo.TabIndex = 15;
-            rbtLancamentoFuturo.TabStop = true;
-            rbtLancamentoFuturo.Text = "Lançamentos recorrentes";
-            rbtLancamentoFuturo.UseVisualStyleBackColor = true;
-            // 
             // menu
             // 
             menu.Items.AddRange(new ToolStripItem[] { lançamentosToolStripMenuItem, categoriasToolStripMenuItem, mesesFuturoToolStripMenuItem, geralToolStripMenuItem });
@@ -1153,12 +844,14 @@
             categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
             categoriasToolStripMenuItem.Size = new Size(75, 20);
             categoriasToolStripMenuItem.Text = "Categorias";
+            categoriasToolStripMenuItem.Click += categoriasToolStripMenuItem_Click;
             // 
             // mesesFuturoToolStripMenuItem
             // 
             mesesFuturoToolStripMenuItem.Name = "mesesFuturoToolStripMenuItem";
             mesesFuturoToolStripMenuItem.Size = new Size(88, 20);
             mesesFuturoToolStripMenuItem.Text = "Meses futuro";
+            mesesFuturoToolStripMenuItem.Click += mesesFuturoToolStripMenuItem_Click;
             // 
             // geralToolStripMenuItem
             // 
@@ -1172,13 +865,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1537, 791);
-            Controls.Add(groupBox4);
-            Controls.Add(panelLancRecorrente);
             Controls.Add(panelLancamento);
-            Controls.Add(dgvMesesFuturos);
-            Controls.Add(groupBox2);
-            Controls.Add(dgvLancamentosRecorrentes);
-            Controls.Add(btnNovoLancRecorrente);
             Controls.Add(chxTodosMeses);
             Controls.Add(btnLimparMes);
             Controls.Add(tbxIdMes);
@@ -1237,16 +924,6 @@
             panelLancamento.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvMeses).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvLancamentosRecorrentes).EndInit();
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
-            panelLancRecorrente.ResumeLayout(false);
-            panelLancRecorrente.PerformLayout();
-            groupBox3.ResumeLayout(false);
-            groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).EndInit();
-            groupBox4.ResumeLayout(false);
-            groupBox4.PerformLayout();
             menu.ResumeLayout(false);
             menu.PerformLayout();
             ResumeLayout(false);
@@ -1330,33 +1007,7 @@
         private CheckBox chxTodosMeses;
         private ComboBox cbxCategoriaRecorrente;
         private Button btnSalvarLancamentoRecorrente;
-        private Button btnNovoLancRecorrente;
-        private DataGridView dgvLancamentosRecorrentes;
-        private GroupBox groupBox2;
-        private RadioButton radioButton1;
-        private RadioButton rbtFiltroSaidaLancRecorrente;
-        private Panel panelLancRecorrente;
-        private Button btnFecharLancRecorrente;
-        private Label label26;
-        private Button btnLimparLancRecorrente;
-        private TextBox tbxDescLancRecorrente;
-        private Label label27;
-        private Label label28;
-        private TextBox tbxValorLancRecorrente;
-        private Button btnSalvarLancRecorrente;
-        private Label label31;
-        private ComboBox cbxCategoriaLancRecorrente;
-        private Label label37;
-        private GroupBox groupBox3;
-        private RadioButton rbtEntradaLancRecorrente;
-        private RadioButton rbtSaidaLancRecorrente;
-        private TextBox tbxIdLancRecorrente;
-        private DataGridView dgvMesesFuturos;
-        private GroupBox groupBox4;
-        private RadioButton rbtMedia;
-        private RadioButton rbtLancamentoFuturo;
         private TextBox tbxNumParcela;
-        private CheckBox chkLancObrigatorio;
         private MenuStrip menu;
         private ToolStripMenuItem lançamentosToolStripMenuItem;
         private ToolStripMenuItem categoriasToolStripMenuItem;

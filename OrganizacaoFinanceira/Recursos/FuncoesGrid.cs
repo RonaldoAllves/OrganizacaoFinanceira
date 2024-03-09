@@ -123,7 +123,7 @@ namespace OrganizacaoFinanceira.Recursos
         {
             List<(string, string, DataGridViewContentAlignment, int, bool)> colunas = new List<(string, string, DataGridViewContentAlignment, int, bool)>
             {
-                ("mes", "Mês", DataGridViewContentAlignment.MiddleCenter, 150, false),
+                ("mes", "Mês", DataGridViewContentAlignment.MiddleCenter, 100, false),
                 ("saidasTotais", "Saídas", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("saidasParceladas", "Saídas parceladas", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("entradasTotais", "Entradas", DataGridViewContentAlignment.MiddleCenter, 150, true),
@@ -140,7 +140,7 @@ namespace OrganizacaoFinanceira.Recursos
                 ("valor", "Valor", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("chaveCategoria", "Categoria", DataGridViewContentAlignment.MiddleCenter, 150, false),
                 ("tipoLancamento", "Tipo do lançamento", DataGridViewContentAlignment.MiddleCenter, 150, false),
-                ("obrigatorio", "Obrigatório (1 - sim, 0 - não)", DataGridViewContentAlignment.MiddleCenter, 250, false),
+                ("obrigatorio", "Obrigatório", DataGridViewContentAlignment.MiddleCenter, 100, false),
             };
             return colunas;
         }

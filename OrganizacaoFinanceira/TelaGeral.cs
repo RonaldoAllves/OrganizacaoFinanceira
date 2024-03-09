@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OrganizacaoFinanceira.Telas;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,7 +20,13 @@ namespace OrganizacaoFinanceira
 
         private void lançamentosToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            Formularios.telaPrincipal.Show();
+            this.Close();
+        }
+
+        private void categoriasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
