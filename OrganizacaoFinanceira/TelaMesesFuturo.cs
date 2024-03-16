@@ -34,6 +34,8 @@ namespace OrganizacaoFinanceira
         private void TelaMesesFuturo_Load(object sender, EventArgs e)
         {
             this.Enabled = false;
+            tbxEntradaExtra.Text = DadosGerais.entradaExtra.ToString();
+            tbxSaidaExtra.Text = DadosGerais.saidaExtra.ToString();
             InicializarLancamentosRecorrentes();
             InicializarMesesFuturos();
             PreencherComboBoxCategoriasLancRecorrente();
@@ -224,6 +226,8 @@ namespace OrganizacaoFinanceira
             DadosGerais.mesesFuturos = new();
             double valorAtualContas = DadosGerais.contas.Sum(x => x.valorAtual);
 
+            valorAtualContas += Convert.ToDouble(tbxEntradaExtra.Text) - Convert.ToDouble(tbxSaidaExtra.Text);
+
             //Feito isso, pois o valor atual não considera as compras no crédito do mês atual, pois ainda não foram pagas.
             if (DadosGerais.saidas != null && DadosGerais.saidas.Count > 0)
             {
@@ -235,7 +239,7 @@ namespace OrganizacaoFinanceira
                 double entradasTotaisRecorrente = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).Sum(x => x.valor);
                 double saidasParceladas;
                 double entradasMesAtual;
-                for (int i = 0; i < 11; i++)
+                for (int i = 0; i < 24; i++)
                 {
                     DadosGerais.mesesFuturos.Add(new MesFuturo());
                     DadosGerais.mesesFuturos[i].mes = DateTime.Now.AddMonths(i + 1).Date;
@@ -337,6 +341,41 @@ namespace OrganizacaoFinanceira
         {
             Formularios.telaPrincipal.Show();
             this.Close();
+        }
+
+        private void tbxEntradaExtra_Validated(object sender, EventArgs e)
+        {
+            if (tbxEntradaExtra.Text.Length == 0) tbxEntradaExtra.Text = "0";
+        }
+
+        private void btnRecalcular_Click(object sender, EventArgs e)
+        {
+            InicializarMesesFuturos();
+        }
+
+        private void categoriasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Formularios.telaCategorias = new();
+            Formularios.telaCategorias.WindowState = this.WindowState;
+            Formularios.telaCategorias.Show();
+            this.Hide();
+        }
+
+        private void tbxEntradaExtra_TextChanged(object sender, EventArgs e)
+        {
+            if (tbxEntradaExtra.Text.Length == 0) return;
+            DadosGerais.entradaExtra = Convert.ToDouble(tbxEntradaExtra.Text);
+        }
+
+        private void tbxSaidaExtra_TextChanged(object sender, EventArgs e)
+        {
+            if (tbxSaidaExtra.Text.Length == 0) return;
+            DadosGerais.saidaExtra = Convert.ToDouble(tbxSaidaExtra.Text);
+        }
+
+        private void tbxSaidaExtra_Validated(object sender, EventArgs e)
+        {
+            if (tbxSaidaExtra.Text.Length == 0) tbxSaidaExtra.Text = "0";
         }
     }
 }

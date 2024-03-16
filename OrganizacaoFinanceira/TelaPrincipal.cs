@@ -27,30 +27,23 @@ namespace OrganizacaoFinanceira
     public partial class TelaPrincipal : Form
     {
         CRUD CRUD = new CRUD();
+        FuncoesGrid funcoesGrid = new();
+
         string mensagemValorAtualConta = "";
 
         BindingSource bindingSourceContas = new BindingSource();
         BindingSource bindingSourceSaidas = new BindingSource();
-        BindingSource bindingSourceEntradas = new BindingSource();
-        BindingSource bindingSourceCategorias = new BindingSource();
-        BindingSource bindingSourceMeses = new BindingSource();
+        BindingSource bindingSourceEntradas = new BindingSource();        
 
         ContaBanco contaSelecionada;
         Saida saidaSelecionada;
         Entrada entradaSelecionada;
-        Categoria categoriaSelecionada;
-        Mes mesSelecionado;
 
         SortableBindingList<Saida> saidasDaConta;
         SortableBindingList<Entrada> entradasDaConta;
-        SortableBindingList<Mes> mesesDaCategoria;
-
-        FuncoesGrid funcoesGrid = new();
 
         public TelaPrincipal()
         {
-
-
             InitializeComponent();
 
             this.WindowState = FormWindowState.Maximized;
@@ -65,8 +58,8 @@ namespace OrganizacaoFinanceira
             await CRUD.BuscarTodosDados();
             InicializarDatas();
             InicializarContas();
-            InicializarCategorias();
-
+            
+            PreencherComboBoxCategorias();
 
             this.Enabled = true;
         }
@@ -78,9 +71,6 @@ namespace OrganizacaoFinanceira
 
             dtpMesReferenciaLancamento.CustomFormat = "MM/yyyy";
             dtpMesReferenciaLancamento.ShowUpDown = true;
-
-            dtpMesCategoria.CustomFormat = "MM/yyyy";
-            dtpMesCategoria.ShowUpDown = true;
         }
 
         private void TelaPrincipal_Resize(object sender, EventArgs e)
@@ -440,12 +430,6 @@ namespace OrganizacaoFinanceira
             LimparLancamento();
         }
 
-
-
-
-
-
-
         private void rbtSaidas_CheckedChanged(object sender, EventArgs e)
         {
             FiltrarLancamentos();
@@ -555,7 +539,7 @@ namespace OrganizacaoFinanceira
                 DadosGerais.saidas = await CRUD.BuscarSaidas();
                 FiltrarSaidas();
                 LimparLancamento();
-                AtualizarCategorias();
+                
                 return true;
             }
             else
@@ -640,7 +624,6 @@ namespace OrganizacaoFinanceira
                 DadosGerais.entradas = await CRUD.BuscarEntradas();
                 FiltrarEntradas();
                 LimparLancamento();
-                AtualizarCategorias();
                 return true;
             }
             else
@@ -659,10 +642,15 @@ namespace OrganizacaoFinanceira
                 if (mes != null)
                 {
                     mes.verbaAdicional += entrada.valor;
-                    await SalvarMes(mes, false);
+                    await CRUD.SalvarMes(mes, false);
+                }
+                else
+                {
+                    Mes mesNovo = new();
+                    mesNovo.verbaAdicional = entrada.valor;
+                    CRUD.CriarMes(mesNovo, entrada.chaveCategoria, entrada.mesReferencia);
                 }
             }
-
         }
 
         private bool ValidarLancamento()
@@ -700,7 +688,7 @@ namespace OrganizacaoFinanceira
                 Mes mesNovo = new();
 
                 mesNovo.verbaOriginal = categoria.verbaPadrao;
-                CriarMes(mesNovo, categoria, dtpMesReferenciaLancamento.Value);
+                CRUD.CriarMes(mesNovo, categoria.chave, dtpMesReferenciaLancamento.Value);
             }
 
             if (sb.Length > 0)
@@ -831,6 +819,28 @@ namespace OrganizacaoFinanceira
             {
                 saidaSelecionada = null;
                 entradaSelecionada = null;
+            }
+
+            TotalSelecionados();
+
+        }
+
+        private void TotalSelecionados()
+        {
+            if (dgvLancamentos.SelectedRows.Count > 0)
+            {
+                int columnIndex = 1;
+                double soma = 0;
+                foreach (DataGridViewRow row in dgvLancamentos.SelectedRows)
+                {
+                    soma += Convert.ToDouble(row.Cells[columnIndex].Value);
+                }
+
+                tbxTotalSelecionados.Text = soma.ToString();
+            }
+            else
+            {
+                tbxTotalSelecionados.Text = "";
             }
         }
 
@@ -963,366 +973,20 @@ namespace OrganizacaoFinanceira
 
         #endregion
 
-        #region CATEGORIAS
-
-        private void InicializarCategorias()
-        {
-            PreencherValoresTodosMeses();
-            PreencherSaldoTotalCategoria();
-
-            funcoesGrid.ConfigurarGrid(dgvCategorias, bindingSourceCategorias, funcoesGrid.ColunasGridCategorias(), false);
-            bindingSourceCategorias.DataSource = DadosGerais.categorias;
-
-            funcoesGrid.ConfigurarGrid(dgvMeses, bindingSourceMeses, funcoesGrid.ColunasGridMeses(), false);
-            FiltrarMeses();
-            PreencherComboBoxCategorias();
-        }
-
-        private void AtualizarCategorias()
-        {
-            PreencherSaldoTotalCategoria();
-            bindingSourceCategorias.DataSource = DadosGerais.categorias;
-            dgvCategorias.Refresh();
-        }
-
-        private async void dgvCategorias_KeyDown(object sender, KeyEventArgs e)
-        {
-            // Verifica se a tecla pressionada é a tecla "Delete"
-            if (e.KeyCode == Keys.Delete)
-            {
-                if (dgvCategorias.SelectedRows.Count > 0)
-                {
-                    Categoria categoriaSelecionada = dgvCategorias.SelectedRows[0].DataBoundItem as Categoria;
-
-                    // Exibe uma mensagem de confirmação para o usuário
-                    DialogResult result = MessageBox.Show("Tem certeza que deseja excluir esta categoria?",
-                                                          "Excluir categoria",
-                                                          MessageBoxButtons.YesNo,
-                                                          MessageBoxIcon.Question);
-
-                    if (DadosGerais.saidas.Any(x => x.chaveCategoria == categoriaSelecionada.chave) || DadosGerais.entradas.Any(x => x.chaveCategoria == categoriaSelecionada.chave) || DadosGerais.lancamentosRecorrentes.Any(x => x.chaveCategoria == categoriaSelecionada.chave))
-                    {
-                        MessageBox.Show("Para excluir uma categoria não deve ter saídas, entradas ou lançamentos recorrentes vinculados. Verifique.");
-                        return;
-                    }
-
-                    // Se o usuário confirmar a exclusão, exclua a conta
-                    if (result == DialogResult.Yes)
-                    {
-                        this.Enabled = false;
-                        // Realiza a operação de exclusão no banco de dados Firebase
-                        FirebaseResponse response = await DadosGerais.client.DeleteTaskAsync("Categorias/" + "chave-" + categoriaSelecionada.chave);
-                        this.Enabled = true;
-
-                        // Verifica se a exclusão foi bem-sucedida
-                        if (response.Exception == null)
-                        {
-                            MessageBox.Show("Categoria excluída com sucesso.");
-
-                            // Atualiza a lista de contas exibida na interface
-                            DadosGerais.categorias = await CRUD.BuscarCategorias();
-                            funcoesGrid.ConfigurarGrid(dgvCategorias, bindingSourceCategorias, funcoesGrid.ColunasGridCategorias(), false);
-                            bindingSourceCategorias.DataSource = DadosGerais.categorias;
-
-                            FiltrarMeses();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Falha ao excluir a categoria.");
-                        }
-                    }
-                }
-            }
-        }
-
-        private void btnNovaCategoria_Click(object sender, EventArgs e)
-        {
-            LimparCategoria();
-        }
-
-        private void LimparCategoria()
-        {
-            tbxIdCategoria.Text = "";
-            tbxDescCategoria.Text = "";
-            tbxVerbaPadraoCat.Text = "";
-            tbxIdCategoria.Enabled = false;
-        }
-
-        private void PreencherSaldoTotalCategoria()
-        {
-            double verbaTotal;
-            foreach (Categoria categoria in DadosGerais.categorias)
-            {
-                verbaTotal = DadosGerais.meses.Where(x => x.chaveCategoria == categoria.chave && DataMenorIgual(x.mes.Date, DateTime.Now.Date)).Sum(x => x.verbaMes);
-                categoria.saldoTotal = verbaTotal - (DadosGerais.saidas == null ? 0 : DadosGerais.saidas.Where(x => x.chaveCategoria == categoria.chave).Sum(x => x.valorParcela));
-            }
-        }
-
-        private void PreencherValoresTodosMeses()
-        {
-            foreach (Mes mes in DadosGerais.meses)
-            {
-                PreencherValoresMes(mes);
-            }
-        }
-
-        private void FiltrarMeses()
-        {
-            if (DadosGerais.categorias == null || DadosGerais.categorias.Count == 0 || DadosGerais.meses == null || categoriaSelecionada == null) return;
-
-            List<Mes> mesesAux;
-
-            mesesAux = DadosGerais.meses.Where(x => x.chaveCategoria == categoriaSelecionada.chave).ToList();
-            if (!chxTodosMeses.Checked)
-            {
-                mesesAux = mesesAux.Where(x => x.mes.Month == dtpMesCategoria.Value.Month && x.mes.Year == dtpMesCategoria.Value.Year).ToList();
-            }
-
-            mesesAux = mesesAux.OrderByDescending(x => x.mes).ToList();
-            mesesDaCategoria = new(mesesAux);
-
-            if (mesesDaCategoria.Count == 0)
-            {
-                bindingSourceMeses.DataSource = mesesDaCategoria;
-                return;
-            }
-
-            foreach (Mes mes in mesesDaCategoria)
-            {
-                PreencherValoresMes(mes);
-            }
-
-            bindingSourceMeses.DataSource = mesesDaCategoria;
-        }
-
-        private void PreencherValoresMes(Mes mes)
-        {
-            List<Saida> saidasCategoria = new();
-            List<Saida> saidasMes = new();
-
-            if (DadosGerais.saidas != null)
-            {
-                saidasCategoria = DadosGerais.saidas.Where(x => x.chaveCategoria == mes.chaveCategoria).ToList();
-                saidasMes = saidasCategoria.Where(x => x.mesReferencia.Month == mes.mes.Month && x.mesReferencia.Year == mes.mes.Year).ToList();
-                mes.saldoMes = mes.verbaMes - saidasMes.Sum(x => x.valorParcela);
-            }
-        }
-
-
-
-
-
-        private async void btnCriarMes_Click(object sender, EventArgs e)
-        {
-            Mes mesNovo = new();
-
-            if (tbxVerbaMesCategoria.Text.Trim() != "")
-                mesNovo.verbaOriginal = Convert.ToDouble(tbxVerbaMesCategoria.Text);
-            else
-                mesNovo.verbaOriginal = categoriaSelecionada.verbaPadrao;
-
-            CriarMes(mesNovo, categoriaSelecionada, dtpMesCategoria.Value);
-        }
-
-        private void CriarMes(Mes mesNovo, Categoria categoria, DateTime mes)
-        {
-            if (DadosGerais.categorias == null || DadosGerais.categorias.Count == 0 || categoria == null)
-            {
-                MessageBox.Show("Deve criar primeiro as categorias.");
-                return;
-            }
-
-            if (DadosGerais.meses == null || DadosGerais.meses.Count == 0)
-            {
-                mesNovo.chave = 1;
-
-            }
-            else
-            {
-                Mes mesOld = DadosGerais.meses.FirstOrDefault(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year && x.chaveCategoria == categoria.chave);
-                if (mesOld != null)
-                {
-                    if (mesOld.verbaOriginal == mesNovo.verbaOriginal)
-                    {
-                        MessageBox.Show("Mês já existe.");
-                        return;
-                    }
-                    mesNovo.chave = mesOld.chave;
-                    mesNovo.verbaAdicional = mesOld.verbaAdicional;
-                }
-                else
-                    mesNovo.chave = DadosGerais.meses.Max(x => x.chave) + 1;
-            }
-
-            mesNovo.mes = mes.Date;
-            mesNovo.chaveCategoria = categoria.chave;
-
-            SalvarMes(mesNovo, true);
-        }
-
-        private async Task SalvarMes(Mes mesNovo, bool mostrarMensagem)
-        {
-            this.Enabled = false;
-            SetResponse response = await DadosGerais.client.SetTaskAsync("Meses/" + "chave-" + mesNovo.chave.ToString(), mesNovo);
-            this.Enabled = true;
-
-            if (response.Exception == null)
-            {
-                if (mostrarMensagem) MessageBox.Show("Mes gravado.");
-                LimparMes();
-
-                DadosGerais.meses = await CRUD.BuscarMeses();
-                AtualizarCategorias();
-                FiltrarMeses();
-            }
-            else
-            {
-                MessageBox.Show("Erro ao gravar mês.\n" + response.Exception);
-            }
-        }
-
-        private void dgvCategorias_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgvCategorias.SelectedCells.Count > 0)
-            {
-                int rowIndex = dgvCategorias.SelectedCells[0].RowIndex;
-
-                if (rowIndex >= 0 && rowIndex < dgvCategorias.Rows.Count)
-                {
-                    categoriaSelecionada = dgvCategorias.Rows[rowIndex].DataBoundItem as Categoria;
-                }
-            }
-            else
-                categoriaSelecionada = null;
-
-            FiltrarMeses();
-        }
-
-        private async void btnSalvarCategoria_Click(object sender, EventArgs e)
-        {
-            Categoria categoriaNova = new();
-            categoriaNova.descricao = tbxDescCategoria.Text.Trim();
-            categoriaNova.verbaPadrao = Convert.ToDouble(tbxVerbaPadraoCat.Text);
-
-            if (tbxIdCategoria.Text.Length > 0)
-            {
-                categoriaNova.chave = Convert.ToInt32(tbxIdCategoria.Text);
-            }
-            else
-            {
-                if (DadosGerais.categorias == null || DadosGerais.categorias.Count == 0)
-                    categoriaNova.chave = 1;
-                else
-                    categoriaNova.chave = DadosGerais.categorias.Max(x => x.chave) + 1;
-            }
-
-            this.Enabled = false;
-            SetResponse response = await DadosGerais.client.SetTaskAsync("Categorias/" + "chave-" + categoriaNova.chave.ToString(), categoriaNova);
-            this.Enabled = true;
-
-            if (response.Exception == null)
-            {
-                MessageBox.Show("Categoria gravada.");
-
-                DadosGerais.categorias = await CRUD.BuscarCategorias();
-                funcoesGrid.ConfigurarGrid(dgvCategorias, bindingSourceCategorias, funcoesGrid.ColunasGridCategorias(), false);
-                bindingSourceCategorias.DataSource = DadosGerais.categorias;
-
-                PreencherComboBoxCategorias();
-                AtualizarCategorias();
-                LimparCategoria();
-                FiltrarMeses();
-            }
-            else
-            {
-                MessageBox.Show("Erro ao gravar categoria.\n" + response.Exception);
-            }
-        }
-
-        private async void dgvCategorias_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                tbxIdCategoria.Text = categoriaSelecionada.chave.ToString();
-                tbxDescCategoria.Text = categoriaSelecionada.descricao.ToString();
-                tbxVerbaPadraoCat.Text = categoriaSelecionada.verbaPadrao.ToString();
-            }
-        }
-
-        #endregion
-
-        #region MESES
-
-        private void dgvMeses_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (chxTodosMeses.Checked) return;
-            tbxIdMes.Text = mesSelecionado.chave.ToString();
-            tbxVerbaMesCategoria.Text = mesSelecionado.verbaOriginal.ToString();
-        }
-
-        private void LimparMes()
-        {
-            tbxIdMes.Text = "";
-            tbxVerbaMesCategoria.Text = "";
-        }
-
-        private void btnLimparMes_Click(object sender, EventArgs e)
-        {
-            LimparMes();
-        }
-
-        private void dgvMeses_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgvMeses.SelectedCells.Count > 0)
-            {
-                int rowIndex = dgvMeses.SelectedCells[0].RowIndex;
-
-                if (rowIndex >= 0 && rowIndex < dgvMeses.Rows.Count)
-                {
-                    mesSelecionado = dgvMeses.Rows[rowIndex].DataBoundItem as Mes;
-                }
-            }
-            else
-                mesSelecionado = null;
-        }
-
-        private void dtpMesCategoria_ValueChanged(object sender, EventArgs e)
-        {
-            FiltrarMeses();
-        }
-
-        private void chxTodosMeses_CheckedChanged(object sender, EventArgs e)
-        {
-            dtpMesCategoria.Enabled = !chxTodosMeses.Checked;
-            tbxVerbaMesCategoria.Enabled = !chxTodosMeses.Checked;
-            btnCriarMes.Enabled = !chxTodosMeses.Checked;
-            btnLimparMes.Enabled = !chxTodosMeses.Checked;
-            if (chxTodosMeses.Checked) LimparMes();
-            FiltrarMeses();
-        }
-
-        private void dgvMeses_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (dgvMeses.Columns[e.ColumnIndex].DataPropertyName == "mes" && e.Value != null && e.Value is DateTime)
-            {
-                DateTime dateValue = (DateTime)e.Value;
-                e.Value = dateValue.ToString("MMM/yyyy");
-                e.FormattingApplied = true;
-            }
-        }
-
-        #endregion
-
         private void geralToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Formularios.telaGeral = new();
+            Formularios.telaGeral.WindowState = this.WindowState;
             Formularios.telaGeral.Show();
             this.Hide();
         }
 
         private void categoriasToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            Formularios.telaCategorias = new();
+            Formularios.telaCategorias.WindowState = this.WindowState;
+            Formularios.telaCategorias.Show();
+            this.Hide();
         }
 
         private void mesesFuturoToolStripMenuItem_Click(object sender, EventArgs e)

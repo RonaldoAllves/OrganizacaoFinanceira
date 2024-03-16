@@ -106,6 +106,19 @@ namespace OrganizacaoFinanceira.Recursos
             return colunas;
         }
 
+        public List<(string, string, DataGridViewContentAlignment, int, bool)> ColunasGridVerbasCategorias()
+        {
+            List<(string, string, DataGridViewContentAlignment, int, bool)> colunas = new List<(string, string, DataGridViewContentAlignment, int, bool)>
+            {
+                ("descricaoCategoria", "Descrição", DataGridViewContentAlignment.MiddleCenter, 150, false),
+                ("verbaOriginalMesCategoria", "Verba original", DataGridViewContentAlignment.MiddleCenter, 150, true),
+                ("verbaAdicionalMesCategoria", "Verba adicional", DataGridViewContentAlignment.MiddleCenter, 150, true),
+                ("verbaMesCategoria", "Verba do mês", DataGridViewContentAlignment.MiddleCenter, 150, true),
+                ("saldoMes", "Saldo do mês", DataGridViewContentAlignment.MiddleCenter, 150, true),
+            };
+            return colunas;
+        }
+
         public List<(string, string, DataGridViewContentAlignment, int, bool)> ColunasGridMeses()
         {
             List<(string, string, DataGridViewContentAlignment, int, bool)> colunas = new List<(string, string, DataGridViewContentAlignment, int, bool)>

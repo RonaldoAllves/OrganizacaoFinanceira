@@ -12,6 +12,7 @@ namespace OrganizacaoFinanceira.Dados
 {
     public class CRUD
     {
+        #region BUSCAS
         public async Task BuscarTodosDados()
         {
             DadosGerais.client = new FirebaseClient(DadosGerais.config);
@@ -164,6 +165,57 @@ namespace OrganizacaoFinanceira.Dados
                 return new SortableBindingList<LancamentoRecorrente>();
             }
 
+        }
+        #endregion
+
+        public void CriarMes(Mes mesNovo, int categoria, DateTime mes)
+        {
+            if (DadosGerais.categorias == null || DadosGerais.categorias.Count == 0 || categoria == 0)
+            {
+                MessageBox.Show("Deve criar primeiro as categorias.");
+                return;
+            }
+
+            if (DadosGerais.meses == null || DadosGerais.meses.Count == 0)
+            {
+                mesNovo.chave = 1;
+
+            }
+            else
+            {
+                Mes mesOld = DadosGerais.meses.FirstOrDefault(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year && x.chaveCategoria == categoria);
+                if (mesOld != null)
+                {
+                    if (mesOld.verbaOriginal == mesNovo.verbaOriginal)
+                    {
+                        MessageBox.Show("Mês já existe.");
+                        return;
+                    }
+                    mesNovo.chave = mesOld.chave;
+                    mesNovo.verbaAdicional = mesOld.verbaAdicional;
+                }
+                else
+                    mesNovo.chave = DadosGerais.meses.Max(x => x.chave) + 1;
+            }
+
+            mesNovo.mes = mes.Date;
+            mesNovo.chaveCategoria = categoria;
+
+            SalvarMes(mesNovo, true);
+        }
+
+        public async Task SalvarMes(Mes mesNovo, bool mostrarMensagem)
+        {
+            SetResponse response = await DadosGerais.client.SetTaskAsync("Meses/" + "chave-" + mesNovo.chave.ToString(), mesNovo);
+
+            if (response.Exception == null)
+            {
+                if (mostrarMensagem) MessageBox.Show("Mes gravado.");                                            
+            }
+            else
+            {
+                MessageBox.Show("Erro ao gravar mês.\n" + response.Exception);
+            }
         }
     }
 }
