@@ -168,7 +168,7 @@ namespace OrganizacaoFinanceira.Dados
         }
         #endregion
 
-        public void CriarMes(Mes mesNovo, int categoria, DateTime mes)
+        public async Task CriarMes(Mes mesNovo, int categoria, DateTime mes)
         {
             if (DadosGerais.categorias == null || DadosGerais.categorias.Count == 0 || categoria == 0)
             {
@@ -201,7 +201,7 @@ namespace OrganizacaoFinanceira.Dados
             mesNovo.mes = mes.Date;
             mesNovo.chaveCategoria = categoria;
 
-            SalvarMes(mesNovo, true);
+            await SalvarMes(mesNovo, true);
         }
 
         public async Task SalvarMes(Mes mesNovo, bool mostrarMensagem)

@@ -13,6 +13,7 @@ namespace OrganizacaoFinanceira.Objetos
         public string descricao { get; set; }
         public double valor { get; set; }
         public byte tipoLancamento { get; set; }
+        public DateTime dataFinal {  get; set; }
         public bool obrigatorio { get; set; }
     }
 }

@@ -59,18 +59,21 @@
             dgvVerbasPorMes = new DataGridView();
             tbxSaldoTotalMes = new TextBox();
             label3 = new Label();
+            groupBox1 = new GroupBox();
             ((System.ComponentModel.ISupportInitialize)dgvMeses).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).BeginInit();
             menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVerbasPorMes).BeginInit();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // chxTodosMeses
             // 
             chxTodosMeses.AutoSize = true;
-            chxTodosMeses.Location = new Point(1370, 105);
+            chxTodosMeses.Location = new Point(522, 537);
+            chxTodosMeses.Margin = new Padding(3, 2, 3, 2);
             chxTodosMeses.Name = "chxTodosMeses";
-            chxTodosMeses.Size = new Size(116, 24);
+            chxTodosMeses.Size = new Size(93, 19);
             chxTodosMeses.TabIndex = 88;
             chxTodosMeses.Text = "Todos meses";
             chxTodosMeses.UseVisualStyleBackColor = true;
@@ -78,10 +81,9 @@
             // 
             // btnLimparMes
             // 
-            btnLimparMes.Location = new Point(1057, 104);
-            btnLimparMes.Margin = new Padding(3, 4, 3, 4);
+            btnLimparMes.Location = new Point(364, 537);
             btnLimparMes.Name = "btnLimparMes";
-            btnLimparMes.Size = new Size(86, 29);
+            btnLimparMes.Size = new Size(75, 22);
             btnLimparMes.TabIndex = 87;
             btnLimparMes.Text = "Limpar";
             btnLimparMes.UseVisualStyleBackColor = true;
@@ -90,27 +92,25 @@
             // tbxIdMes
             // 
             tbxIdMes.Enabled = false;
-            tbxIdMes.Location = new Point(781, 104);
-            tbxIdMes.Margin = new Padding(3, 4, 3, 4);
+            tbxIdMes.Location = new Point(122, 537);
             tbxIdMes.Name = "tbxIdMes";
-            tbxIdMes.Size = new Size(53, 27);
+            tbxIdMes.Size = new Size(47, 23);
             tbxIdMes.TabIndex = 86;
             // 
             // label25
             // 
             label25.AutoSize = true;
-            label25.Location = new Point(781, 81);
+            label25.Location = new Point(122, 520);
             label25.Name = "label25";
-            label25.Size = new Size(24, 20);
+            label25.Size = new Size(18, 15);
             label25.TabIndex = 85;
             label25.Text = "ID";
             // 
             // btnLimparCategoria
             // 
-            btnLimparCategoria.Location = new Point(503, 104);
-            btnLimparCategoria.Margin = new Padding(3, 4, 3, 4);
+            btnLimparCategoria.Location = new Point(434, 40);
             btnLimparCategoria.Name = "btnLimparCategoria";
-            btnLimparCategoria.Size = new Size(86, 31);
+            btnLimparCategoria.Size = new Size(75, 23);
             btnLimparCategoria.TabIndex = 84;
             btnLimparCategoria.Text = "Limpar";
             btnLimparCategoria.UseVisualStyleBackColor = true;
@@ -119,18 +119,17 @@
             // tbxIdCategoria
             // 
             tbxIdCategoria.Enabled = false;
-            tbxIdCategoria.Location = new Point(14, 104);
-            tbxIdCategoria.Margin = new Padding(3, 4, 3, 4);
+            tbxIdCategoria.Location = new Point(6, 40);
             tbxIdCategoria.Name = "tbxIdCategoria";
-            tbxIdCategoria.Size = new Size(53, 27);
+            tbxIdCategoria.Size = new Size(47, 23);
             tbxIdCategoria.TabIndex = 83;
             // 
             // label24
             // 
             label24.AutoSize = true;
-            label24.Location = new Point(14, 81);
+            label24.Location = new Point(6, 23);
             label24.Name = "label24";
-            label24.Size = new Size(24, 20);
+            label24.Size = new Size(18, 15);
             label24.TabIndex = 82;
             label24.Text = "ID";
             // 
@@ -139,12 +138,11 @@
             dgvMeses.BackgroundColor = SystemColors.ControlLightLight;
             dgvMeses.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMeses.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvMeses.Location = new Point(781, 140);
-            dgvMeses.Margin = new Padding(3, 4, 3, 4);
+            dgvMeses.Location = new Point(6, 570);
             dgvMeses.MultiSelect = false;
             dgvMeses.Name = "dgvMeses";
             dgvMeses.RowHeadersWidth = 51;
-            dgvMeses.Size = new Size(965, 450);
+            dgvMeses.Size = new Size(609, 167);
             dgvMeses.TabIndex = 81;
             dgvMeses.CellDoubleClick += dgvMeses_CellDoubleClick;
             dgvMeses.CellFormatting += dgvMeses_CellFormatting;
@@ -152,9 +150,10 @@
             // 
             // btnCriarMes
             // 
-            btnCriarMes.Location = new Point(934, 104);
+            btnCriarMes.Location = new Point(256, 537);
+            btnCriarMes.Margin = new Padding(3, 2, 3, 2);
             btnCriarMes.Name = "btnCriarMes";
-            btnCriarMes.Size = new Size(117, 29);
+            btnCriarMes.Size = new Size(102, 22);
             btnCriarMes.TabIndex = 80;
             btnCriarMes.Text = "Salvar/Criar mês";
             btnCriarMes.UseVisualStyleBackColor = true;
@@ -162,10 +161,9 @@
             // 
             // btnSalvarCategoria
             // 
-            btnSalvarCategoria.Location = new Point(410, 105);
-            btnSalvarCategoria.Margin = new Padding(3, 4, 3, 4);
+            btnSalvarCategoria.Location = new Point(353, 41);
             btnSalvarCategoria.Name = "btnSalvarCategoria";
-            btnSalvarCategoria.Size = new Size(86, 31);
+            btnSalvarCategoria.Size = new Size(75, 23);
             btnSalvarCategoria.TabIndex = 79;
             btnSalvarCategoria.Text = "Salvar";
             btnSalvarCategoria.UseVisualStyleBackColor = true;
@@ -173,49 +171,54 @@
             // 
             // tbxVerbaMesCategoria
             // 
-            tbxVerbaMesCategoria.Location = new Point(841, 104);
+            tbxVerbaMesCategoria.Location = new Point(175, 537);
+            tbxVerbaMesCategoria.Margin = new Padding(3, 2, 3, 2);
             tbxVerbaMesCategoria.Name = "tbxVerbaMesCategoria";
-            tbxVerbaMesCategoria.Size = new Size(86, 27);
+            tbxVerbaMesCategoria.Size = new Size(76, 23);
             tbxVerbaMesCategoria.TabIndex = 78;
+            tbxVerbaMesCategoria.TextAlign = HorizontalAlignment.Right;
             // 
             // label23
             // 
             label23.AutoSize = true;
-            label23.Location = new Point(838, 81);
+            label23.Location = new Point(172, 520);
             label23.Name = "label23";
-            label23.Size = new Size(78, 20);
+            label23.Size = new Size(61, 15);
             label23.TabIndex = 77;
             label23.Text = "Verba mês";
             // 
             // tbxVerbaPadraoCat
             // 
-            tbxVerbaPadraoCat.Location = new Point(254, 104);
+            tbxVerbaPadraoCat.Location = new Point(216, 40);
+            tbxVerbaPadraoCat.Margin = new Padding(3, 2, 3, 2);
             tbxVerbaPadraoCat.Name = "tbxVerbaPadraoCat";
-            tbxVerbaPadraoCat.Size = new Size(149, 27);
+            tbxVerbaPadraoCat.Size = new Size(131, 23);
             tbxVerbaPadraoCat.TabIndex = 76;
+            tbxVerbaPadraoCat.TextAlign = HorizontalAlignment.Right;
             // 
             // label22
             // 
             label22.AutoSize = true;
-            label22.Location = new Point(250, 81);
+            label22.Location = new Point(213, 23);
             label22.Name = "label22";
-            label22.Size = new Size(99, 20);
+            label22.Size = new Size(76, 15);
             label22.TabIndex = 75;
             label22.Text = "Verba padrão";
             // 
             // tbxDescCategoria
             // 
-            tbxDescCategoria.Location = new Point(74, 104);
+            tbxDescCategoria.Location = new Point(59, 40);
+            tbxDescCategoria.Margin = new Padding(3, 2, 3, 2);
             tbxDescCategoria.Name = "tbxDescCategoria";
-            tbxDescCategoria.Size = new Size(174, 27);
+            tbxDescCategoria.Size = new Size(153, 23);
             tbxDescCategoria.TabIndex = 74;
             // 
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(70, 81);
+            label21.Location = new Point(55, 23);
             label21.Name = "label21";
-            label21.Size = new Size(74, 20);
+            label21.Size = new Size(58, 15);
             label21.TabIndex = 73;
             label21.Text = "Categoria";
             // 
@@ -224,33 +227,32 @@
             dgvCategorias.BackgroundColor = SystemColors.ControlLightLight;
             dgvCategorias.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvCategorias.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvCategorias.Location = new Point(14, 140);
-            dgvCategorias.Margin = new Padding(3, 4, 3, 4);
+            dgvCategorias.Location = new Point(6, 67);
             dgvCategorias.MultiSelect = false;
             dgvCategorias.Name = "dgvCategorias";
             dgvCategorias.RowHeadersWidth = 51;
-            dgvCategorias.Size = new Size(743, 450);
+            dgvCategorias.Size = new Size(609, 440);
             dgvCategorias.TabIndex = 72;
             dgvCategorias.CellDoubleClick += dgvCategorias_CellDoubleClick;
+            dgvCategorias.CellFormatting += dgvCategorias_CellFormatting;
             dgvCategorias.SelectionChanged += dgvCategorias_SelectionChanged;
             dgvCategorias.KeyDown += dgvCategorias_KeyDown;
             // 
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new Point(1185, 79);
+            label20.Location = new Point(3, 519);
             label20.Name = "label20";
-            label20.Size = new Size(127, 20);
+            label20.Size = new Size(100, 15);
             label20.TabIndex = 71;
             label20.Text = "Mês de referência";
             // 
             // dtpMesCategoria
             // 
             dtpMesCategoria.Format = DateTimePickerFormat.Custom;
-            dtpMesCategoria.Location = new Point(1189, 103);
-            dtpMesCategoria.Margin = new Padding(3, 4, 3, 4);
+            dtpMesCategoria.Location = new Point(6, 537);
             dtpMesCategoria.Name = "dtpMesCategoria";
-            dtpMesCategoria.Size = new Size(118, 27);
+            dtpMesCategoria.Size = new Size(104, 23);
             dtpMesCategoria.TabIndex = 70;
             dtpMesCategoria.ValueChanged += dtpMesCategoria_ValueChanged;
             // 
@@ -260,69 +262,69 @@
             menu.Items.AddRange(new ToolStripItem[] { lançamentosToolStripMenuItem, categoriasToolStripMenuItem, mesesFuturoToolStripMenuItem, geralToolStripMenuItem });
             menu.Location = new Point(0, 0);
             menu.Name = "menu";
-            menu.Padding = new Padding(7, 3, 0, 3);
-            menu.Size = new Size(1760, 30);
+            menu.Size = new Size(2098, 24);
             menu.TabIndex = 89;
             menu.Text = "menuStrip1";
             // 
             // lançamentosToolStripMenuItem
             // 
             lançamentosToolStripMenuItem.Name = "lançamentosToolStripMenuItem";
-            lançamentosToolStripMenuItem.Size = new Size(110, 24);
+            lançamentosToolStripMenuItem.Size = new Size(90, 20);
             lançamentosToolStripMenuItem.Text = "Lançamentos";
             lançamentosToolStripMenuItem.Click += lançamentosToolStripMenuItem_Click;
             // 
             // categoriasToolStripMenuItem
             // 
             categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
-            categoriasToolStripMenuItem.Size = new Size(94, 24);
+            categoriasToolStripMenuItem.Size = new Size(75, 20);
             categoriasToolStripMenuItem.Text = "Categorias";
             // 
             // mesesFuturoToolStripMenuItem
             // 
             mesesFuturoToolStripMenuItem.Name = "mesesFuturoToolStripMenuItem";
-            mesesFuturoToolStripMenuItem.Size = new Size(108, 24);
+            mesesFuturoToolStripMenuItem.Size = new Size(88, 20);
             mesesFuturoToolStripMenuItem.Text = "Meses futuro";
             mesesFuturoToolStripMenuItem.Click += mesesFuturoToolStripMenuItem_Click;
             // 
             // geralToolStripMenuItem
             // 
             geralToolStripMenuItem.Name = "geralToolStripMenuItem";
-            geralToolStripMenuItem.Size = new Size(58, 24);
+            geralToolStripMenuItem.Size = new Size(46, 20);
             geralToolStripMenuItem.Text = "Geral";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(10, 607);
+            label1.Location = new Point(655, 57);
             label1.Name = "label1";
-            label1.Size = new Size(127, 20);
+            label1.Size = new Size(100, 15);
             label1.TabIndex = 91;
             label1.Text = "Mês de referência";
             // 
             // dtpMesRefVerbaTotal
             // 
             dtpMesRefVerbaTotal.Format = DateTimePickerFormat.Custom;
-            dtpMesRefVerbaTotal.Location = new Point(14, 631);
-            dtpMesRefVerbaTotal.Margin = new Padding(3, 4, 3, 4);
+            dtpMesRefVerbaTotal.Location = new Point(658, 75);
             dtpMesRefVerbaTotal.Name = "dtpMesRefVerbaTotal";
-            dtpMesRefVerbaTotal.Size = new Size(118, 27);
+            dtpMesRefVerbaTotal.Size = new Size(104, 23);
             dtpMesRefVerbaTotal.TabIndex = 90;
             dtpMesRefVerbaTotal.ValueChanged += dtpMesRefVerbaTotal_ValueChanged;
             // 
             // tbxVerbaTotalMes
             // 
-            tbxVerbaTotalMes.Location = new Point(165, 631);
+            tbxVerbaTotalMes.Location = new Point(790, 75);
+            tbxVerbaTotalMes.Margin = new Padding(3, 2, 3, 2);
             tbxVerbaTotalMes.Name = "tbxVerbaTotalMes";
-            tbxVerbaTotalMes.Size = new Size(149, 27);
+            tbxVerbaTotalMes.Size = new Size(131, 23);
             tbxVerbaTotalMes.TabIndex = 93;
+            tbxVerbaTotalMes.TextAlign = HorizontalAlignment.Right;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(161, 608);
+            label2.Location = new Point(787, 58);
             label2.Name = "label2";
-            label2.Size = new Size(134, 20);
+            label2.Size = new Size(105, 15);
             label2.TabIndex = 92;
             label2.Text = "Verba total no mês";
             // 
@@ -331,35 +333,66 @@
             dgvVerbasPorMes.BackgroundColor = SystemColors.ControlLightLight;
             dgvVerbasPorMes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvVerbasPorMes.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvVerbasPorMes.Location = new Point(14, 666);
-            dgvVerbasPorMes.Margin = new Padding(3, 4, 3, 4);
+            dgvVerbasPorMes.Location = new Point(658, 102);
             dgvVerbasPorMes.MultiSelect = false;
             dgvVerbasPorMes.Name = "dgvVerbasPorMes";
             dgvVerbasPorMes.RowHeadersWidth = 51;
-            dgvVerbasPorMes.Size = new Size(1732, 258);
+            dgvVerbasPorMes.Size = new Size(1416, 670);
             dgvVerbasPorMes.TabIndex = 94;
+            dgvVerbasPorMes.CellFormatting += dgvVerbasPorMes_CellFormatting;
             // 
             // tbxSaldoTotalMes
             // 
-            tbxSaldoTotalMes.Location = new Point(320, 631);
+            tbxSaldoTotalMes.Location = new Point(926, 75);
+            tbxSaldoTotalMes.Margin = new Padding(3, 2, 3, 2);
             tbxSaldoTotalMes.Name = "tbxSaldoTotalMes";
-            tbxSaldoTotalMes.Size = new Size(149, 27);
+            tbxSaldoTotalMes.Size = new Size(131, 23);
             tbxSaldoTotalMes.TabIndex = 96;
+            tbxSaldoTotalMes.TextAlign = HorizontalAlignment.Right;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(316, 608);
+            label3.Location = new Point(922, 58);
             label3.Name = "label3";
-            label3.Size = new Size(134, 20);
+            label3.Size = new Size(105, 15);
             label3.TabIndex = 95;
             label3.Text = "Saldo total no mês";
             // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(dgvCategorias);
+            groupBox1.Controls.Add(label21);
+            groupBox1.Controls.Add(tbxDescCategoria);
+            groupBox1.Controls.Add(label22);
+            groupBox1.Controls.Add(tbxVerbaPadraoCat);
+            groupBox1.Controls.Add(btnSalvarCategoria);
+            groupBox1.Controls.Add(label24);
+            groupBox1.Controls.Add(tbxIdCategoria);
+            groupBox1.Controls.Add(btnLimparCategoria);
+            groupBox1.Controls.Add(chxTodosMeses);
+            groupBox1.Controls.Add(dgvMeses);
+            groupBox1.Controls.Add(btnLimparMes);
+            groupBox1.Controls.Add(dtpMesCategoria);
+            groupBox1.Controls.Add(tbxIdMes);
+            groupBox1.Controls.Add(label20);
+            groupBox1.Controls.Add(label25);
+            groupBox1.Controls.Add(label23);
+            groupBox1.Controls.Add(tbxVerbaMesCategoria);
+            groupBox1.Controls.Add(btnCriarMes);
+            groupBox1.Location = new Point(12, 35);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(630, 750);
+            groupBox1.TabIndex = 97;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Criar categoria/mês";
+            // 
             // TelaCategorias
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1760, 1052);
+            ClientSize = new Size(2098, 789);
+            Controls.Add(groupBox1);
             Controls.Add(tbxSaldoTotalMes);
             Controls.Add(label3);
             Controls.Add(dgvVerbasPorMes);
@@ -368,34 +401,17 @@
             Controls.Add(label1);
             Controls.Add(dtpMesRefVerbaTotal);
             Controls.Add(menu);
-            Controls.Add(chxTodosMeses);
-            Controls.Add(btnLimparMes);
-            Controls.Add(tbxIdMes);
-            Controls.Add(label25);
-            Controls.Add(btnLimparCategoria);
-            Controls.Add(tbxIdCategoria);
-            Controls.Add(label24);
-            Controls.Add(dgvMeses);
-            Controls.Add(btnCriarMes);
-            Controls.Add(btnSalvarCategoria);
-            Controls.Add(tbxVerbaMesCategoria);
-            Controls.Add(label23);
-            Controls.Add(tbxVerbaPadraoCat);
-            Controls.Add(label22);
-            Controls.Add(tbxDescCategoria);
-            Controls.Add(label21);
-            Controls.Add(dgvCategorias);
-            Controls.Add(label20);
-            Controls.Add(dtpMesCategoria);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "TelaCategorias";
             Text = "TelaCategorias";
             Load += TelaCategorias_Load;
+            Resize += TelaCategorias_Resize;
             ((System.ComponentModel.ISupportInitialize)dgvMeses).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).EndInit();
             menu.ResumeLayout(false);
             menu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVerbasPorMes).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -433,5 +449,6 @@
         private DataGridView dgvVerbasPorMes;
         private TextBox tbxSaldoTotalMes;
         private Label label3;
+        private GroupBox groupBox1;
     }
 }

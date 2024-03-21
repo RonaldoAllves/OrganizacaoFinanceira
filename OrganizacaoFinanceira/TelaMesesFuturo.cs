@@ -47,6 +47,10 @@ namespace OrganizacaoFinanceira
             int x = (this.ClientSize.Width - panelLancRecorrente.Size.Width) / 2;
             int y = (this.ClientSize.Height - panelLancRecorrente.Size.Height) / 2;
             panelLancRecorrente.Location = new Point(x, y);
+
+            dgvLancamentosRecorrentes.Height = this.Height - dgvLancamentosRecorrentes.Top - 50;
+            dgvMesesFuturos.Height = dgvLancamentosRecorrentes.Height;
+            dgvMesesFuturos.Width = this.Width - dgvMesesFuturos.Left - 50;
         }
 
         private void PreencherComboBoxCategoriasLancRecorrente()
@@ -84,6 +88,8 @@ namespace OrganizacaoFinanceira
             if (rbtSaidaLancRecorrente.Checked) lancRecorrenteNovo.chaveCategoria = (int)cbxCategoriaLancRecorrente.SelectedValue;
             else lancRecorrenteNovo.chaveCategoria = 0;
             lancRecorrenteNovo.obrigatorio = chkLancObrigatorio.Checked;
+
+            lancRecorrenteNovo.dataFinal = dtpMesFinal.Value;
 
             if (tbxIdLancRecorrente.Text.Length > 0)
             {
@@ -262,8 +268,8 @@ namespace OrganizacaoFinanceira
                     double saidasMesCategoria;
                     foreach (Categoria categoria in DadosGerais.categorias)
                     {
-                        saidatotal += DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave).Sum(x => x.valor);
-                        saidasCategoria = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && !x.obrigatorio && x.chaveCategoria == categoria.chave).Sum(x => x.valor);
+                        saidatotal += DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(DadosGerais.mesesFuturos[i].mes, x.dataFinal))).Sum(x => x.valor);
+                        saidasCategoria = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && !x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(DadosGerais.mesesFuturos[i].mes, x.dataFinal))).Sum(x => x.valor);
                         saidasMesCategoria = DadosGerais.saidas.Where(x => x.tipoSaida == 0 && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == DadosGerais.mesesFuturos[i].mes.Month && x.mesReferencia.Year == DadosGerais.mesesFuturos[i].mes.Year).Sum(x => x.valorParcela);
 
                         if (saidasMesCategoria >= saidasCategoria)
@@ -288,6 +294,15 @@ namespace OrganizacaoFinanceira
             bindingSourceMesesFuturos.DataSource = DadosGerais.mesesFuturos;
 
         }
+
+        private bool MesMenorIgual(DateTime mes1, DateTime mes2)
+        {
+            DateTime data1 = new DateTime(mes1.Year, mes1.Month, 1);
+            DateTime data2 = new DateTime(mes2.Year, mes2.Month, 1);
+
+            return data1 <= data2;
+        }
+
         private void dgvMesesFuturos_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (dgvMesesFuturos.Columns[e.ColumnIndex].DataPropertyName == "mes" &&
@@ -296,6 +311,21 @@ namespace OrganizacaoFinanceira
                 DateTime dateValue = (DateTime)e.Value;
                 e.Value = dateValue.ToString("MMM/yyyy");
                 e.FormattingApplied = true;
+            }
+
+            if (dgvMesesFuturos.Columns[e.ColumnIndex].DataPropertyName == "saldoGeral" && e.Value != null && e.Value is double)
+            {
+                double saldo = (double)e.Value;
+                if (saldo < 0)
+                {
+                    e.CellStyle.ForeColor = Color.Red;
+                    e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Bold);
+                }
+                else
+                {
+                    e.CellStyle.ForeColor = dgvMesesFuturos.DefaultCellStyle.ForeColor;
+                    e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Regular);
+                }
             }
         }
 

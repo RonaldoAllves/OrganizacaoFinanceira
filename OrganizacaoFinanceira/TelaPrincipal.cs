@@ -64,6 +64,13 @@ namespace OrganizacaoFinanceira
             this.Enabled = true;
         }
 
+        private void AjustarLayout()
+        {
+            dgvContas.Width = this.Width - 3 * dgvContas.Left - 15;
+            dgvLancamentos.Width = dgvContas.Width;
+            dgvLancamentos.Height = this.Height - dgvLancamentos.Top - 50;
+        }
+
         private void InicializarDatas()
         {
             dtpMesReferencia.CustomFormat = "MM/yyyy";
@@ -78,6 +85,8 @@ namespace OrganizacaoFinanceira
             int x = (this.ClientSize.Width - panelLancamento.Size.Width) / 2;
             int y = (this.ClientSize.Height - panelLancamento.Size.Height) / 2;
             panelLancamento.Location = new Point(x, y);
+
+            AjustarLayout();
         }
 
         #region ATUALIZAR BANCO
@@ -459,15 +468,16 @@ namespace OrganizacaoFinanceira
 
         private async void btnSalvarLancamento_Click(object sender, EventArgs e)
         {
+            bool sucesso;
             if (rbtSaidas.Checked)
             {
-                panelLancamento.Visible = !await SalvarSaida();
+                sucesso = await SalvarSaida();
             }
             else
             {
-                panelLancamento.Visible = !await SalvarEntrada();
+                sucesso = await SalvarEntrada();
             }
-            if (!panelLancamento.Visible) AtualizarValorTotalConta();
+            if (sucesso) AtualizarValorTotalConta();
         }
 
         private async Task<bool> SalvarSaida()
@@ -648,7 +658,7 @@ namespace OrganizacaoFinanceira
                 {
                     Mes mesNovo = new();
                     mesNovo.verbaAdicional = entrada.valor;
-                    CRUD.CriarMes(mesNovo, entrada.chaveCategoria, entrada.mesReferencia);
+                    await CRUD.CriarMes(mesNovo, entrada.chaveCategoria, entrada.mesReferencia);
                 }
             }
         }
@@ -836,7 +846,7 @@ namespace OrganizacaoFinanceira
                     soma += Convert.ToDouble(row.Cells[columnIndex].Value);
                 }
 
-                tbxTotalSelecionados.Text = soma.ToString();
+                tbxTotalSelecionados.Text = soma.ToString("N2");
             }
             else
             {

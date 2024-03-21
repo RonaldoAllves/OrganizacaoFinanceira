@@ -211,7 +211,7 @@ namespace OrganizacaoFinanceira
             else
                 mesNovo.verbaOriginal = categoriaSelecionada.verbaPadrao;
 
-            CRUD.CriarMes(mesNovo, categoriaSelecionada.chave, dtpMesCategoria.Value);
+            await CRUD.CriarMes(mesNovo, categoriaSelecionada.chave, dtpMesCategoria.Value);
             DadosGerais.meses = await CRUD.BuscarMeses();
             LimparMes();
             AtualizarCategorias();
@@ -345,6 +345,21 @@ namespace OrganizacaoFinanceira
                 e.Value = dateValue.ToString("MMM/yyyy");
                 e.FormattingApplied = true;
             }
+
+            if (dgvMeses.Columns[e.ColumnIndex].DataPropertyName == "saldoMes" && e.Value != null && e.Value is double)
+            {
+                double saldo = (double)e.Value;
+                if (saldo < 0)
+                {
+                    e.CellStyle.ForeColor = Color.Red;
+                    e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Bold);
+                }
+                else
+                {
+                    e.CellStyle.ForeColor = dgvMeses.DefaultCellStyle.ForeColor;
+                    e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Regular);
+                }
+            }
         }
 
         #endregion
@@ -369,7 +384,7 @@ namespace OrganizacaoFinanceira
         {
             funcoesGrid.ConfigurarGrid(dgvVerbasPorMes, bindingSourceVerbasCategorias, funcoesGrid.ColunasGridVerbasCategorias(), false);
             FiltrarVerbasMesCategorias();
-            
+
         }
         private void dtpMesRefVerbaTotal_ValueChanged(object sender, EventArgs e)
         {
@@ -389,8 +404,8 @@ namespace OrganizacaoFinanceira
             foreach (Categoria categoria in DadosGerais.categorias)
             {
                 mesAux = DadosGerais.meses.Where(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year && x.chaveCategoria == categoria.chave).FirstOrDefault();
-                
-                
+
+
                 VerbaCategorias novo = new();
                 novo.chaveCategoria = categoria.chave;
                 novo.descricaoCategoria = categoria.descricao;
@@ -418,5 +433,49 @@ namespace OrganizacaoFinanceira
 
         #endregion
 
+        private void TelaCategorias_Resize(object sender, EventArgs e)
+        {
+            dgvVerbasPorMes.Width = this.Width - dgvVerbasPorMes.Left - 50;
+            dgvVerbasPorMes.Height = this.Height - dgvVerbasPorMes.Top - 50;
+
+            groupBox1.Height = this.Height - groupBox1.Top - 50;
+            dgvMeses.Height = groupBox1.Height - dgvMeses.Top - 10;
+        }
+
+        private void dgvCategorias_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvCategorias.Columns[e.ColumnIndex].DataPropertyName == "saldoTotal" && e.Value != null && e.Value is double)
+            {
+                double saldo = (double)e.Value;
+                if (saldo < 0)
+                {
+                    e.CellStyle.ForeColor = Color.Red;
+                    e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Bold);
+                }
+                else
+                {
+                    e.CellStyle.ForeColor = dgvCategorias.DefaultCellStyle.ForeColor;
+                    e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Regular);
+                }
+            }
+        }
+
+        private void dgvVerbasPorMes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvVerbasPorMes.Columns[e.ColumnIndex].DataPropertyName == "saldoMes" && e.Value != null && e.Value is double)
+            {
+                double saldo = (double)e.Value;
+                if (saldo < 0)
+                {
+                    e.CellStyle.ForeColor = Color.Red;
+                    e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Bold);
+                }
+                else
+                {
+                    e.CellStyle.ForeColor = dgvVerbasPorMes.DefaultCellStyle.ForeColor;
+                    e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Regular);
+                }
+            }
+        }
     }
 }

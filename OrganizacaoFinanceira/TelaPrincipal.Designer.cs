@@ -103,12 +103,11 @@
             dgvContas.BackgroundColor = SystemColors.ControlLightLight;
             dgvContas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvContas.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvContas.Location = new Point(14, 135);
-            dgvContas.Margin = new Padding(3, 4, 3, 4);
+            dgvContas.Location = new Point(12, 101);
             dgvContas.MultiSelect = false;
             dgvContas.Name = "dgvContas";
             dgvContas.RowHeadersWidth = 51;
-            dgvContas.Size = new Size(743, 245);
+            dgvContas.Size = new Size(844, 149);
             dgvContas.TabIndex = 0;
             dgvContas.CellDoubleClick += dgvContas_CellDoubleClick;
             dgvContas.SelectionChanged += dgvContas_SelectionChanged;
@@ -117,77 +116,73 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(74, 68);
+            label1.Location = new Point(65, 51);
             label1.Name = "label1";
-            label1.Size = new Size(50, 20);
+            label1.Size = new Size(40, 15);
             label1.TabIndex = 1;
             label1.Text = "Banco";
             // 
             // txBanco
             // 
-            txBanco.Location = new Point(74, 92);
-            txBanco.Margin = new Padding(3, 4, 3, 4);
+            txBanco.Location = new Point(65, 69);
             txBanco.Name = "txBanco";
-            txBanco.Size = new Size(114, 27);
+            txBanco.Size = new Size(100, 23);
             txBanco.TabIndex = 2;
             // 
             // txUsuario
             // 
-            txUsuario.Location = new Point(195, 92);
-            txUsuario.Margin = new Padding(3, 4, 3, 4);
+            txUsuario.Location = new Point(171, 69);
             txUsuario.Name = "txUsuario";
-            txUsuario.Size = new Size(114, 27);
+            txUsuario.Size = new Size(100, 23);
             txUsuario.TabIndex = 4;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(195, 68);
+            label2.Location = new Point(171, 51);
             label2.Name = "label2";
-            label2.Size = new Size(59, 20);
+            label2.Size = new Size(47, 15);
             label2.TabIndex = 3;
             label2.Text = "Usuário";
             // 
             // txDataFechamento
             // 
-            txDataFechamento.Location = new Point(317, 92);
-            txDataFechamento.Margin = new Padding(3, 4, 3, 4);
+            txDataFechamento.Location = new Point(277, 69);
             txDataFechamento.Name = "txDataFechamento";
-            txDataFechamento.Size = new Size(114, 27);
+            txDataFechamento.Size = new Size(100, 23);
             txDataFechamento.TabIndex = 6;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(317, 68);
+            label3.Location = new Point(277, 51);
             label3.Name = "label3";
-            label3.Size = new Size(124, 20);
+            label3.Size = new Size(98, 15);
             label3.TabIndex = 5;
             label3.Text = "Data fechamento";
             // 
             // txValorInicial
             // 
-            txValorInicial.Location = new Point(438, 92);
-            txValorInicial.Margin = new Padding(3, 4, 3, 4);
+            txValorInicial.Location = new Point(383, 69);
             txValorInicial.Name = "txValorInicial";
-            txValorInicial.Size = new Size(114, 27);
+            txValorInicial.Size = new Size(100, 23);
             txValorInicial.TabIndex = 8;
+            txValorInicial.TextAlign = HorizontalAlignment.Right;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(438, 68);
+            label4.Location = new Point(383, 51);
             label4.Name = "label4";
-            label4.Size = new Size(86, 20);
+            label4.Size = new Size(67, 15);
             label4.TabIndex = 7;
             label4.Text = "Valor inicial";
             // 
             // btnSalvar
             // 
-            btnSalvar.Location = new Point(578, 92);
-            btnSalvar.Margin = new Padding(3, 4, 3, 4);
+            btnSalvar.Location = new Point(506, 69);
             btnSalvar.Name = "btnSalvar";
-            btnSalvar.Size = new Size(86, 31);
+            btnSalvar.Size = new Size(75, 23);
             btnSalvar.TabIndex = 9;
             btnSalvar.Text = "Salvar";
             btnSalvar.UseVisualStyleBackColor = true;
@@ -197,12 +192,11 @@
             // 
             dgvLancamentos.BackgroundColor = SystemColors.ControlLightLight;
             dgvLancamentos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvLancamentos.Location = new Point(781, 135);
-            dgvLancamentos.Margin = new Padding(3, 4, 3, 4);
+            dgvLancamentos.Location = new Point(12, 320);
             dgvLancamentos.Name = "dgvLancamentos";
             dgvLancamentos.RowHeadersWidth = 51;
             dgvLancamentos.RowTemplate.Height = 25;
-            dgvLancamentos.Size = new Size(965, 696);
+            dgvLancamentos.Size = new Size(844, 459);
             dgvLancamentos.TabIndex = 10;
             dgvLancamentos.CellDoubleClick += dgvLancamentos_CellDoubleClick;
             dgvLancamentos.CellFormatting += dgvLancamentos_CellFormatting;
@@ -212,46 +206,44 @@
             // dtpMesReferencia
             // 
             dtpMesReferencia.Format = DateTimePickerFormat.Custom;
-            dtpMesReferencia.Location = new Point(1057, 88);
-            dtpMesReferencia.Margin = new Padding(3, 4, 3, 4);
+            dtpMesReferencia.Location = new Point(12, 284);
             dtpMesReferencia.Name = "dtpMesReferencia";
-            dtpMesReferencia.Size = new Size(118, 27);
+            dtpMesReferencia.Size = new Size(104, 23);
             dtpMesReferencia.TabIndex = 11;
             dtpMesReferencia.ValueChanged += dtpMesReferencia_ValueChanged;
             // 
             // tbxTotalLancamento
             // 
-            tbxTotalLancamento.Location = new Point(1189, 88);
-            tbxTotalLancamento.Margin = new Padding(3, 4, 3, 4);
+            tbxTotalLancamento.Location = new Point(736, 284);
             tbxTotalLancamento.Name = "tbxTotalLancamento";
-            tbxTotalLancamento.Size = new Size(137, 27);
+            tbxTotalLancamento.Size = new Size(120, 23);
             tbxTotalLancamento.TabIndex = 12;
+            tbxTotalLancamento.TextAlign = HorizontalAlignment.Right;
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(1189, 64);
+            label5.Location = new Point(736, 266);
             label5.Name = "label5";
-            label5.Size = new Size(124, 20);
+            label5.Size = new Size(98, 15);
             label5.TabIndex = 13;
             label5.Text = "Total lançamento";
             // 
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(1053, 64);
+            label6.Location = new Point(8, 266);
             label6.Name = "label6";
-            label6.Size = new Size(127, 20);
+            label6.Size = new Size(100, 15);
             label6.TabIndex = 14;
             label6.Text = "Mês de referência";
             // 
             // rbtSaidas
             // 
             rbtSaidas.AutoSize = true;
-            rbtSaidas.Location = new Point(7, 24);
-            rbtSaidas.Margin = new Padding(3, 4, 3, 4);
+            rbtSaidas.Location = new Point(6, 18);
             rbtSaidas.Name = "rbtSaidas";
-            rbtSaidas.Size = new Size(73, 24);
+            rbtSaidas.Size = new Size(58, 19);
             rbtSaidas.TabIndex = 15;
             rbtSaidas.TabStop = true;
             rbtSaidas.Text = "Saídas";
@@ -262,11 +254,9 @@
             // 
             groupBox1.Controls.Add(radioButton2);
             groupBox1.Controls.Add(rbtSaidas);
-            groupBox1.Location = new Point(870, 64);
-            groupBox1.Margin = new Padding(3, 4, 3, 4);
+            groupBox1.Location = new Point(122, 265);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(3, 4, 3, 4);
-            groupBox1.Size = new Size(181, 64);
+            groupBox1.Size = new Size(158, 48);
             groupBox1.TabIndex = 16;
             groupBox1.TabStop = false;
             groupBox1.Text = "Tipo de lançamento";
@@ -274,10 +264,9 @@
             // radioButton2
             // 
             radioButton2.AutoSize = true;
-            radioButton2.Location = new Point(90, 24);
-            radioButton2.Margin = new Padding(3, 4, 3, 4);
+            radioButton2.Location = new Point(79, 18);
             radioButton2.Name = "radioButton2";
-            radioButton2.Size = new Size(87, 24);
+            radioButton2.Size = new Size(70, 19);
             radioButton2.TabIndex = 16;
             radioButton2.TabStop = true;
             radioButton2.Text = "Entradas";
@@ -286,160 +275,152 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(95, 68);
+            label7.Location = new Point(83, 51);
             label7.Name = "label7";
-            label7.Size = new Size(74, 20);
+            label7.Size = new Size(58, 15);
             label7.TabIndex = 17;
             label7.Text = "Descrição";
             // 
             // tbxDescricao
             // 
-            tbxDescricao.Location = new Point(95, 92);
-            tbxDescricao.Margin = new Padding(3, 4, 3, 4);
+            tbxDescricao.Location = new Point(83, 69);
             tbxDescricao.Name = "tbxDescricao";
-            tbxDescricao.Size = new Size(218, 27);
+            tbxDescricao.Size = new Size(191, 23);
             tbxDescricao.TabIndex = 18;
             // 
             // tbxValor
             // 
-            tbxValor.Location = new Point(320, 92);
-            tbxValor.Margin = new Padding(3, 4, 3, 4);
+            tbxValor.Location = new Point(280, 69);
             tbxValor.Name = "tbxValor";
-            tbxValor.Size = new Size(132, 27);
+            tbxValor.Size = new Size(116, 23);
             tbxValor.TabIndex = 20;
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(320, 68);
+            label8.Location = new Point(280, 51);
             label8.Name = "label8";
-            label8.Size = new Size(43, 20);
+            label8.Size = new Size(33, 15);
             label8.TabIndex = 19;
             label8.Text = "Valor";
             // 
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(6, 5);
+            label9.Location = new Point(5, 4);
             label9.Name = "label9";
-            label9.Size = new Size(56, 20);
+            label9.Size = new Size(45, 15);
             label9.TabIndex = 21;
             label9.Text = "Parcela";
             // 
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(66, 4);
+            label10.Location = new Point(58, 3);
             label10.Name = "label10";
-            label10.Size = new Size(96, 20);
+            label10.Size = new Size(76, 15);
             label10.TabIndex = 23;
             label10.Text = "Qtd. parcelas";
             // 
             // cbxCategoria
             // 
             cbxCategoria.FormattingEnabled = true;
-            cbxCategoria.Location = new Point(34, 163);
-            cbxCategoria.Margin = new Padding(3, 4, 3, 4);
+            cbxCategoria.Location = new Point(30, 122);
             cbxCategoria.Name = "cbxCategoria";
-            cbxCategoria.Size = new Size(138, 28);
+            cbxCategoria.Size = new Size(121, 23);
             cbxCategoria.TabIndex = 25;
             // 
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(34, 140);
+            label11.Location = new Point(30, 105);
             label11.Name = "label11";
-            label11.Size = new Size(74, 20);
+            label11.Size = new Size(58, 15);
             label11.TabIndex = 26;
             label11.Text = "Categoria";
             // 
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(459, 68);
+            label12.Location = new Point(402, 51);
             label12.Name = "label12";
-            label12.Size = new Size(144, 20);
+            label12.Size = new Size(113, 15);
             label12.TabIndex = 27;
             label12.Text = "Data de lançamento";
             // 
             // dtpDataLancamento
             // 
             dtpDataLancamento.Format = DateTimePickerFormat.Short;
-            dtpDataLancamento.Location = new Point(459, 92);
-            dtpDataLancamento.Margin = new Padding(3, 4, 3, 4);
+            dtpDataLancamento.Location = new Point(402, 69);
             dtpDataLancamento.Name = "dtpDataLancamento";
-            dtpDataLancamento.Size = new Size(129, 27);
+            dtpDataLancamento.Size = new Size(113, 23);
             dtpDataLancamento.TabIndex = 28;
             // 
             // dtpDataInicial
             // 
             dtpDataInicial.Format = DateTimePickerFormat.Short;
-            dtpDataInicial.Location = new Point(160, 29);
-            dtpDataInicial.Margin = new Padding(3, 4, 3, 4);
+            dtpDataInicial.Location = new Point(140, 22);
             dtpDataInicial.Name = "dtpDataInicial";
-            dtpDataInicial.Size = new Size(129, 27);
+            dtpDataInicial.Size = new Size(113, 23);
             dtpDataInicial.TabIndex = 30;
             // 
             // label13
             // 
             label13.AutoSize = true;
-            label13.Location = new Point(160, 5);
+            label13.Location = new Point(140, 4);
             label13.Name = "label13";
-            label13.Size = new Size(124, 20);
+            label13.Size = new Size(98, 15);
             label13.TabIndex = 29;
             label13.Text = "Dt. primeira parc.";
             // 
             // tbxValorTotal
             // 
-            tbxValorTotal.Location = new Point(296, 28);
-            tbxValorTotal.Margin = new Padding(3, 4, 3, 4);
+            tbxValorTotal.Location = new Point(259, 21);
             tbxValorTotal.Name = "tbxValorTotal";
-            tbxValorTotal.Size = new Size(132, 27);
+            tbxValorTotal.Size = new Size(116, 23);
             tbxValorTotal.TabIndex = 32;
             // 
             // label14
             // 
             label14.AutoSize = true;
-            label14.Location = new Point(296, 4);
+            label14.Location = new Point(259, 3);
             label14.Name = "label14";
-            label14.Size = new Size(78, 20);
+            label14.Size = new Size(60, 15);
             label14.TabIndex = 31;
             label14.Text = "Valor total";
             // 
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(325, 139);
+            label15.Location = new Point(284, 104);
             label15.Name = "label15";
-            label15.Size = new Size(127, 20);
+            label15.Size = new Size(100, 15);
             label15.TabIndex = 34;
             label15.Text = "Mês de referência";
             // 
             // dtpMesReferenciaLancamento
             // 
             dtpMesReferenciaLancamento.Format = DateTimePickerFormat.Custom;
-            dtpMesReferenciaLancamento.Location = new Point(325, 163);
-            dtpMesReferenciaLancamento.Margin = new Padding(3, 4, 3, 4);
+            dtpMesReferenciaLancamento.Location = new Point(284, 122);
             dtpMesReferenciaLancamento.Name = "dtpMesReferenciaLancamento";
-            dtpMesReferenciaLancamento.Size = new Size(118, 27);
+            dtpMesReferenciaLancamento.Size = new Size(104, 23);
             dtpMesReferenciaLancamento.TabIndex = 33;
             // 
             // label16
             // 
             label16.AutoSize = true;
-            label16.Location = new Point(179, 140);
+            label16.Location = new Point(157, 105);
             label16.Name = "label16";
-            label16.Size = new Size(48, 20);
+            label16.Size = new Size(39, 15);
             label16.TabIndex = 36;
             label16.Text = "Conta";
             // 
             // cbxContas
             // 
             cbxContas.FormattingEnabled = true;
-            cbxContas.Location = new Point(179, 163);
-            cbxContas.Margin = new Padding(3, 4, 3, 4);
+            cbxContas.Location = new Point(157, 122);
             cbxContas.Name = "cbxContas";
-            cbxContas.Size = new Size(138, 28);
+            cbxContas.Size = new Size(121, 23);
             cbxContas.TabIndex = 35;
             // 
             // panelParcelas
@@ -452,37 +433,33 @@
             panelParcelas.Controls.Add(tbxValorTotal);
             panelParcelas.Controls.Add(dtpDataInicial);
             panelParcelas.Controls.Add(label14);
-            panelParcelas.Location = new Point(29, 213);
-            panelParcelas.Margin = new Padding(3, 4, 3, 4);
+            panelParcelas.Location = new Point(25, 160);
             panelParcelas.Name = "panelParcelas";
-            panelParcelas.Size = new Size(442, 71);
+            panelParcelas.Size = new Size(387, 53);
             panelParcelas.TabIndex = 37;
             // 
             // tbxNumParcela
             // 
             tbxNumParcela.Enabled = false;
-            tbxNumParcela.Location = new Point(6, 29);
-            tbxNumParcela.Margin = new Padding(3, 4, 3, 4);
+            tbxNumParcela.Location = new Point(5, 22);
             tbxNumParcela.Name = "tbxNumParcela";
-            tbxNumParcela.Size = new Size(53, 27);
+            tbxNumParcela.Size = new Size(47, 23);
             tbxNumParcela.TabIndex = 49;
             // 
             // nudQtdParcelas
             // 
-            nudQtdParcelas.Location = new Point(66, 29);
-            nudQtdParcelas.Margin = new Padding(3, 4, 3, 4);
+            nudQtdParcelas.Location = new Point(58, 22);
             nudQtdParcelas.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudQtdParcelas.Name = "nudQtdParcelas";
-            nudQtdParcelas.Size = new Size(87, 27);
+            nudQtdParcelas.Size = new Size(76, 23);
             nudQtdParcelas.TabIndex = 40;
             nudQtdParcelas.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // btnSalvarLancamento
             // 
-            btnSalvarLancamento.Location = new Point(112, 337);
-            btnSalvarLancamento.Margin = new Padding(3, 4, 3, 4);
+            btnSalvarLancamento.Location = new Point(98, 253);
             btnSalvarLancamento.Name = "btnSalvarLancamento";
-            btnSalvarLancamento.Size = new Size(86, 31);
+            btnSalvarLancamento.Size = new Size(75, 23);
             btnSalvarLancamento.TabIndex = 38;
             btnSalvarLancamento.Text = "Salvar";
             btnSalvarLancamento.UseVisualStyleBackColor = true;
@@ -491,45 +468,43 @@
             // tbxChaveLancamento
             // 
             tbxChaveLancamento.Enabled = false;
-            tbxChaveLancamento.Location = new Point(34, 92);
-            tbxChaveLancamento.Margin = new Padding(3, 4, 3, 4);
+            tbxChaveLancamento.Location = new Point(30, 69);
             tbxChaveLancamento.Name = "tbxChaveLancamento";
-            tbxChaveLancamento.Size = new Size(53, 27);
+            tbxChaveLancamento.Size = new Size(47, 23);
             tbxChaveLancamento.TabIndex = 40;
             // 
             // label17
             // 
             label17.AutoSize = true;
-            label17.Location = new Point(34, 69);
+            label17.Location = new Point(30, 52);
             label17.Name = "label17";
-            label17.Size = new Size(24, 20);
+            label17.Size = new Size(18, 15);
             label17.TabIndex = 39;
             label17.Text = "ID";
             // 
             // tbxChaveConta
             // 
             tbxChaveConta.Enabled = false;
-            tbxChaveConta.Location = new Point(14, 92);
-            tbxChaveConta.Margin = new Padding(3, 4, 3, 4);
+            tbxChaveConta.Location = new Point(12, 69);
             tbxChaveConta.Name = "tbxChaveConta";
-            tbxChaveConta.Size = new Size(53, 27);
+            tbxChaveConta.Size = new Size(47, 23);
             tbxChaveConta.TabIndex = 42;
             // 
             // label18
             // 
             label18.AutoSize = true;
-            label18.Location = new Point(14, 69);
+            label18.Location = new Point(12, 52);
             label18.Name = "label18";
-            label18.Size = new Size(24, 20);
+            label18.Size = new Size(18, 15);
             label18.TabIndex = 41;
             label18.Text = "ID";
             // 
             // lblTipoSaida
             // 
             lblTipoSaida.AutoSize = true;
-            lblTipoSaida.Location = new Point(450, 140);
+            lblTipoSaida.Location = new Point(394, 105);
             lblTipoSaida.Name = "lblTipoSaida";
-            lblTipoSaida.Size = new Size(99, 20);
+            lblTipoSaida.Size = new Size(76, 15);
             lblTipoSaida.TabIndex = 44;
             lblTipoSaida.Text = "Tipo de saída";
             // 
@@ -537,19 +512,17 @@
             // 
             cbxTipoSaida.FormattingEnabled = true;
             cbxTipoSaida.Items.AddRange(new object[] { "Crédito", "Dinheiro" });
-            cbxTipoSaida.Location = new Point(450, 163);
-            cbxTipoSaida.Margin = new Padding(3, 4, 3, 4);
+            cbxTipoSaida.Location = new Point(394, 122);
             cbxTipoSaida.Name = "cbxTipoSaida";
-            cbxTipoSaida.Size = new Size(138, 28);
+            cbxTipoSaida.Size = new Size(121, 23);
             cbxTipoSaida.TabIndex = 43;
             // 
             // chxCredito
             // 
             chxCredito.AutoSize = true;
-            chxCredito.Location = new Point(1370, 92);
-            chxCredito.Margin = new Padding(3, 4, 3, 4);
+            chxCredito.Location = new Point(293, 284);
             chxCredito.Name = "chxCredito";
-            chxCredito.Size = new Size(80, 24);
+            chxCredito.Size = new Size(65, 19);
             chxCredito.TabIndex = 45;
             chxCredito.Text = "Crédito";
             chxCredito.UseVisualStyleBackColor = true;
@@ -558,10 +531,9 @@
             // chxDinheiro
             // 
             chxDinheiro.AutoSize = true;
-            chxDinheiro.Location = new Point(1451, 92);
-            chxDinheiro.Margin = new Padding(3, 4, 3, 4);
+            chxDinheiro.Location = new Point(364, 284);
             chxDinheiro.Name = "chxDinheiro";
-            chxDinheiro.Size = new Size(88, 24);
+            chxDinheiro.Size = new Size(71, 19);
             chxDinheiro.TabIndex = 46;
             chxDinheiro.Text = "Dinheiro";
             chxDinheiro.UseVisualStyleBackColor = true;
@@ -569,10 +541,9 @@
             // 
             // btnLimparLancamento
             // 
-            btnLimparLancamento.Location = new Point(437, 337);
-            btnLimparLancamento.Margin = new Padding(3, 4, 3, 4);
+            btnLimparLancamento.Location = new Point(382, 253);
             btnLimparLancamento.Name = "btnLimparLancamento";
-            btnLimparLancamento.Size = new Size(86, 31);
+            btnLimparLancamento.Size = new Size(75, 23);
             btnLimparLancamento.TabIndex = 47;
             btnLimparLancamento.Text = "Limpar";
             btnLimparLancamento.UseVisualStyleBackColor = true;
@@ -603,19 +574,17 @@
             panelLancamento.Controls.Add(cbxContas);
             panelLancamento.Controls.Add(dtpMesReferenciaLancamento);
             panelLancamento.Controls.Add(label15);
-            panelLancamento.Location = new Point(330, 388);
-            panelLancamento.Margin = new Padding(3, 4, 3, 4);
+            panelLancamento.Location = new Point(1618, 246);
             panelLancamento.Name = "panelLancamento";
-            panelLancamento.Size = new Size(620, 403);
+            panelLancamento.Size = new Size(543, 303);
             panelLancamento.TabIndex = 48;
             panelLancamento.Visible = false;
             // 
             // btnFecharMntLancamento
             // 
-            btnFecharMntLancamento.Location = new Point(582, 4);
-            btnFecharMntLancamento.Margin = new Padding(3, 4, 3, 4);
+            btnFecharMntLancamento.Location = new Point(509, 3);
             btnFecharMntLancamento.Name = "btnFecharMntLancamento";
-            btnFecharMntLancamento.Size = new Size(33, 31);
+            btnFecharMntLancamento.Size = new Size(29, 23);
             btnFecharMntLancamento.TabIndex = 48;
             btnFecharMntLancamento.Text = "X";
             btnFecharMntLancamento.UseVisualStyleBackColor = true;
@@ -625,17 +594,18 @@
             // 
             label19.AutoSize = true;
             label19.Font = new Font("Segoe UI", 11F, FontStyle.Regular, GraphicsUnit.Point);
-            label19.Location = new Point(185, 17);
+            label19.Location = new Point(162, 13);
             label19.Name = "label19";
-            label19.Size = new Size(269, 25);
+            label19.Size = new Size(211, 20);
             label19.TabIndex = 41;
             label19.Text = "Cadastrar/Alterar lançamentos";
             // 
             // btnNovoLancamento
             // 
-            btnNovoLancamento.Location = new Point(1651, 91);
+            btnNovoLancamento.Location = new Point(454, 280);
+            btnNovoLancamento.Margin = new Padding(3, 2, 3, 2);
             btnNovoLancamento.Name = "btnNovoLancamento";
-            btnNovoLancamento.Size = new Size(94, 29);
+            btnNovoLancamento.Size = new Size(82, 22);
             btnNovoLancamento.TabIndex = 49;
             btnNovoLancamento.Text = "Novo";
             btnNovoLancamento.UseVisualStyleBackColor = true;
@@ -643,10 +613,9 @@
             // 
             // btnNovaConta
             // 
-            btnNovaConta.Location = new Point(671, 92);
-            btnNovaConta.Margin = new Padding(3, 4, 3, 4);
+            btnNovaConta.Location = new Point(587, 69);
             btnNovaConta.Name = "btnNovaConta";
-            btnNovaConta.Size = new Size(86, 31);
+            btnNovaConta.Size = new Size(75, 23);
             btnNovaConta.TabIndex = 64;
             btnNovaConta.Text = "Limpar";
             btnNovaConta.UseVisualStyleBackColor = true;
@@ -658,60 +627,59 @@
             menu.Items.AddRange(new ToolStripItem[] { lançamentosToolStripMenuItem, categoriasToolStripMenuItem, mesesFuturoToolStripMenuItem, geralToolStripMenuItem });
             menu.Location = new Point(0, 0);
             menu.Name = "menu";
-            menu.Padding = new Padding(7, 3, 0, 3);
-            menu.Size = new Size(1766, 30);
+            menu.Size = new Size(2313, 24);
             menu.TabIndex = 85;
             menu.Text = "menuStrip1";
             // 
             // lançamentosToolStripMenuItem
             // 
             lançamentosToolStripMenuItem.Name = "lançamentosToolStripMenuItem";
-            lançamentosToolStripMenuItem.Size = new Size(110, 24);
+            lançamentosToolStripMenuItem.Size = new Size(90, 20);
             lançamentosToolStripMenuItem.Text = "Lançamentos";
             // 
             // categoriasToolStripMenuItem
             // 
             categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
-            categoriasToolStripMenuItem.Size = new Size(94, 24);
+            categoriasToolStripMenuItem.Size = new Size(75, 20);
             categoriasToolStripMenuItem.Text = "Categorias";
             categoriasToolStripMenuItem.Click += categoriasToolStripMenuItem_Click;
             // 
             // mesesFuturoToolStripMenuItem
             // 
             mesesFuturoToolStripMenuItem.Name = "mesesFuturoToolStripMenuItem";
-            mesesFuturoToolStripMenuItem.Size = new Size(108, 24);
+            mesesFuturoToolStripMenuItem.Size = new Size(88, 20);
             mesesFuturoToolStripMenuItem.Text = "Meses futuro";
             mesesFuturoToolStripMenuItem.Click += mesesFuturoToolStripMenuItem_Click;
             // 
             // geralToolStripMenuItem
             // 
             geralToolStripMenuItem.Name = "geralToolStripMenuItem";
-            geralToolStripMenuItem.Size = new Size(58, 24);
+            geralToolStripMenuItem.Size = new Size(46, 20);
             geralToolStripMenuItem.Text = "Geral";
             geralToolStripMenuItem.Click += geralToolStripMenuItem_Click;
             // 
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new Point(781, 841);
+            label20.Location = new Point(610, 266);
             label20.Name = "label20";
-            label20.Size = new Size(132, 20);
+            label20.Size = new Size(103, 15);
             label20.TabIndex = 87;
             label20.Text = "Total selecionados";
             // 
             // tbxTotalSelecionados
             // 
-            tbxTotalSelecionados.Location = new Point(781, 865);
-            tbxTotalSelecionados.Margin = new Padding(3, 4, 3, 4);
+            tbxTotalSelecionados.Location = new Point(610, 284);
             tbxTotalSelecionados.Name = "tbxTotalSelecionados";
-            tbxTotalSelecionados.Size = new Size(137, 27);
+            tbxTotalSelecionados.Size = new Size(120, 23);
             tbxTotalSelecionados.TabIndex = 86;
+            tbxTotalSelecionados.TextAlign = HorizontalAlignment.Right;
             // 
             // TelaPrincipal
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1766, 1055);
+            ClientSize = new Size(2313, 791);
             Controls.Add(label20);
             Controls.Add(tbxTotalSelecionados);
             Controls.Add(panelLancamento);
@@ -739,7 +707,6 @@
             Controls.Add(dgvContas);
             Controls.Add(menu);
             MainMenuStrip = menu;
-            Margin = new Padding(3, 4, 3, 4);
             Name = "TelaPrincipal";
             Text = "TelaPrincipal";
             Load += TelaPrincipal_Load;
