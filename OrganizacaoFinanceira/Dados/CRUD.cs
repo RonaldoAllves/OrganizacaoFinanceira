@@ -13,7 +13,7 @@ namespace OrganizacaoFinanceira.Dados
     public class CRUD
     {
         #region BUSCAS
-        public async Task BuscarTodosDados()
+        public async Task BuscarTodosDados(bool somenteInicializar)
         {
             DadosGerais.client = new FirebaseClient(DadosGerais.config);
             if (DadosGerais.client == null)
@@ -22,12 +22,27 @@ namespace OrganizacaoFinanceira.Dados
                 return;
             }
 
+            if (somenteInicializar) {
+                inicializarVazio();
+                return;
+            }
+            
             DadosGerais.contas = await BuscarContas();
             DadosGerais.saidas = await BuscarSaidas();
             DadosGerais.entradas = await BuscarEntradas();
             DadosGerais.meses = await BuscarMeses();
             DadosGerais.categorias = await BuscarCategorias();
             DadosGerais.lancamentosRecorrentes = await BuscarLancamentosRecorrentes();
+        }
+
+        private void inicializarVazio()
+        {
+            DadosGerais.contas = new();
+            DadosGerais.saidas = new();
+            DadosGerais.entradas = new();
+            DadosGerais.meses = new();
+            DadosGerais.categorias = new();
+            DadosGerais.lancamentosRecorrentes = new();
         }
 
         public async Task<SortableBindingList<Saida>> BuscarSaidas()

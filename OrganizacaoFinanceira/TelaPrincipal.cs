@@ -46,22 +46,36 @@ namespace OrganizacaoFinanceira
         {
             InitializeComponent();
 
+            ControlesVisiveis(false);
             this.WindowState = FormWindowState.Maximized;
-
             panelLancamento.BringToFront();
+            LayoutColor.EstiloLayout(this);
         }
 
         private async void TelaPrincipal_Load(object sender, EventArgs e)
-        {
+        {            
             this.Enabled = false;
+            
 
-            await CRUD.BuscarTodosDados();
+            await CRUD.BuscarTodosDados(false);
             InicializarDatas();
             InicializarContas();
             
             PreencherComboBoxCategorias();
 
-            this.Enabled = true;
+            ControlesVisiveis(true);
+            this.Enabled = true;   
+        }
+
+        private void ControlesVisiveis(bool visible)
+        {
+            foreach (Control control in this.Controls)
+            {
+                if ( control is not Panel)
+                {
+                    control.Visible = visible;                    
+                }
+            }
         }
 
         private void AjustarLayout()

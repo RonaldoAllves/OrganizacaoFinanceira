@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace OrganizacaoFinanceira
 {
@@ -32,6 +33,8 @@ namespace OrganizacaoFinanceira
         public TelaCategorias()
         {
             InitializeComponent();
+           
+            LayoutColor.EstiloLayout(this);
         }
 
         private void TelaCategorias_Load(object sender, EventArgs e)
@@ -351,7 +354,7 @@ namespace OrganizacaoFinanceira
                 double saldo = (double)e.Value;
                 if (saldo < 0)
                 {
-                    e.CellStyle.ForeColor = Color.Red;
+                    e.CellStyle.ForeColor = LayoutColor.corValorNegativo;
                     e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Bold);
                 }
                 else
@@ -438,8 +441,7 @@ namespace OrganizacaoFinanceira
             dgvVerbasPorMes.Width = this.Width - dgvVerbasPorMes.Left - 50;
             dgvVerbasPorMes.Height = this.Height - dgvVerbasPorMes.Top - 50;
 
-            groupBox1.Height = this.Height - groupBox1.Top - 50;
-            dgvMeses.Height = groupBox1.Height - dgvMeses.Top - 10;
+            dgvMeses.Height = this.Height - dgvMeses.Top - 50;
         }
 
         private void dgvCategorias_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -449,7 +451,7 @@ namespace OrganizacaoFinanceira
                 double saldo = (double)e.Value;
                 if (saldo < 0)
                 {
-                    e.CellStyle.ForeColor = Color.Red;
+                    e.CellStyle.ForeColor = LayoutColor.corValorNegativo;
                     e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Bold);
                 }
                 else
@@ -467,7 +469,7 @@ namespace OrganizacaoFinanceira
                 double saldo = (double)e.Value;
                 if (saldo < 0)
                 {
-                    e.CellStyle.ForeColor = Color.Red;
+                    e.CellStyle.ForeColor = LayoutColor.corValorNegativo;
                     e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Bold);
                 }
                 else

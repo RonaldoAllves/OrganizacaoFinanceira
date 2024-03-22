@@ -29,6 +29,7 @@ namespace OrganizacaoFinanceira
         {
             InitializeComponent();
             panelLancRecorrente.BringToFront();
+            LayoutColor.EstiloLayout(this);
         }
 
         private void TelaMesesFuturo_Load(object sender, EventArgs e)
@@ -318,7 +319,7 @@ namespace OrganizacaoFinanceira
                 double saldo = (double)e.Value;
                 if (saldo < 0)
                 {
-                    e.CellStyle.ForeColor = Color.Red;
+                    e.CellStyle.ForeColor = LayoutColor.corValorNegativo;
                     e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Bold);
                 }
                 else
