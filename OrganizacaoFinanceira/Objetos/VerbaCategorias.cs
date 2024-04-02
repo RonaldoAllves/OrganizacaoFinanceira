@@ -15,5 +15,6 @@ namespace OrganizacaoFinanceira.Objetos
         public double verbaAdicionalMesCategoria { get; set; }
         public double verbaMesCategoria { get; set; }
         public double saldoMes {  get; set; }
+        public double saldoTotal {  get; set; }
     }
 }

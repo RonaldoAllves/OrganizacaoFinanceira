@@ -48,8 +48,7 @@ namespace OrganizacaoFinanceira
 
             ControlesVisiveis(false);
             this.WindowState = FormWindowState.Maximized;
-            panelLancamento.BringToFront();
-            LayoutColor.EstiloLayout(this);
+            LayoutColor.EstiloLayout(this);            
         }
 
         private async void TelaPrincipal_Load(object sender, EventArgs e)
@@ -64,6 +63,7 @@ namespace OrganizacaoFinanceira
             PreencherComboBoxCategorias();
 
             ControlesVisiveis(true);
+            panelLancamento.BringToFront();
             this.Enabled = true;   
         }
 
@@ -476,7 +476,7 @@ namespace OrganizacaoFinanceira
             }
 
             bindingSourceEntradas.DataSource = entradasDaConta;
-            tbxTotalLancamento.Text = entradasDaConta.Sum(x => x.valor).ToString();
+            tbxTotalLancamento.Text = entradasDaConta.Sum(x => x.valor).ToString("N2");
             LimparLancamento();
         }
 

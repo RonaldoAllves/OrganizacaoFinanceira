@@ -115,6 +115,7 @@ namespace OrganizacaoFinanceira.Recursos
                 ("verbaAdicionalMesCategoria", "Verba adicional", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("verbaMesCategoria", "Verba do mês", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("saldoMes", "Saldo do mês", DataGridViewContentAlignment.MiddleCenter, 150, true),
+                ("saldoTotal", "Saldo total", DataGridViewContentAlignment.MiddleCenter, 150, true),
             };
             return colunas;
         }

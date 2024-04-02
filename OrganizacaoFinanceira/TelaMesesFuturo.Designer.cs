@@ -28,9 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            groupBox4 = new GroupBox();
-            rbtMedia = new RadioButton();
-            rbtLancamentoFuturo = new RadioButton();
             dgvMesesFuturos = new DataGridView();
             groupBox2 = new GroupBox();
             radioButton1 = new RadioButton();
@@ -66,7 +63,6 @@
             label2 = new Label();
             tbxSaidaExtra = new TextBox();
             btnRecalcular = new Button();
-            groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).BeginInit();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvLancamentosRecorrentes).BeginInit();
@@ -74,39 +70,6 @@
             groupBox3.SuspendLayout();
             menu.SuspendLayout();
             SuspendLayout();
-            // 
-            // groupBox4
-            // 
-            groupBox4.Controls.Add(rbtMedia);
-            groupBox4.Controls.Add(rbtLancamentoFuturo);
-            groupBox4.Location = new Point(839, 72);
-            groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(255, 48);
-            groupBox4.TabIndex = 89;
-            groupBox4.TabStop = false;
-            groupBox4.Text = "Tipo previsão";
-            // 
-            // rbtMedia
-            // 
-            rbtMedia.AutoSize = true;
-            rbtMedia.Location = new Point(183, 18);
-            rbtMedia.Name = "rbtMedia";
-            rbtMedia.Size = new Size(58, 19);
-            rbtMedia.TabIndex = 16;
-            rbtMedia.Text = "Média";
-            rbtMedia.UseVisualStyleBackColor = true;
-            // 
-            // rbtLancamentoFuturo
-            // 
-            rbtLancamentoFuturo.AutoSize = true;
-            rbtLancamentoFuturo.Checked = true;
-            rbtLancamentoFuturo.Location = new Point(6, 18);
-            rbtLancamentoFuturo.Name = "rbtLancamentoFuturo";
-            rbtLancamentoFuturo.Size = new Size(158, 19);
-            rbtLancamentoFuturo.TabIndex = 15;
-            rbtLancamentoFuturo.TabStop = true;
-            rbtLancamentoFuturo.Text = "Lançamentos recorrentes";
-            rbtLancamentoFuturo.UseVisualStyleBackColor = true;
             // 
             // dgvMesesFuturos
             // 
@@ -412,7 +375,7 @@
             // 
             // tbxEntradaExtra
             // 
-            tbxEntradaExtra.Location = new Point(1107, 94);
+            tbxEntradaExtra.Location = new Point(839, 97);
             tbxEntradaExtra.Name = "tbxEntradaExtra";
             tbxEntradaExtra.Size = new Size(100, 23);
             tbxEntradaExtra.TabIndex = 92;
@@ -424,7 +387,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(1107, 76);
+            label1.Location = new Point(839, 79);
             label1.Name = "label1";
             label1.Size = new Size(76, 15);
             label1.TabIndex = 93;
@@ -433,7 +396,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(1213, 76);
+            label2.Location = new Point(945, 79);
             label2.Name = "label2";
             label2.Size = new Size(64, 15);
             label2.TabIndex = 95;
@@ -441,7 +404,7 @@
             // 
             // tbxSaidaExtra
             // 
-            tbxSaidaExtra.Location = new Point(1213, 94);
+            tbxSaidaExtra.Location = new Point(945, 97);
             tbxSaidaExtra.Name = "tbxSaidaExtra";
             tbxSaidaExtra.Size = new Size(100, 23);
             tbxSaidaExtra.TabIndex = 94;
@@ -452,7 +415,7 @@
             // 
             // btnRecalcular
             // 
-            btnRecalcular.Location = new Point(1337, 93);
+            btnRecalcular.Location = new Point(1069, 96);
             btnRecalcular.Name = "btnRecalcular";
             btnRecalcular.Size = new Size(75, 23);
             btnRecalcular.TabIndex = 96;
@@ -472,7 +435,6 @@
             Controls.Add(tbxEntradaExtra);
             Controls.Add(menu);
             Controls.Add(panelLancRecorrente);
-            Controls.Add(groupBox4);
             Controls.Add(dgvMesesFuturos);
             Controls.Add(groupBox2);
             Controls.Add(dgvLancamentosRecorrentes);
@@ -481,8 +443,6 @@
             Text = "TelaMesesFuturo";
             Load += TelaMesesFuturo_Load;
             Resize += TelaMesesFuturo_Resize;
-            groupBox4.ResumeLayout(false);
-            groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).EndInit();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
@@ -498,10 +458,6 @@
         }
 
         #endregion
-
-        private GroupBox groupBox4;
-        private RadioButton rbtMedia;
-        private RadioButton rbtLancamentoFuturo;
         private DataGridView dgvMesesFuturos;
         private GroupBox groupBox2;
         private RadioButton radioButton1;

@@ -242,7 +242,7 @@ namespace OrganizacaoFinanceira
         {
             Categoria categoriaNova = new();
             categoriaNova.descricao = tbxDescCategoria.Text.Trim();
-            categoriaNova.verbaPadrao = Convert.ToDouble(tbxVerbaPadraoCat.Text);
+            categoriaNova.verbaPadrao = (!String.IsNullOrEmpty(tbxVerbaPadraoCat.Text.Trim())) ? Convert.ToDouble(tbxVerbaPadraoCat.Text) : 0;
 
             if (tbxIdCategoria.Text.Length > 0)
             {
@@ -408,7 +408,6 @@ namespace OrganizacaoFinanceira
             {
                 mesAux = DadosGerais.meses.Where(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year && x.chaveCategoria == categoria.chave).FirstOrDefault();
 
-
                 VerbaCategorias novo = new();
                 novo.chaveCategoria = categoria.chave;
                 novo.descricaoCategoria = categoria.descricao;
@@ -422,6 +421,7 @@ namespace OrganizacaoFinanceira
                     novo.verbaAdicionalMesCategoria = mesAux.verbaAdicional;
                     novo.verbaMesCategoria = mesAux.verbaMes;
                     novo.saldoMes = mesAux.saldoMes;
+                    novo.saldoTotal = categoria.saldoTotal;
                 }
 
                 verbasCategorias.Add(novo);
@@ -442,6 +442,7 @@ namespace OrganizacaoFinanceira
             dgvVerbasPorMes.Height = this.Height - dgvVerbasPorMes.Top - 50;
 
             dgvMeses.Height = this.Height - dgvMeses.Top - 50;
+            panelDivisor.Height = this.Height - panelDivisor.Top - 50;
         }
 
         private void dgvCategorias_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -464,7 +465,8 @@ namespace OrganizacaoFinanceira
 
         private void dgvVerbasPorMes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvVerbasPorMes.Columns[e.ColumnIndex].DataPropertyName == "saldoMes" && e.Value != null && e.Value is double)
+            if ((dgvVerbasPorMes.Columns[e.ColumnIndex].DataPropertyName == "saldoMes" ||
+                 dgvVerbasPorMes.Columns[e.ColumnIndex].DataPropertyName == "saldoTotal") && e.Value != null && e.Value is double)
             {
                 double saldo = (double)e.Value;
                 if (saldo < 0)
