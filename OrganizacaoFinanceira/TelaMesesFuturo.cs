@@ -39,7 +39,6 @@ namespace OrganizacaoFinanceira
             tbxEntradaExtra.Text = DadosGerais.entradaExtra.ToString();
             tbxSaidaExtra.Text = DadosGerais.saidaExtra.ToString();
             InicializarLancamentosRecorrentes();
-            InicializarMesesFuturos();
             PreencherComboBoxCategoriasLancRecorrente();
 
             this.Enabled = true;
@@ -47,22 +46,41 @@ namespace OrganizacaoFinanceira
 
         private void CarregarEntradaSaldoExtra()
         {
-            if (DadosGerais.entradaExtra != 0 && DadosGerais.saidaExtra != 0)
-            {
-                return;
-            }
-            double entradasRecorrentes = DadosGerais.lancamentosRecorrentes.Where(x=>x.tipoLancamento == 1).Sum(x => x.valor);
-            double saidasRecorrentes = DadosGerais.lancamentosRecorrentes.Where(x=>x.tipoLancamento == 0).Sum(x => x.valor);
+            double entradasRecorrentes = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).Sum(x => x.valor);
+            double saidasRecorrentes = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0).Sum(x => x.valor);
 
-            double entradasMes = DadosGerais.entradas.Where(x => x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valor);
+            double entradasMes = DadosGerais.entradas.Where(x => x.chaveCategoria == 0 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valor);
             double saidasMes = DadosGerais.saidas.Where(x => x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valorParcela);
 
             DadosGerais.entradaExtra = entradasRecorrentes - entradasMes;
-            DadosGerais.saidaExtra = saidasRecorrentes - saidasMes;
+            DadosGerais.saidaExtra = CalcularPrevisaoSaidasTotaisMes(DateTime.Now) - saidasMes;
 
             if (DadosGerais.entradaExtra == 0) DadosGerais.entradaExtra = 0;
             if (DadosGerais.saidaExtra == 0) DadosGerais.saidaExtra = 0;
 
+        }
+
+        private double CalcularPrevisaoSaidasTotaisMes(DateTime data)
+        {
+            double saidatotal = 0;
+            double saidasCategoria;
+            double saidasMesCategoria;
+            foreach (Categoria categoria in DadosGerais.categorias)
+            {
+                saidatotal += DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
+                saidasCategoria = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && !x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
+                saidasMesCategoria = DadosGerais.saidas.Where(x => x.tipoSaida == 0 && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
+
+                if (saidasMesCategoria >= saidasCategoria)
+                {
+                    saidatotal += saidasMesCategoria;
+                }
+                else
+                {
+                    saidatotal += saidasCategoria - saidasMesCategoria;
+                }
+            }
+            return saidatotal;
         }
 
         private void TelaMesesFuturo_Resize(object sender, EventArgs e)
@@ -234,16 +252,16 @@ namespace OrganizacaoFinanceira
 
         private void rbtFiltroSaidaLancRecorrente_CheckedChanged(object sender, EventArgs e)
         {
-            FiltrarLancamentosRecorrentes();
+            FiltrarLancamentosRecorrentes(false);
         }
 
-        private void FiltrarLancamentosRecorrentes()
+        private void FiltrarLancamentosRecorrentes(bool recarregar = true)
         {
             if (DadosGerais.lancamentosRecorrentes == null) return;
             SortableBindingList<LancamentoRecorrente> lancamentosFiltro = new(DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == (rbtFiltroSaidaLancRecorrente.Checked ? 0 : 1)).ToList());
             bindingSourceLancRecorrentes.DataSource = lancamentosFiltro;
             dgvLancamentosRecorrentes.Columns[2].Visible = rbtFiltroSaidaLancRecorrente.Checked;
-            InicializarMesesFuturos();
+            if (recarregar) InicializarMesesFuturos();
         }
 
         #endregion
@@ -284,24 +302,7 @@ namespace OrganizacaoFinanceira
                     entradasMesAtual = DadosGerais.entradas.Where(x => x.mesReferencia.Month == DadosGerais.mesesFuturos[i].mes.Month && x.mesReferencia.Year == DadosGerais.mesesFuturos[i].mes.Year).Sum(x => x.valor);
                 }
 
-                double saidatotal = 0;
-                double saidasCategoria;
-                double saidasMesCategoria;
-                foreach (Categoria categoria in DadosGerais.categorias)
-                {
-                    saidatotal += DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(DadosGerais.mesesFuturos[i].mes, x.dataFinal))).Sum(x => x.valor);
-                    saidasCategoria = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && !x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(DadosGerais.mesesFuturos[i].mes, x.dataFinal))).Sum(x => x.valor);
-                    saidasMesCategoria = DadosGerais.saidas.Where(x => x.tipoSaida == 0 && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == DadosGerais.mesesFuturos[i].mes.Month && x.mesReferencia.Year == DadosGerais.mesesFuturos[i].mes.Year).Sum(x => x.valorParcela);
-
-                    if (saidasMesCategoria >= saidasCategoria)
-                    {
-                        saidatotal += saidasMesCategoria;
-                    }
-                    else
-                    {
-                        saidatotal += saidasCategoria - saidasMesCategoria;
-                    }
-                }
+                double saidatotal = CalcularPrevisaoSaidasTotaisMes(DadosGerais.mesesFuturos[i].mes);                
 
                 DadosGerais.mesesFuturos[i].saidasTotais = saidatotal;
                 DadosGerais.mesesFuturos[i].entradasTotais = entradasTotaisRecorrente;
