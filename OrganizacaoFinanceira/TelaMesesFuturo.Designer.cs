@@ -441,6 +441,7 @@
             Controls.Add(btnNovoLancRecorrente);
             Name = "TelaMesesFuturo";
             Text = "TelaMesesFuturo";
+            FormClosed += TelaMesesFuturo_FormClosed;
             Load += TelaMesesFuturo_Load;
             Resize += TelaMesesFuturo_Resize;
             ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).EndInit();

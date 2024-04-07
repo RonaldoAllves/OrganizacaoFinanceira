@@ -17,11 +17,13 @@ namespace OrganizacaoFinanceira.Objetos
         public double valorParcela { get; set; }
         public int parcela { get; set; }
         public int qtdParcelas { get; set; }
+        public bool gastoObrigatorio { get; set; }
+        public double valorExtrapolado { get; set; }
         public DateTime mesReferencia { get; set; }
         public DateTime data { get; set; }
         public DateTime dataInicio { get; set; }
         public DateTime dataCadastro { get; set; }
-        public DateTime dataAlteracao { get; set; }
+        public DateTime dataAlteracao { get; set; }        
 
         public Saida Copy()
         {

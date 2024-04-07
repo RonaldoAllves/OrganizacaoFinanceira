@@ -60,10 +60,14 @@
             tbxVerbaMesCategoria = new TextBox();
             btnCriarMes = new Button();
             panelDivisor = new Panel();
+            dgvSaidasCategoria = new DataGridView();
+            tbxTotalSaida = new TextBox();
+            lblTotalSaidas = new Label();
             menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVerbasPorMes).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvMeses).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvSaidasCategoria).BeginInit();
             SuspendLayout();
             // 
             // menu
@@ -147,9 +151,10 @@
             dgvVerbasPorMes.MultiSelect = false;
             dgvVerbasPorMes.Name = "dgvVerbasPorMes";
             dgvVerbasPorMes.RowHeadersWidth = 51;
-            dgvVerbasPorMes.Size = new Size(1416, 670);
+            dgvVerbasPorMes.Size = new Size(1081, 307);
             dgvVerbasPorMes.TabIndex = 94;
             dgvVerbasPorMes.CellFormatting += dgvVerbasPorMes_CellFormatting;
+            dgvVerbasPorMes.SelectionChanged += dgvVerbasPorMes_SelectionChanged;
             // 
             // tbxSaldoTotalMes
             // 
@@ -367,11 +372,45 @@
             panelDivisor.Size = new Size(3, 739);
             panelDivisor.TabIndex = 116;
             // 
+            // dgvSaidasCategoria
+            // 
+            dgvSaidasCategoria.BackgroundColor = SystemColors.ControlLightLight;
+            dgvSaidasCategoria.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvSaidasCategoria.EditMode = DataGridViewEditMode.EditOnEnter;
+            dgvSaidasCategoria.Location = new Point(576, 459);
+            dgvSaidasCategoria.MultiSelect = false;
+            dgvSaidasCategoria.Name = "dgvSaidasCategoria";
+            dgvSaidasCategoria.RowHeadersWidth = 51;
+            dgvSaidasCategoria.Size = new Size(1081, 283);
+            dgvSaidasCategoria.TabIndex = 117;
+            dgvSaidasCategoria.CellFormatting += dgvSaidasCategoria_CellFormatting;
+            // 
+            // tbxTotalSaida
+            // 
+            tbxTotalSaida.Location = new Point(576, 431);
+            tbxTotalSaida.Margin = new Padding(3, 2, 3, 2);
+            tbxTotalSaida.Name = "tbxTotalSaida";
+            tbxTotalSaida.Size = new Size(131, 23);
+            tbxTotalSaida.TabIndex = 119;
+            tbxTotalSaida.TextAlign = HorizontalAlignment.Right;
+            // 
+            // lblTotalSaidas
+            // 
+            lblTotalSaidas.AutoSize = true;
+            lblTotalSaidas.Location = new Point(573, 414);
+            lblTotalSaidas.Name = "lblTotalSaidas";
+            lblTotalSaidas.Size = new Size(67, 15);
+            lblTotalSaidas.TabIndex = 118;
+            lblTotalSaidas.Text = "Total saídas";
+            // 
             // TelaCategorias
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1684, 789);
+            Controls.Add(tbxTotalSaida);
+            Controls.Add(lblTotalSaidas);
+            Controls.Add(dgvSaidasCategoria);
             Controls.Add(panelDivisor);
             Controls.Add(dgvCategorias);
             Controls.Add(label21);
@@ -402,6 +441,7 @@
             Controls.Add(menu);
             Name = "TelaCategorias";
             Text = "TelaCategorias";
+            FormClosed += TelaCategorias_FormClosed;
             Load += TelaCategorias_Load;
             Resize += TelaCategorias_Resize;
             menu.ResumeLayout(false);
@@ -409,6 +449,7 @@
             ((System.ComponentModel.ISupportInitialize)dgvVerbasPorMes).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvMeses).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvSaidasCategoria).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -446,5 +487,8 @@
         private TextBox tbxVerbaMesCategoria;
         private Button btnCriarMes;
         private Panel panelDivisor;
+        private DataGridView dgvSaidasCategoria;
+        private TextBox tbxTotalSaida;
+        private Label lblTotalSaidas;
     }
 }

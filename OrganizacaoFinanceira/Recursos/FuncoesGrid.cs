@@ -32,8 +32,8 @@ namespace OrganizacaoFinanceira.Recursos
                 dgv.Columns.Add(nameColumn);
             }
             dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgv.DefaultCellStyle.Font = new Font("Arial", 8, FontStyle.Regular);
-            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 8, FontStyle.Bold);
+            dgv.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
+            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
             dgv.ReadOnly = true;
             dgv.AllowUserToAddRows = false;
 
@@ -63,7 +63,7 @@ namespace OrganizacaoFinanceira.Recursos
             return colunas;
         }
 
-        public List<(string, string, DataGridViewContentAlignment, int, bool)> ColunasGridSaidas()
+        public List<(string, string, DataGridViewContentAlignment, int, bool)> ColunasGridSaidas(bool comConta = false)
         {
             List<(string, string, DataGridViewContentAlignment, int, bool)> colunas = new List<(string, string, DataGridViewContentAlignment, int, bool)>
             {
@@ -72,14 +72,24 @@ namespace OrganizacaoFinanceira.Recursos
                 ("data", "Data", DataGridViewContentAlignment.MiddleCenter, 100, false),
                 ("chaveCategoria", "Categoria", DataGridViewContentAlignment.MiddleCenter, 150, false),
                 ("tipoSaida", "Tipo", DataGridViewContentAlignment.MiddleCenter, 100, false),
+                ("gastoObrigatorio", "Obrigatório", DataGridViewContentAlignment.MiddleCenter, 75, false),
+                ("valorExtrapolado", "Valor extr.", DataGridViewContentAlignment.MiddleCenter, 100, false),
                 ("parcela", "Parcela", DataGridViewContentAlignment.MiddleCenter, 75, false),
                 ("qtdParcelas", "Qtd. de parcelas", DataGridViewContentAlignment.MiddleCenter, 100, false),
                 ("dataInicio", "Dt. primeira parcela", DataGridViewContentAlignment.MiddleCenter, 150, false),
                 ("dataCadastro", "Dt. de cadastro", DataGridViewContentAlignment.MiddleCenter, 150, false),
                 ("dataAlteracao", "Dt. de alteração", DataGridViewContentAlignment.MiddleCenter, 150, false)
             };
+
+            // Se comConta for verdadeiro, adicione uma nova coluna após "tipoSaida"
+            if (comConta)
+            {
+                colunas.Insert(5, ("chaveConta", "Conta", DataGridViewContentAlignment.MiddleCenter, 150, false));
+            }
+
             return colunas;
         }
+
 
         public List<(string, string, DataGridViewContentAlignment, int, bool)> ColunasGridEntradas()
         {
@@ -114,6 +124,7 @@ namespace OrganizacaoFinanceira.Recursos
                 ("verbaOriginalMesCategoria", "Verba original", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("verbaAdicionalMesCategoria", "Verba adicional", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("verbaMesCategoria", "Verba do mês", DataGridViewContentAlignment.MiddleCenter, 150, true),
+                ("gastoMes", "Gasto do mês", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("saldoMes", "Saldo do mês", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("saldoTotal", "Saldo total", DataGridViewContentAlignment.MiddleCenter, 150, true),
             };

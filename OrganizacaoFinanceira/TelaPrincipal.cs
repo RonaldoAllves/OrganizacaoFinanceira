@@ -33,7 +33,7 @@ namespace OrganizacaoFinanceira
 
         BindingSource bindingSourceContas = new BindingSource();
         BindingSource bindingSourceSaidas = new BindingSource();
-        BindingSource bindingSourceEntradas = new BindingSource();        
+        BindingSource bindingSourceEntradas = new BindingSource();
 
         ContaBanco contaSelecionada;
         Saida saidaSelecionada;
@@ -48,32 +48,32 @@ namespace OrganizacaoFinanceira
 
             ControlesVisiveis(false);
             this.WindowState = FormWindowState.Maximized;
-            LayoutColor.EstiloLayout(this);            
+            LayoutColor.EstiloLayout(this);
         }
 
         private async void TelaPrincipal_Load(object sender, EventArgs e)
-        {            
+        {
             this.Enabled = false;
-            
+
 
             await CRUD.BuscarTodosDados(false);
             InicializarDatas();
             InicializarContas();
-            
+
             PreencherComboBoxCategorias();
 
             ControlesVisiveis(true);
             panelLancamento.BringToFront();
-            this.Enabled = true;   
+            this.Enabled = true;
         }
 
         private void ControlesVisiveis(bool visible)
         {
             foreach (Control control in this.Controls)
             {
-                if ( control is not Panel)
+                if (control is not Panel)
                 {
-                    control.Visible = visible;                    
+                    control.Visible = visible;
                 }
             }
         }
@@ -408,6 +408,9 @@ namespace OrganizacaoFinanceira
             chxDinheiro.Visible = rbtSaidas.Checked;
             cbxTipoSaida.Visible = rbtSaidas.Checked;
             lblTipoSaida.Visible = rbtSaidas.Checked;
+            chkObrigatorio.Visible = rbtSaidas.Checked;
+            tbxValorExtrapolado.Visible = rbtSaidas.Checked;
+            label21.Visible = rbtSaidas.Checked;
 
             if (rbtSaidas.Checked)
             {
@@ -512,6 +515,8 @@ namespace OrganizacaoFinanceira
             saida.parcela = Convert.ToInt32(tbxNumParcela.Text);
             saida.qtdParcelas = Convert.ToInt32(nudQtdParcelas.Value);
             saida.dataInicio = dtpDataInicial.Value.Date;
+            saida.gastoObrigatorio = chkObrigatorio.Checked;
+            saida.valorExtrapolado = (string.IsNullOrEmpty(tbxValorExtrapolado.Text) ? 0 : Convert.ToDouble(tbxValorExtrapolado.Text));
 
             switch (cbxTipoSaida.SelectedItem)
             {
@@ -563,7 +568,7 @@ namespace OrganizacaoFinanceira
                 DadosGerais.saidas = await CRUD.BuscarSaidas();
                 FiltrarSaidas();
                 LimparLancamento();
-                
+
                 return true;
             }
             else
@@ -700,6 +705,11 @@ namespace OrganizacaoFinanceira
                 sb.AppendLine("Deve preencher a categoria. Verifique.");
             }
 
+            if (!String.IsNullOrEmpty(tbxValorExtrapolado.Text.Trim()) && (!double.TryParse(tbxValorExtrapolado.Text, out double valorExtrapolado)))
+            {
+                sb.AppendLine("Preencha o valor extrapolado corretamente. Deve ser númerico.");
+            }
+
             /*
             if (nudQtdParcelas.Value > 1 && Convert.ToInt32(tbxNumParcela.Text) == 1 && !(dtpMesReferenciaLancamento.Value.Date.Year == dtpDataInicial.Value.Year && dtpMesReferenciaLancamento.Value.Month == dtpDataInicial.Value.Month))
             {
@@ -737,6 +747,8 @@ namespace OrganizacaoFinanceira
             dtpDataInicial.Text = DateTime.Now.ToShortDateString();
             tbxValorTotal.Text = "";
             cbxTipoSaida.SelectedIndex = 0;
+            chkObrigatorio.Checked = false;
+            tbxValorExtrapolado.Text = "";
             SelecionarValorComboboxContas();
 
             nudQtdParcelas.Enabled = true;
@@ -803,6 +815,16 @@ namespace OrganizacaoFinanceira
                     e.Value = "Dinheiro";
 
                 // Define o formato de exibição da célula como texto
+                e.FormattingApplied = true;
+            }
+
+            if (dgvLancamentos.Columns[e.ColumnIndex].DataPropertyName == "gastoObrigatorio" && e.Value != null)
+            {
+                if ((bool)(e.Value))
+                    e.Value = "Sim";
+                else
+                    e.Value = "Não";
+
                 e.FormattingApplied = true;
             }
 
@@ -894,6 +916,10 @@ namespace OrganizacaoFinanceira
 
                     nudQtdParcelas.Enabled = false;
                     dtpDataInicial.Enabled = false;
+
+                    chkObrigatorio.Checked = saidaSelecionada.gastoObrigatorio;
+                    tbxValorExtrapolado.Text = saidaSelecionada.valorExtrapolado.ToString();
+                    tbxValorExtrapolado.Enabled = chkObrigatorio.Checked;
                 }
                 else
                 {
@@ -999,10 +1025,10 @@ namespace OrganizacaoFinanceira
 
         private void geralToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Formularios.telaGeral = new();
-            Formularios.telaGeral.WindowState = this.WindowState;
-            Formularios.telaGeral.Show();
-            this.Hide();
+            //Formularios.telaGeral = new();
+            //Formularios.telaGeral.WindowState = this.WindowState;
+            //Formularios.telaGeral.Show();
+            //this.Hide();
         }
 
         private void categoriasToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1019,6 +1045,11 @@ namespace OrganizacaoFinanceira
             Formularios.telaMesesFuturo.WindowState = this.WindowState;
             Formularios.telaMesesFuturo.Show();
             this.Hide();
+        }
+
+        private void chkObrigatorio_CheckedChanged(object sender, EventArgs e)
+        {
+            tbxValorExtrapolado.Enabled = chkObrigatorio.Checked;
         }
     }
 }

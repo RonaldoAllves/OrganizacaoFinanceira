@@ -23,13 +23,13 @@ namespace OrganizacaoFinanceira.Recursos
         public static void EstiloLayout(Form form)
         {
             form.BackColor = backGround;
-            CorControles(form.Controls);
+            ConfiguracaoControles(form.Controls);
         }
 
-        private static void CorControles(Control.ControlCollection controls)
+        private static void ConfiguracaoControles(Control.ControlCollection controls)
         {
             foreach (Control control in controls)
-            {
+            {                
                 switch (control)
                 {
                     case Label:
@@ -75,7 +75,7 @@ namespace OrganizacaoFinanceira.Recursos
                         MenuStrip menuStrip = (MenuStrip)control;
                         menuStrip.BackColor = corFundoGrid;
                         menuStrip.ForeColor = corLabel;
-                        break;
+                        break;                    
                 }
             }
         }

@@ -78,6 +78,9 @@
             chxDinheiro = new CheckBox();
             btnLimparLancamento = new Button();
             panelLancamento = new Panel();
+            label21 = new Label();
+            tbxValorExtrapolado = new TextBox();
+            chkObrigatorio = new CheckBox();
             btnFecharMntLancamento = new Button();
             label19 = new Label();
             btnNovoLancamento = new Button();
@@ -285,12 +288,12 @@
             // 
             tbxDescricao.Location = new Point(83, 69);
             tbxDescricao.Name = "tbxDescricao";
-            tbxDescricao.Size = new Size(191, 23);
+            tbxDescricao.Size = new Size(195, 23);
             tbxDescricao.TabIndex = 18;
             // 
             // tbxValor
             // 
-            tbxValor.Location = new Point(280, 69);
+            tbxValor.Location = new Point(283, 69);
             tbxValor.Name = "tbxValor";
             tbxValor.Size = new Size(116, 23);
             tbxValor.TabIndex = 20;
@@ -298,7 +301,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(280, 51);
+            label8.Location = new Point(283, 51);
             label8.Name = "label8";
             label8.Size = new Size(33, 15);
             label8.TabIndex = 19;
@@ -342,7 +345,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(402, 51);
+            label12.Location = new Point(405, 51);
             label12.Name = "label12";
             label12.Size = new Size(113, 15);
             label12.TabIndex = 27;
@@ -351,7 +354,7 @@
             // dtpDataLancamento
             // 
             dtpDataLancamento.Format = DateTimePickerFormat.Short;
-            dtpDataLancamento.Location = new Point(402, 69);
+            dtpDataLancamento.Location = new Point(405, 69);
             dtpDataLancamento.Name = "dtpDataLancamento";
             dtpDataLancamento.Size = new Size(113, 23);
             dtpDataLancamento.TabIndex = 28;
@@ -392,7 +395,7 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(284, 104);
+            label15.Location = new Point(287, 104);
             label15.Name = "label15";
             label15.Size = new Size(100, 15);
             label15.TabIndex = 34;
@@ -401,7 +404,7 @@
             // dtpMesReferenciaLancamento
             // 
             dtpMesReferenciaLancamento.Format = DateTimePickerFormat.Custom;
-            dtpMesReferenciaLancamento.Location = new Point(284, 122);
+            dtpMesReferenciaLancamento.Location = new Point(287, 122);
             dtpMesReferenciaLancamento.Name = "dtpMesReferenciaLancamento";
             dtpMesReferenciaLancamento.Size = new Size(104, 23);
             dtpMesReferenciaLancamento.TabIndex = 33;
@@ -457,7 +460,7 @@
             // 
             // btnSalvarLancamento
             // 
-            btnSalvarLancamento.Location = new Point(98, 253);
+            btnSalvarLancamento.Location = new Point(98, 261);
             btnSalvarLancamento.Name = "btnSalvarLancamento";
             btnSalvarLancamento.Size = new Size(75, 23);
             btnSalvarLancamento.TabIndex = 38;
@@ -502,7 +505,7 @@
             // lblTipoSaida
             // 
             lblTipoSaida.AutoSize = true;
-            lblTipoSaida.Location = new Point(394, 105);
+            lblTipoSaida.Location = new Point(397, 105);
             lblTipoSaida.Name = "lblTipoSaida";
             lblTipoSaida.Size = new Size(76, 15);
             lblTipoSaida.TabIndex = 44;
@@ -512,7 +515,7 @@
             // 
             cbxTipoSaida.FormattingEnabled = true;
             cbxTipoSaida.Items.AddRange(new object[] { "Crédito", "Dinheiro" });
-            cbxTipoSaida.Location = new Point(394, 122);
+            cbxTipoSaida.Location = new Point(397, 122);
             cbxTipoSaida.Name = "cbxTipoSaida";
             cbxTipoSaida.Size = new Size(121, 23);
             cbxTipoSaida.TabIndex = 43;
@@ -541,7 +544,7 @@
             // 
             // btnLimparLancamento
             // 
-            btnLimparLancamento.Location = new Point(382, 253);
+            btnLimparLancamento.Location = new Point(382, 261);
             btnLimparLancamento.Name = "btnLimparLancamento";
             btnLimparLancamento.Size = new Size(75, 23);
             btnLimparLancamento.TabIndex = 47;
@@ -553,6 +556,9 @@
             // 
             panelLancamento.BackColor = Color.FromArgb(255, 224, 192);
             panelLancamento.BorderStyle = BorderStyle.FixedSingle;
+            panelLancamento.Controls.Add(label21);
+            panelLancamento.Controls.Add(tbxValorExtrapolado);
+            panelLancamento.Controls.Add(chkObrigatorio);
             panelLancamento.Controls.Add(btnFecharMntLancamento);
             panelLancamento.Controls.Add(label19);
             panelLancamento.Controls.Add(btnLimparLancamento);
@@ -574,11 +580,38 @@
             panelLancamento.Controls.Add(cbxContas);
             panelLancamento.Controls.Add(dtpMesReferenciaLancamento);
             panelLancamento.Controls.Add(label15);
-            panelLancamento.Location = new Point(1618, 246);
+            panelLancamento.Location = new Point(933, 195);
             panelLancamento.Name = "panelLancamento";
             panelLancamento.Size = new Size(543, 303);
             panelLancamento.TabIndex = 48;
             panelLancamento.Visible = false;
+            // 
+            // label21
+            // 
+            label21.AutoSize = true;
+            label21.Location = new Point(165, 218);
+            label21.Name = "label21";
+            label21.Size = new Size(99, 15);
+            label21.TabIndex = 50;
+            label21.Text = "Valor extrapolado";
+            // 
+            // tbxValorExtrapolado
+            // 
+            tbxValorExtrapolado.Location = new Point(165, 232);
+            tbxValorExtrapolado.Name = "tbxValorExtrapolado";
+            tbxValorExtrapolado.Size = new Size(113, 23);
+            tbxValorExtrapolado.TabIndex = 51;
+            // 
+            // chkObrigatorio
+            // 
+            chkObrigatorio.AutoSize = true;
+            chkObrigatorio.Location = new Point(30, 234);
+            chkObrigatorio.Name = "chkObrigatorio";
+            chkObrigatorio.Size = new Size(117, 19);
+            chkObrigatorio.TabIndex = 49;
+            chkObrigatorio.Text = "gasto obrigatório";
+            chkObrigatorio.UseVisualStyleBackColor = true;
+            chkObrigatorio.CheckedChanged += chkObrigatorio_CheckedChanged;
             // 
             // btnFecharMntLancamento
             // 
@@ -627,7 +660,7 @@
             menu.Items.AddRange(new ToolStripItem[] { lançamentosToolStripMenuItem, categoriasToolStripMenuItem, mesesFuturoToolStripMenuItem, geralToolStripMenuItem });
             menu.Location = new Point(0, 0);
             menu.Name = "menu";
-            menu.Size = new Size(2313, 24);
+            menu.Size = new Size(1924, 24);
             menu.TabIndex = 85;
             menu.Text = "menuStrip1";
             // 
@@ -679,7 +712,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(2313, 791);
+            ClientSize = new Size(1924, 791);
             Controls.Add(label20);
             Controls.Add(tbxTotalSelecionados);
             Controls.Add(panelLancamento);
@@ -792,5 +825,8 @@
         private ToolStripMenuItem geralToolStripMenuItem;
         private Label label20;
         private TextBox tbxTotalSelecionados;
+        private Label label21;
+        private TextBox tbxValorExtrapolado;
+        private CheckBox chkObrigatorio;
     }
 }

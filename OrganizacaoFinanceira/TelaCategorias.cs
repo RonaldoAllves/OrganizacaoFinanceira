@@ -24,6 +24,7 @@ namespace OrganizacaoFinanceira
         BindingSource bindingSourceCategorias = new BindingSource();
         BindingSource bindingSourceMeses = new BindingSource();
         BindingSource bindingSourceVerbasCategorias = new BindingSource();
+        BindingSource bindingSourceSaidas = new BindingSource();
 
         Categoria categoriaSelecionada;
         Mes mesSelecionado;
@@ -33,7 +34,7 @@ namespace OrganizacaoFinanceira
         public TelaCategorias()
         {
             InitializeComponent();
-           
+
             LayoutColor.EstiloLayout(this);
         }
 
@@ -114,6 +115,7 @@ namespace OrganizacaoFinanceira
                             bindingSourceCategorias.DataSource = DadosGerais.categorias;
 
                             FiltrarMeses();
+                            FiltrarVerbasMesCategorias();
                         }
                         else
                         {
@@ -219,6 +221,7 @@ namespace OrganizacaoFinanceira
             LimparMes();
             AtualizarCategorias();
             FiltrarMeses();
+            FiltrarVerbasMesCategorias();
         }
 
         private void dgvCategorias_SelectionChanged(object sender, EventArgs e)
@@ -271,6 +274,7 @@ namespace OrganizacaoFinanceira
                 AtualizarCategorias();
                 LimparCategoria();
                 FiltrarMeses();
+                FiltrarVerbasMesCategorias();
             }
             else
             {
@@ -379,6 +383,7 @@ namespace OrganizacaoFinanceira
             Formularios.telaMesesFuturo.WindowState = this.WindowState;
             Formularios.telaMesesFuturo.Show();
             this.Hide();
+
         }
 
         #region VERBAS DAS CATEGORIAS
@@ -398,15 +403,18 @@ namespace OrganizacaoFinanceira
         {
             if (DadosGerais.categorias == null || DadosGerais.categorias.Count == 0 || DadosGerais.meses == null || DadosGerais.meses.Count == 0) return;
 
+            int indexOld = dgvVerbasPorMes.SelectedRows.Count > 0 ? dgvVerbasPorMes.SelectedRows[0].Index : 0;
             DateTime mes = dtpMesRefVerbaTotal.Value.Date;
             SortableBindingList<VerbaCategorias> verbasCategorias = new();
 
             Mes mesAux;
             double verbaTotalMes = 0;
             double saldoTotalMes = 0;
+            double saidasTotalMes = 0;
             foreach (Categoria categoria in DadosGerais.categorias)
             {
                 mesAux = DadosGerais.meses.Where(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year && x.chaveCategoria == categoria.chave).FirstOrDefault();
+                saidasTotalMes = DadosGerais.saidas.Where(x => x.chaveCategoria == categoria.chave && x.mesReferencia.Month == mes.Month && x.mesReferencia.Year == mes.Year).Sum(x => x.valorParcela);
 
                 VerbaCategorias novo = new();
                 novo.chaveCategoria = categoria.chave;
@@ -414,15 +422,15 @@ namespace OrganizacaoFinanceira
                 novo.verbaMesCategoria = 0;
                 novo.saldoMes = 0;
 
-                if (mesAux != null)
-                {
-                    novo.chaveMes = mesAux.chave;
-                    novo.verbaOriginalMesCategoria = mesAux.verbaOriginal;
-                    novo.verbaAdicionalMesCategoria = mesAux.verbaAdicional;
-                    novo.verbaMesCategoria = mesAux.verbaMes;
-                    novo.saldoMes = mesAux.saldoMes;
-                    novo.saldoTotal = categoria.saldoTotal;
-                }
+                if (mesAux == null) mesAux = new();
+
+                novo.chaveMes = mesAux.chave;
+                novo.verbaOriginalMesCategoria = mesAux.verbaOriginal;
+                novo.verbaAdicionalMesCategoria = mesAux.verbaAdicional;
+                novo.verbaMesCategoria = mesAux.verbaMes;
+                novo.gastoMes = saidasTotalMes;
+                novo.saldoMes = mesAux.saldoMes;
+                novo.saldoTotal = categoria.saldoTotal;
 
                 verbasCategorias.Add(novo);
                 verbaTotalMes += novo.verbaMesCategoria;
@@ -432,6 +440,18 @@ namespace OrganizacaoFinanceira
             tbxVerbaTotalMes.Text = verbaTotalMes.ToString("N2");
             tbxSaldoTotalMes.Text = saldoTotalMes.ToString("N2");
             bindingSourceVerbasCategorias.DataSource = verbasCategorias;
+
+            if (dgvVerbasPorMes != null && dgvVerbasPorMes.Rows.Count > 0)
+            {
+                if (dgvVerbasPorMes.Rows.Count >= (indexOld + 1))
+                {
+                    dgvVerbasPorMes.Rows[indexOld].Selected = true;
+                }
+                else
+                {
+                    dgvVerbasPorMes.Rows[0].Selected = true;
+                }
+            }
         }
 
         #endregion
@@ -439,7 +459,14 @@ namespace OrganizacaoFinanceira
         private void TelaCategorias_Resize(object sender, EventArgs e)
         {
             dgvVerbasPorMes.Width = this.Width - dgvVerbasPorMes.Left - 50;
-            dgvVerbasPorMes.Height = this.Height - dgvVerbasPorMes.Top - 50;
+            dgvVerbasPorMes.Height = dgvCategorias.Height;
+
+            lblTotalSaidas.Top = label20.Top;
+            tbxTotalSaida.Top = dtpMesCategoria.Top;
+
+            dgvSaidasCategoria.Width = dgvVerbasPorMes.Width;
+            dgvSaidasCategoria.Top = dgvMeses.Top;
+            dgvSaidasCategoria.Height = this.Height - dgvSaidasCategoria.Top - 50;
 
             dgvMeses.Height = this.Height - dgvMeses.Top - 50;
             panelDivisor.Height = this.Height - panelDivisor.Top - 50;
@@ -480,6 +507,108 @@ namespace OrganizacaoFinanceira
                     e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Regular);
                 }
             }
+        }
+
+        private void dgvVerbasPorMes_SelectionChanged(object sender, EventArgs e)
+        {
+            VerbaCategorias verbaCategoriaSelecionada = null;
+            if (dgvVerbasPorMes.SelectedCells.Count > 0)
+            {
+                int rowIndex = dgvVerbasPorMes.SelectedCells[0].RowIndex;
+
+                if (rowIndex >= 0 && rowIndex < dgvVerbasPorMes.Rows.Count)
+                {
+                    verbaCategoriaSelecionada = dgvVerbasPorMes.Rows[rowIndex].DataBoundItem as VerbaCategorias;
+                }
+            }
+
+            FiltrarSaidas(verbaCategoriaSelecionada);
+
+        }
+
+        private void FiltrarSaidas(VerbaCategorias verbaCategoriaSelecionada)
+        {
+            if (DadosGerais.categorias == null || DadosGerais.categorias.Count == 0 || DadosGerais.saidas == null) return;
+
+            List<Saida> saidasAux;
+            SortableBindingList<Saida> saidasDaCategoria;
+
+            if (verbaCategoriaSelecionada != null)
+            {
+                saidasAux = DadosGerais.saidas.Where(x => x.chaveCategoria == verbaCategoriaSelecionada.chaveCategoria && x.mesReferencia.Year == dtpMesRefVerbaTotal.Value.Year && x.mesReferencia.Month == dtpMesRefVerbaTotal.Value.Month).ToList();
+
+                /*
+                saidasAux = saidasAux.Where(x => (chxCredito.Checked && x.tipoSaida == 0) ||
+                                                (chxDinheiro.Checked && x.tipoSaida == 1)).ToList();*/
+
+                saidasDaCategoria = new(saidasAux);
+            }
+            else
+            {
+                saidasDaCategoria = new();
+            }
+
+            funcoesGrid.ConfigurarGrid(dgvSaidasCategoria, bindingSourceSaidas, funcoesGrid.ColunasGridSaidas(true), false);
+            bindingSourceSaidas.DataSource = saidasDaCategoria;
+
+            tbxTotalSaida.Text = saidasDaCategoria.Sum(x => x.valorParcela).ToString("N2");
+        }
+
+        private void dgvSaidasCategoria_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvSaidasCategoria.Columns[e.ColumnIndex].DataPropertyName == "tipoSaida" && e.Value != null)
+            {
+                if ((byte)(e.Value) == 0)
+                    e.Value = "Crédito";
+                else
+                    e.Value = "Dinheiro";
+
+                e.FormattingApplied = true;
+            }
+
+            if (dgvSaidasCategoria.Columns[e.ColumnIndex].DataPropertyName == "gastoObrigatorio" && e.Value != null)
+            {
+                if ((bool)(e.Value))
+                    e.Value = "Sim";
+                else
+                    e.Value = "Não";
+
+                e.FormattingApplied = true;
+            }
+
+            if (dgvSaidasCategoria.Columns[e.ColumnIndex].DataPropertyName == "chaveCategoria" && e.Value != null)
+            {
+                string descricao = "";
+                int chave = (int)e.Value;
+                if (DadosGerais.categorias != null) descricao = DadosGerais.categorias.Where(x => x.chave == chave).Select(x => x.descricao).FirstOrDefault();
+                e.Value = descricao == null ? "" : descricao;
+
+                e.FormattingApplied = true;
+            }
+
+            if (dgvSaidasCategoria.Columns[e.ColumnIndex].DataPropertyName == "chaveConta" && e.Value != null)
+            {
+                string descricao = "";
+                int chave = (int)e.Value;
+                if (DadosGerais.contas != null) descricao = DadosGerais.contas.Where(x => x.chave == chave).Select(x => x.descricaoConta).FirstOrDefault();
+                e.Value = descricao == null ? "" : descricao;
+
+                e.FormattingApplied = true;
+            }
+
+            if ((dgvSaidasCategoria.Columns[e.ColumnIndex].DataPropertyName == "data" ||
+                dgvSaidasCategoria.Columns[e.ColumnIndex].DataPropertyName == "dataInicio") &&
+                e.Value != null && e.Value is DateTime)
+            {
+                DateTime dateValue = (DateTime)e.Value;
+                e.Value = dateValue.ToString("dd/MM/yyyy");
+                e.FormattingApplied = true;
+            }
+        }
+
+        private void TelaCategorias_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Formularios.telaPrincipal.Show();
         }
     }
 }
