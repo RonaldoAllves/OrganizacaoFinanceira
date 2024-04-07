@@ -63,12 +63,23 @@
             label2 = new Label();
             tbxSaidaExtra = new TextBox();
             btnRecalcular = new Button();
+            groupBox1 = new GroupBox();
+            cbxCategoriaSimulacao = new ComboBox();
+            label7 = new Label();
+            btnSimular = new Button();
+            tbxQtdParcelas = new TextBox();
+            label5 = new Label();
+            label4 = new Label();
+            dtpDataInicialParcela = new DateTimePicker();
+            tbxValorMensal = new TextBox();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).BeginInit();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvLancamentosRecorrentes).BeginInit();
             panelLancRecorrente.SuspendLayout();
             groupBox3.SuspendLayout();
             menu.SuspendLayout();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // dgvMesesFuturos
@@ -423,11 +434,106 @@
             btnRecalcular.UseVisualStyleBackColor = true;
             btnRecalcular.Click += btnRecalcular_Click;
             // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(cbxCategoriaSimulacao);
+            groupBox1.Controls.Add(label7);
+            groupBox1.Controls.Add(btnSimular);
+            groupBox1.Controls.Add(tbxQtdParcelas);
+            groupBox1.Controls.Add(label5);
+            groupBox1.Controls.Add(label4);
+            groupBox1.Controls.Add(dtpDataInicialParcela);
+            groupBox1.Controls.Add(tbxValorMensal);
+            groupBox1.Controls.Add(label3);
+            groupBox1.Location = new Point(12, 487);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(595, 78);
+            groupBox1.TabIndex = 97;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Simular parcelamento";
+            // 
+            // cbxCategoriaSimulacao
+            // 
+            cbxCategoriaSimulacao.FormattingEnabled = true;
+            cbxCategoriaSimulacao.Location = new Point(341, 42);
+            cbxCategoriaSimulacao.Name = "cbxCategoriaSimulacao";
+            cbxCategoriaSimulacao.Size = new Size(121, 23);
+            cbxCategoriaSimulacao.TabIndex = 87;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(341, 25);
+            label7.Name = "label7";
+            label7.Size = new Size(58, 15);
+            label7.TabIndex = 88;
+            label7.Text = "Categoria";
+            // 
+            // btnSimular
+            // 
+            btnSimular.Location = new Point(493, 41);
+            btnSimular.Name = "btnSimular";
+            btnSimular.Size = new Size(75, 23);
+            btnSimular.TabIndex = 86;
+            btnSimular.Text = "Simular";
+            btnSimular.UseVisualStyleBackColor = true;
+            btnSimular.Click += btnSimular_Click;
+            // 
+            // tbxQtdParcelas
+            // 
+            tbxQtdParcelas.Location = new Point(112, 43);
+            tbxQtdParcelas.Name = "tbxQtdParcelas";
+            tbxQtdParcelas.Size = new Size(100, 23);
+            tbxQtdParcelas.TabIndex = 5;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(112, 25);
+            label5.Name = "label5";
+            label5.Size = new Size(73, 15);
+            label5.TabIndex = 4;
+            label5.Text = "Qtd parcelas";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(218, 25);
+            label4.Name = "label4";
+            label4.Size = new Size(63, 15);
+            label4.TabIndex = 3;
+            label4.Text = "Data inicio";
+            // 
+            // dtpDataInicialParcela
+            // 
+            dtpDataInicialParcela.Format = DateTimePickerFormat.Short;
+            dtpDataInicialParcela.Location = new Point(218, 43);
+            dtpDataInicialParcela.Name = "dtpDataInicialParcela";
+            dtpDataInicialParcela.Size = new Size(117, 23);
+            dtpDataInicialParcela.TabIndex = 2;
+            // 
+            // tbxValorMensal
+            // 
+            tbxValorMensal.Location = new Point(6, 43);
+            tbxValorMensal.Name = "tbxValorMensal";
+            tbxValorMensal.Size = new Size(100, 23);
+            tbxValorMensal.TabIndex = 1;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(6, 25);
+            label3.Name = "label3";
+            label3.Size = new Size(74, 15);
+            label3.TabIndex = 0;
+            label3.Text = "Valor mensal";
+            // 
             // TelaMesesFuturo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1545, 791);
+            Controls.Add(groupBox1);
             Controls.Add(btnRecalcular);
             Controls.Add(label2);
             Controls.Add(tbxSaidaExtra);
@@ -454,6 +560,8 @@
             groupBox3.PerformLayout();
             menu.ResumeLayout(false);
             menu.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -494,5 +602,15 @@
         private Button btnRecalcular;
         private Label label6;
         private DateTimePicker dtpMesFinal;
+        private GroupBox groupBox1;
+        private TextBox tbxValorMensal;
+        private Label label3;
+        private Label label4;
+        private DateTimePicker dtpDataInicialParcela;
+        private TextBox tbxQtdParcelas;
+        private Label label5;
+        private Button btnSimular;
+        private ComboBox cbxCategoriaSimulacao;
+        private Label label7;
     }
 }

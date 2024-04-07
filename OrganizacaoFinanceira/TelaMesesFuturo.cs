@@ -24,6 +24,10 @@ namespace OrganizacaoFinanceira
 
         CRUD CRUD = new CRUD();
         FuncoesGrid funcoesGrid = new();
+        private readonly DateTime data;
+
+        List<Saida> saidasComSimulacao;
+        List<Saida> parcelasSimulacao;
 
         public TelaMesesFuturo()
         {
@@ -35,9 +39,13 @@ namespace OrganizacaoFinanceira
         private void TelaMesesFuturo_Load(object sender, EventArgs e)
         {
             this.Enabled = false;
+            saidasComSimulacao = DadosGerais.saidas.ToList();
+            parcelasSimulacao = null;
+
             CarregarEntradaSaidaExtra();
             InicializarLancamentosRecorrentes();
-            PreencherComboBoxCategoriasLancRecorrente();
+            PreencherComboBoxCategorias(ref cbxCategoriaLancRecorrente);
+            PreencherComboBoxCategorias(ref cbxCategoriaSimulacao);
 
             this.Enabled = true;
         }
@@ -50,8 +58,8 @@ namespace OrganizacaoFinanceira
             if (DadosGerais.entradaExtra == 0) DadosGerais.entradaExtra = 0;
             if (DadosGerais.saidaExtra == 0) DadosGerais.saidaExtra = 0;
 
-            tbxEntradaExtra.Text = DadosGerais.entradaExtra.ToString();
-            tbxSaidaExtra.Text = DadosGerais.saidaExtra.ToString();
+            tbxEntradaExtra.Text = DadosGerais.entradaExtra.ToString("N2");
+            tbxSaidaExtra.Text = DadosGerais.saidaExtra.ToString("N2");
         }
 
         private double CalcularPrevisaoEntradaExtra()
@@ -76,12 +84,12 @@ namespace OrganizacaoFinanceira
             foreach (Categoria categoria in DadosGerais.categorias)
             {
                 valorObrigatorioPrevistoCat = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
-                valorObrigatorioRegistradoCat = DadosGerais.saidas.Where(x => x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
-                valorExtrapoladoCategoria = DadosGerais.saidas.Where(x => x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorExtrapolado);
+                valorObrigatorioRegistradoCat = saidasComSimulacao.Where(x => x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
+                valorExtrapoladoCategoria = saidasComSimulacao.Where(x => x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorExtrapolado);
                 valorFaltaGastarCategoria = valorObrigatorioPrevistoCat - valorObrigatorioRegistradoCat + valorExtrapoladoCategoria;
 
                 valorNaoObrigatorioPrevistoCat = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && !x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
-                valorNaoObrigatorioRegistradoCategoria = DadosGerais.saidas.Where(x => !x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
+                valorNaoObrigatorioRegistradoCategoria = saidasComSimulacao.Where(x => !x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
                 valorFaltaGastarCategoria += Math.Max(valorNaoObrigatorioPrevistoCat - valorNaoObrigatorioRegistradoCategoria, 0);
 
                 valorFaltaGastar += valorFaltaGastarCategoria;
@@ -98,7 +106,7 @@ namespace OrganizacaoFinanceira
             {
                 saidatotal += DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
                 saidasCategoria = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && !x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
-                saidasMesCategoria = DadosGerais.saidas.Where(x => x.tipoSaida == 0 && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
+                saidasMesCategoria = saidasComSimulacao.Where(x => x.tipoSaida == 0 && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
 
                 saidatotal += Math.Max(saidasCategoria, saidasMesCategoria);
 
@@ -117,20 +125,20 @@ namespace OrganizacaoFinanceira
             dgvMesesFuturos.Width = this.Width - dgvMesesFuturos.Left - 50;
         }
 
-        private void PreencherComboBoxCategoriasLancRecorrente()
+        private void PreencherComboBoxCategorias(ref ComboBox combo)
         {
-            cbxCategoriaLancRecorrente.DataSource = null;
-            cbxCategoriaLancRecorrente.Items.Clear();
+            combo.DataSource = null;
+            combo.Items.Clear();
 
             if (DadosGerais.categorias != null && DadosGerais.categorias.Count > 0)
             {
                 BindingList<Categoria> bindingList = new BindingList<Categoria>(DadosGerais.categorias);
-                cbxCategoriaLancRecorrente.DataSource = bindingList;
+                combo.DataSource = bindingList;
 
-                cbxCategoriaLancRecorrente.DisplayMember = "descricao";
-                cbxCategoriaLancRecorrente.ValueMember = "chave";
+                combo.DisplayMember = "descricao";
+                combo.ValueMember = "chave";
 
-                cbxCategoriaLancRecorrente.SelectedIndex = -1;
+                combo.SelectedIndex = -1;
             }
         }
 
@@ -291,10 +299,11 @@ namespace OrganizacaoFinanceira
 
         #region MESES FUTUROS
 
-        private void InicializarMesesFuturos()
+        private void InicializarMesesFuturos(List<Saida> parcelasSimuladas = null)
         {
             DadosGerais.mesesFuturos = new();
-            double saidasMesAtual = DadosGerais.saidas.Where(x => x.tipoSaida == 0 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valorParcela);
+
+            double saidasMesAtual = saidasComSimulacao.Where(x => x.tipoSaida == 0 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valorParcela);
             double valorAtualContas = DadosGerais.contas.Sum(x => x.valorAtual);
 
             valorAtualContas += Convert.ToDouble(tbxEntradaExtra.Text) - Convert.ToDouble(tbxSaidaExtra.Text);
@@ -311,9 +320,9 @@ namespace OrganizacaoFinanceira
                 saidasParceladas = 0;
                 entradasMesAtual = 0;
 
-                if (DadosGerais.saidas != null && DadosGerais.saidas.Count > 0)
+                if (saidasComSimulacao != null && saidasComSimulacao.Count > 0)
                 {
-                    saidasParceladas = DadosGerais.saidas.Where(x => x.qtdParcelas > 1 && x.mesReferencia.Month == DadosGerais.mesesFuturos[i].mes.Month && x.mesReferencia.Year == DadosGerais.mesesFuturos[i].mes.Year).Sum(x => x.valorParcela);
+                    saidasParceladas = saidasComSimulacao.Where(x => x.qtdParcelas > 1 && x.mesReferencia.Month == DadosGerais.mesesFuturos[i].mes.Month && x.mesReferencia.Year == DadosGerais.mesesFuturos[i].mes.Year).Sum(x => x.valorParcela);
                 }
 
                 if (DadosGerais.entradas != null && DadosGerais.entradas.Count > 0)
@@ -451,6 +460,32 @@ namespace OrganizacaoFinanceira
         private void TelaMesesFuturo_FormClosed(object sender, FormClosedEventArgs e)
         {
             Formularios.telaPrincipal.Show();
+        }
+
+        private void btnSimular_Click(object sender, EventArgs e)
+        {
+            saidasComSimulacao = DadosGerais.saidas.ToList();
+            parcelasSimulacao = new();
+            int qtdParcleas = Convert.ToInt16(tbxQtdParcelas.Text);
+            int categoria = (int)cbxCategoriaSimulacao.SelectedValue;
+            DateTime data = dtpDataInicialParcela.Value.Date;
+            for (int i = 0; i < qtdParcleas; i++)
+            {
+                Saida parc = new Saida();
+                parc.tipoSaida = 0;
+                parc.valorParcela = Convert.ToDouble(tbxValorMensal.Text);
+                parc.parcela = i + 1;
+                parc.dataInicio = dtpDataInicialParcela.Value.Date;
+                parc.qtdParcelas = qtdParcleas;
+                parc.mesReferencia = data;
+                parc.chaveCategoria = categoria;
+                data = data.AddMonths(1);
+
+                parcelasSimulacao.Add(parc);
+            }
+            saidasComSimulacao.AddRange(parcelasSimulacao);
+            CarregarEntradaSaidaExtra();
+            InicializarMesesFuturos();
         }
     }
 }

@@ -37,7 +37,8 @@ namespace OrganizacaoFinanceira.Recursos
                         label.ForeColor = corLabel;
                         break;
                     case Button:
-                        //Button button = (Button)control;
+                        Button button = (Button)control;
+                        button.ForeColor = Color.Black;
                         //button.UseVisualStyleBackColor = false;
                         /*;
                         button.BackColor = corButton;
@@ -50,7 +51,7 @@ namespace OrganizacaoFinanceira.Recursos
                     case GroupBox:
                         GroupBox groupBox = (GroupBox)control;
                         groupBox.ForeColor = corLabel;
-                        //CorControles(groupBox.Controls);
+                        ConfiguracaoControles(groupBox.Controls);
                         break;
                     case CheckBox:
                         CheckBox checkBox = (CheckBox)control;
