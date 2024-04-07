@@ -64,6 +64,10 @@ namespace OrganizacaoFinanceira
 
             ControlesVisiveis(true);
             panelLancamento.BringToFront();
+
+            funcoesGrid.AjustarTitulo(dgvContas, lblTituloContas, "Contas");
+            funcoesGrid.AjustarTitulo(dgvLancamentos, lblTituloSaidas, "Saídas da conta");
+
             this.Enabled = true;
         }
 
@@ -131,8 +135,11 @@ namespace OrganizacaoFinanceira
 
         private void InicializarContas()
         {
+            
             AtualizarValorTotalConta();
+
             funcoesGrid.ConfigurarGrid(dgvContas, bindingSourceContas, funcoesGrid.ColunasGridContas(), false);
+
             dgvContas.Columns[3].ToolTipText = mensagemValorAtualConta;
 
             bindingSourceContas.DataSource = DadosGerais.contas;
@@ -368,7 +375,9 @@ namespace OrganizacaoFinanceira
             else
                 contaSelecionada = null;
 
-            FiltrarLancamentos();
+            if (rbtSaidas.Checked) FiltrarLancamentosSaida();
+            else FiltrarLancamentosEntrada();
+
             SelecionarValorComboboxContas();
         }
 
@@ -382,7 +391,9 @@ namespace OrganizacaoFinanceira
 
             if (rbtSaidas.Checked)
             {
+                lblTituloSaidas.Text = "Saídas da conta selecionada";
                 funcoesGrid.ConfigurarGrid(dgvLancamentos, bindingSourceSaidas, funcoesGrid.ColunasGridSaidas(), false);
+
                 FiltrarSaidas();
                 LimparLancamento();
 
@@ -393,7 +404,9 @@ namespace OrganizacaoFinanceira
             }
             else
             {
+                lblTituloSaidas.Text = "Entradas da conta selecionada";
                 funcoesGrid.ConfigurarGrid(dgvLancamentos, bindingSourceEntradas, funcoesGrid.ColunasGridEntradas(), false);
+
                 FiltrarEntradas();
                 LimparLancamento();
             }
@@ -401,7 +414,7 @@ namespace OrganizacaoFinanceira
             PreencherComboBoxContas();
         }
 
-        private async void FiltrarLancamentos()
+        private async void FiltrarLancamentosSaida()
         {
             panelParcelas.Visible = rbtSaidas.Checked;
             chxCredito.Visible = rbtSaidas.Checked;
@@ -414,13 +427,30 @@ namespace OrganizacaoFinanceira
 
             if (rbtSaidas.Checked)
             {
+                lblTituloSaidas.Text = "Saídas da conta selecionada";
                 funcoesGrid.ConfigurarGrid(dgvLancamentos, bindingSourceSaidas, funcoesGrid.ColunasGridSaidas(), false);
+
                 entradasDaConta = null;
                 bindingSourceEntradas.DataSource = entradasDaConta;
                 FiltrarSaidas();
             }
-            else
+        }
+
+        private async void FiltrarLancamentosEntrada()
+        {
+            panelParcelas.Visible = rbtSaidas.Checked;
+            chxCredito.Visible = rbtSaidas.Checked;
+            chxDinheiro.Visible = rbtSaidas.Checked;
+            cbxTipoSaida.Visible = rbtSaidas.Checked;
+            lblTipoSaida.Visible = rbtSaidas.Checked;
+            chkObrigatorio.Visible = rbtSaidas.Checked;
+            tbxValorExtrapolado.Visible = rbtSaidas.Checked;
+            label21.Visible = rbtSaidas.Checked;
+
+            if (!rbtSaidas.Checked)       
             {
+                lblTituloSaidas.Text = "Entradas da conta selecionada";
+
                 funcoesGrid.ConfigurarGrid(dgvLancamentos, bindingSourceEntradas, funcoesGrid.ColunasGridEntradas(), false);
 
                 if (DadosGerais.entradas == null) DadosGerais.entradas = await CRUD.BuscarEntradas();
@@ -458,7 +488,10 @@ namespace OrganizacaoFinanceira
 
         private void rbtSaidas_CheckedChanged(object sender, EventArgs e)
         {
-            FiltrarLancamentos();
+            if (rbtSaidas.Checked) FiltrarLancamentosSaida();
+            else FiltrarLancamentosEntrada();
+
+            funcoesGrid.ReajustarTamanhoTitulo(dgvLancamentos, lblTituloSaidas);
         }
 
         private void FiltrarEntradas()
@@ -940,7 +973,8 @@ namespace OrganizacaoFinanceira
         }
         private void dtpMesReferencia_ValueChanged(object sender, EventArgs e)
         {
-            FiltrarLancamentos();
+            if (rbtSaidas.Checked) FiltrarLancamentosSaida();
+            else FiltrarLancamentosEntrada();
         }
 
         private void btnLimparLancamento_Click(object sender, EventArgs e)
@@ -1015,7 +1049,8 @@ namespace OrganizacaoFinanceira
                     DadosGerais.saidas = await CRUD.BuscarSaidas();
                     DadosGerais.entradas = await CRUD.BuscarEntradas();
 
-                    FiltrarLancamentos();
+                    if (rbtSaidas.Checked) FiltrarLancamentosSaida();
+                    else FiltrarLancamentosEntrada();
                     AtualizarValorTotalConta();
                 }
             }
@@ -1050,6 +1085,16 @@ namespace OrganizacaoFinanceira
         private void chkObrigatorio_CheckedChanged(object sender, EventArgs e)
         {
             tbxValorExtrapolado.Enabled = chkObrigatorio.Checked;
+        }
+
+        private void dgvContas_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            funcoesGrid.ReajustarTamanhoTitulo(dgvContas, lblTituloContas);
+        }
+
+        private void dgvLancamentos_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            funcoesGrid.ReajustarTamanhoTitulo(dgvLancamentos, lblTituloSaidas);
         }
     }
 }

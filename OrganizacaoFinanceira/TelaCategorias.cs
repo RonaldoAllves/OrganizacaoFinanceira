@@ -49,6 +49,11 @@ namespace OrganizacaoFinanceira
             this.Enabled = false;
             InicializarCategorias();
             InicializarVerbasCategorias();
+
+            funcoesGrid.AjustarTitulo(dgvCategorias, lblTituloCategorias, "Categorias criadas");
+            funcoesGrid.AjustarTitulo(dgvMeses, lblTituloMesesCriados, "Meses criados");
+            funcoesGrid.AjustarTitulo(dgvVerbasPorMes, lblTituloVerbasPorMes, "Verbas por mês");
+            funcoesGrid.AjustarTitulo(dgvSaidasCategoria, lblTituloSaidasCategoria, "Saídas da categoria");
             this.Enabled = true;
         }
 
@@ -522,11 +527,11 @@ namespace OrganizacaoFinanceira
                 }
             }
 
-            FiltrarSaidas(verbaCategoriaSelecionada);
+            FiltrarSaidas(verbaCategoriaSelecionada, false);
 
         }
 
-        private void FiltrarSaidas(VerbaCategorias verbaCategoriaSelecionada)
+        private void FiltrarSaidas(VerbaCategorias verbaCategoriaSelecionada, bool ajustarTitulo)
         {
             if (DadosGerais.categorias == null || DadosGerais.categorias.Count == 0 || DadosGerais.saidas == null) return;
 
@@ -609,6 +614,26 @@ namespace OrganizacaoFinanceira
         private void TelaCategorias_FormClosed(object sender, FormClosedEventArgs e)
         {
             Formularios.telaPrincipal.Show();
+        }
+
+        private void dgvCategorias_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            funcoesGrid.ReajustarTamanhoTitulo(dgvCategorias, lblTituloCategorias);
+        }
+
+        private void dgvMeses_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            funcoesGrid.ReajustarTamanhoTitulo(dgvMeses, lblTituloMesesCriados);
+        }
+
+        private void dgvVerbasPorMes_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            funcoesGrid.ReajustarTamanhoTitulo(dgvVerbasPorMes, lblTituloVerbasPorMes);
+        }
+
+        private void dgvSaidasCategoria_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            funcoesGrid.ReajustarTamanhoTitulo(dgvSaidasCategoria, lblTituloSaidasCategoria);
         }
     }
 }

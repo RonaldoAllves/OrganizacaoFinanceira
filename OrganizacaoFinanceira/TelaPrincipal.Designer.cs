@@ -92,6 +92,8 @@
             geralToolStripMenuItem = new ToolStripMenuItem();
             label20 = new Label();
             tbxTotalSelecionados = new TextBox();
+            lblTituloContas = new Label();
+            lblTituloSaidas = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvContas).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvLancamentos).BeginInit();
             groupBox1.SuspendLayout();
@@ -113,6 +115,7 @@
             dgvContas.Size = new Size(844, 149);
             dgvContas.TabIndex = 0;
             dgvContas.CellDoubleClick += dgvContas_CellDoubleClick;
+            dgvContas.ColumnWidthChanged += dgvContas_ColumnWidthChanged;
             dgvContas.SelectionChanged += dgvContas_SelectionChanged;
             dgvContas.KeyDown += dgvContas_KeyDown;
             // 
@@ -203,6 +206,7 @@
             dgvLancamentos.TabIndex = 10;
             dgvLancamentos.CellDoubleClick += dgvLancamentos_CellDoubleClick;
             dgvLancamentos.CellFormatting += dgvLancamentos_CellFormatting;
+            dgvLancamentos.ColumnWidthChanged += dgvLancamentos_ColumnWidthChanged;
             dgvLancamentos.SelectionChanged += dgvLancamentos_SelectionChanged;
             dgvLancamentos.KeyDown += dgvLancamentos_KeyDown;
             // 
@@ -708,11 +712,31 @@
             tbxTotalSelecionados.TabIndex = 86;
             tbxTotalSelecionados.TextAlign = HorizontalAlignment.Right;
             // 
+            // lblTituloContas
+            // 
+            lblTituloContas.AutoSize = true;
+            lblTituloContas.Location = new Point(957, 535);
+            lblTituloContas.Name = "lblTituloContas";
+            lblTituloContas.Size = new Size(44, 15);
+            lblTituloContas.TabIndex = 88;
+            lblTituloContas.Text = "Contas";
+            // 
+            // lblTituloSaidas
+            // 
+            lblTituloSaidas.AutoSize = true;
+            lblTituloSaidas.Location = new Point(959, 565);
+            lblTituloSaidas.Name = "lblTituloSaidas";
+            lblTituloSaidas.Size = new Size(89, 15);
+            lblTituloSaidas.TabIndex = 89;
+            lblTituloSaidas.Text = "Saídas da conta";
+            // 
             // TelaPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1924, 791);
+            Controls.Add(lblTituloSaidas);
+            Controls.Add(lblTituloContas);
             Controls.Add(label20);
             Controls.Add(tbxTotalSelecionados);
             Controls.Add(panelLancamento);
@@ -828,5 +852,7 @@
         private Label label21;
         private TextBox tbxValorExtrapolado;
         private CheckBox chkObrigatorio;
+        private Label lblTituloContas;
+        private Label lblTituloSaidas;
     }
 }

@@ -73,6 +73,8 @@
             dtpDataInicialParcela = new DateTimePicker();
             tbxValorMensal = new TextBox();
             label3 = new Label();
+            lblTituloLancamentosCriados = new Label();
+            lblTituloSaldosFuturo = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).BeginInit();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvLancamentosRecorrentes).BeginInit();
@@ -94,6 +96,7 @@
             dgvMesesFuturos.Size = new Size(688, 328);
             dgvMesesFuturos.TabIndex = 88;
             dgvMesesFuturos.CellFormatting += dgvMesesFuturos_CellFormatting;
+            dgvMesesFuturos.ColumnWidthChanged += dgvMesesFuturos_ColumnWidthChanged;
             // 
             // groupBox2
             // 
@@ -142,6 +145,7 @@
             dgvLancamentosRecorrentes.TabIndex = 86;
             dgvLancamentosRecorrentes.CellDoubleClick += dgvLancamentosRecorrentes_CellDoubleClick;
             dgvLancamentosRecorrentes.CellFormatting += dgvLancamentosRecorrentes_CellFormatting;
+            dgvLancamentosRecorrentes.ColumnWidthChanged += dgvLancamentosRecorrentes_ColumnWidthChanged;
             dgvLancamentosRecorrentes.SelectionChanged += dgvLancamentosRecorrentes_SelectionChanged;
             dgvLancamentosRecorrentes.KeyDown += dgvLancamentosRecorrentes_KeyDown;
             // 
@@ -528,11 +532,31 @@
             label3.TabIndex = 0;
             label3.Text = "Valor mensal";
             // 
+            // lblTituloLancamentosCriados
+            // 
+            lblTituloLancamentosCriados.AutoSize = true;
+            lblTituloLancamentosCriados.Location = new Point(754, 525);
+            lblTituloLancamentosCriados.Name = "lblTituloLancamentosCriados";
+            lblTituloLancamentosCriados.Size = new Size(119, 15);
+            lblTituloLancamentosCriados.TabIndex = 98;
+            lblTituloLancamentosCriados.Text = "Lançamentos criados";
+            // 
+            // lblTituloSaldosFuturo
+            // 
+            lblTituloSaldosFuturo.AutoSize = true;
+            lblTituloSaldosFuturo.Location = new Point(910, 525);
+            lblTituloSaldosFuturo.Name = "lblTituloSaldosFuturo";
+            lblTituloSaldosFuturo.Size = new Size(108, 15);
+            lblTituloSaldosFuturo.TabIndex = 99;
+            lblTituloSaldosFuturo.Text = "Saldo final por mês";
+            // 
             // TelaMesesFuturo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1545, 791);
+            Controls.Add(lblTituloSaldosFuturo);
+            Controls.Add(lblTituloLancamentosCriados);
             Controls.Add(groupBox1);
             Controls.Add(btnRecalcular);
             Controls.Add(label2);
@@ -612,5 +636,7 @@
         private Button btnSimular;
         private ComboBox cbxCategoriaSimulacao;
         private Label label7;
+        private Label lblTituloLancamentosCriados;
+        private Label lblTituloSaldosFuturo;
     }
 }

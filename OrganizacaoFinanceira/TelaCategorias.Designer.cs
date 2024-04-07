@@ -63,6 +63,10 @@
             dgvSaidasCategoria = new DataGridView();
             tbxTotalSaida = new TextBox();
             lblTotalSaidas = new Label();
+            lblTituloCategorias = new Label();
+            lblTituloMesesCriados = new Label();
+            lblTituloVerbasPorMes = new Label();
+            lblTituloSaidasCategoria = new Label();
             menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVerbasPorMes).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).BeginInit();
@@ -154,6 +158,7 @@
             dgvVerbasPorMes.Size = new Size(1081, 307);
             dgvVerbasPorMes.TabIndex = 94;
             dgvVerbasPorMes.CellFormatting += dgvVerbasPorMes_CellFormatting;
+            dgvVerbasPorMes.ColumnWidthChanged += dgvVerbasPorMes_ColumnWidthChanged;
             dgvVerbasPorMes.SelectionChanged += dgvVerbasPorMes_SelectionChanged;
             // 
             // tbxSaldoTotalMes
@@ -187,6 +192,7 @@
             dgvCategorias.TabIndex = 99;
             dgvCategorias.CellDoubleClick += dgvCategorias_CellDoubleClick;
             dgvCategorias.CellFormatting += dgvCategorias_CellFormatting;
+            dgvCategorias.ColumnWidthChanged += dgvCategorias_ColumnWidthChanged;
             dgvCategorias.SelectionChanged += dgvCategorias_SelectionChanged;
             dgvCategorias.KeyDown += dgvCategorias_KeyDown;
             // 
@@ -287,6 +293,7 @@
             dgvMeses.TabIndex = 108;
             dgvMeses.CellDoubleClick += dgvMeses_CellDoubleClick;
             dgvMeses.CellFormatting += dgvMeses_CellFormatting;
+            dgvMeses.ColumnWidthChanged += dgvMeses_ColumnWidthChanged;
             dgvMeses.SelectionChanged += dgvMeses_SelectionChanged;
             // 
             // btnLimparMes
@@ -384,6 +391,7 @@
             dgvSaidasCategoria.Size = new Size(1081, 283);
             dgvSaidasCategoria.TabIndex = 117;
             dgvSaidasCategoria.CellFormatting += dgvSaidasCategoria_CellFormatting;
+            dgvSaidasCategoria.ColumnWidthChanged += dgvSaidasCategoria_ColumnWidthChanged;
             // 
             // tbxTotalSaida
             // 
@@ -403,11 +411,51 @@
             lblTotalSaidas.TabIndex = 118;
             lblTotalSaidas.Text = "Total saídas";
             // 
+            // lblTituloCategorias
+            // 
+            lblTituloCategorias.AutoSize = true;
+            lblTituloCategorias.Location = new Point(578, 756);
+            lblTituloCategorias.Name = "lblTituloCategorias";
+            lblTituloCategorias.Size = new Size(63, 15);
+            lblTituloCategorias.TabIndex = 120;
+            lblTituloCategorias.Text = "Categorias";
+            // 
+            // lblTituloMesesCriados
+            // 
+            lblTituloMesesCriados.AutoSize = true;
+            lblTituloMesesCriados.Location = new Point(662, 756);
+            lblTituloMesesCriados.Name = "lblTituloMesesCriados";
+            lblTituloMesesCriados.Size = new Size(81, 15);
+            lblTituloMesesCriados.TabIndex = 121;
+            lblTituloMesesCriados.Text = "Meses criados";
+            // 
+            // lblTituloVerbasPorMes
+            // 
+            lblTituloVerbasPorMes.AutoSize = true;
+            lblTituloVerbasPorMes.Location = new Point(747, 757);
+            lblTituloVerbasPorMes.Name = "lblTituloVerbasPorMes";
+            lblTituloVerbasPorMes.Size = new Size(87, 15);
+            lblTituloVerbasPorMes.TabIndex = 122;
+            lblTituloVerbasPorMes.Text = "Verbas por mês";
+            // 
+            // lblTituloSaidasCategoria
+            // 
+            lblTituloSaidasCategoria.AutoSize = true;
+            lblTituloSaidasCategoria.Location = new Point(844, 757);
+            lblTituloSaidasCategoria.Name = "lblTituloSaidasCategoria";
+            lblTituloSaidasCategoria.Size = new Size(108, 15);
+            lblTituloSaidasCategoria.TabIndex = 123;
+            lblTituloSaidasCategoria.Text = "Saídas da categoria";
+            // 
             // TelaCategorias
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1684, 789);
+            ClientSize = new Size(1684, 904);
+            Controls.Add(lblTituloSaidasCategoria);
+            Controls.Add(lblTituloVerbasPorMes);
+            Controls.Add(lblTituloMesesCriados);
+            Controls.Add(lblTituloCategorias);
             Controls.Add(tbxTotalSaida);
             Controls.Add(lblTotalSaidas);
             Controls.Add(dgvSaidasCategoria);
@@ -490,5 +538,9 @@
         private DataGridView dgvSaidasCategoria;
         private TextBox tbxTotalSaida;
         private Label lblTotalSaidas;
+        private Label lblTituloCategorias;
+        private Label lblTituloMesesCriados;
+        private Label lblTituloVerbasPorMes;
+        private Label lblTituloSaidasCategoria;
     }
 }

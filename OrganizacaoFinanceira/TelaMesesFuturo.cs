@@ -47,6 +47,9 @@ namespace OrganizacaoFinanceira
             PreencherComboBoxCategorias(ref cbxCategoriaLancRecorrente);
             PreencherComboBoxCategorias(ref cbxCategoriaSimulacao);
 
+            funcoesGrid.AjustarTitulo(dgvLancamentosRecorrentes, lblTituloLancamentosCriados, "Lançamentos criados");
+            funcoesGrid.AjustarTitulo(dgvMesesFuturos, lblTituloSaldosFuturo, "Previsão do saldo final por mês");
+
             this.Enabled = true;
         }
 
@@ -341,7 +344,6 @@ namespace OrganizacaoFinanceira
 
             funcoesGrid.ConfigurarGrid(dgvMesesFuturos, bindingSourceMesesFuturos, funcoesGrid.ColunasGridMesesFuturos(), false);
             bindingSourceMesesFuturos.DataSource = DadosGerais.mesesFuturos;
-
         }
 
         private bool MesMenorIgual(DateTime mes1, DateTime mes2)
@@ -486,6 +488,16 @@ namespace OrganizacaoFinanceira
             saidasComSimulacao.AddRange(parcelasSimulacao);
             CarregarEntradaSaidaExtra();
             InicializarMesesFuturos();
+        }
+
+        private void dgvLancamentosRecorrentes_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            funcoesGrid.ReajustarTamanhoTitulo(dgvLancamentosRecorrentes, lblTituloLancamentosCriados);
+        }
+
+        private void dgvMesesFuturos_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            funcoesGrid.ReajustarTamanhoTitulo(dgvMesesFuturos, lblTituloSaldosFuturo);
         }
     }
 }

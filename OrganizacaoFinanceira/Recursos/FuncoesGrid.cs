@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace OrganizacaoFinanceira.Recursos
 {
     internal class FuncoesGrid
     {
-        public void ConfigurarGrid(DataGridView dgv, BindingSource bindingSource, List<(string, string, DataGridViewContentAlignment, int, bool)> colunas, bool autoSizeFill = true)
+        public void ConfigurarGrid(DataGridView dgv, BindingSource bindingSource, List<(string, string, DataGridViewContentAlignment, int, bool)> colunas, bool autoSizeFill)
         {
             // Configuração do DataGridView
             dgv.AllowUserToDeleteRows = false;
@@ -45,6 +46,47 @@ namespace OrganizacaoFinanceira.Recursos
             {
                 column.SortMode = DataGridViewColumnSortMode.Automatic;
             }
+        }
+
+        public void AjustarTitulo(DataGridView dataGridView, Label labelTitulo, string titulo)
+        {
+            labelTitulo.AutoSize = false;
+            labelTitulo.Text = titulo;
+            labelTitulo.BackColor = Color.FromArgb(181, 230, 29);
+            labelTitulo.ForeColor = LayoutColor.backGround;
+            labelTitulo.TextAlign = ContentAlignment.MiddleCenter;
+            labelTitulo.Font = new Font("Arial", 12, FontStyle.Bold | FontStyle.Italic);
+
+
+            // Definir o tamanho do label igual ao do DataGridView e centralizar
+            labelTitulo.Width = CalcularLarguraTotal(dataGridView);
+            labelTitulo.Height = 20; // Ajuste conforme necessário
+            labelTitulo.Left = dataGridView.Left;
+
+            labelTitulo.Top = dataGridView.Top;
+            dataGridView.Top = labelTitulo.Top + labelTitulo.Height;
+
+        }
+
+        public static int CalcularLarguraTotal(DataGridView dataGridView)
+        {
+            int larguraTotal = 0;
+
+            // Somar a largura de cada coluna
+            foreach (DataGridViewColumn coluna in dataGridView.Columns)
+            {
+                larguraTotal += coluna.Width;
+            }
+
+            // Adicionar a largura da borda direita do DataGridView
+            larguraTotal += dataGridView.RowHeadersWidth;
+
+            return larguraTotal;
+        }
+
+        public void ReajustarTamanhoTitulo(DataGridView dgv, Label labelTitulo)
+        {
+            labelTitulo.Width = CalcularLarguraTotal(dgv);
         }
 
         public List<(string, string, DataGridViewContentAlignment, int, bool)> ColunasGridContas()
