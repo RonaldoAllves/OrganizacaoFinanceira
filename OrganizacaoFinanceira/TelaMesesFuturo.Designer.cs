@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TelaMesesFuturo));
             dgvMesesFuturos = new DataGridView();
             groupBox2 = new GroupBox();
             radioButton1 = new RadioButton();
@@ -430,7 +431,7 @@
             // 
             // btnRecalcular
             // 
-            btnRecalcular.Location = new Point(1069, 96);
+            btnRecalcular.Location = new Point(1051, 97);
             btnRecalcular.Name = "btnRecalcular";
             btnRecalcular.Size = new Size(75, 23);
             btnRecalcular.TabIndex = 96;
@@ -569,8 +570,9 @@
             Controls.Add(groupBox2);
             Controls.Add(dgvLancamentosRecorrentes);
             Controls.Add(btnNovoLancRecorrente);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "TelaMesesFuturo";
-            Text = "TelaMesesFuturo";
+            Text = "Previsão meses";
             FormClosed += TelaMesesFuturo_FormClosed;
             Load += TelaMesesFuturo_Load;
             Resize += TelaMesesFuturo_Resize;

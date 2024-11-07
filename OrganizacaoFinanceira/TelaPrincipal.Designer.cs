@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TelaPrincipal));
             dgvContas = new DataGridView();
             label1 = new Label();
             txBanco = new TextBox();
@@ -215,6 +216,7 @@
             dtpMesReferencia.Format = DateTimePickerFormat.Custom;
             dtpMesReferencia.Location = new Point(12, 284);
             dtpMesReferencia.Name = "dtpMesReferencia";
+            dtpMesReferencia.ShowUpDown = true;
             dtpMesReferencia.Size = new Size(104, 23);
             dtpMesReferencia.TabIndex = 11;
             dtpMesReferencia.ValueChanged += dtpMesReferencia_ValueChanged;
@@ -412,6 +414,7 @@
             dtpMesReferenciaLancamento.Name = "dtpMesReferenciaLancamento";
             dtpMesReferenciaLancamento.Size = new Size(104, 23);
             dtpMesReferenciaLancamento.TabIndex = 33;
+            dtpMesReferenciaLancamento.ValueChanged += dtpMesReferenciaLancamento_ValueChanged;
             // 
             // label16
             // 
@@ -763,9 +766,10 @@
             Controls.Add(label1);
             Controls.Add(dgvContas);
             Controls.Add(menu);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menu;
             Name = "TelaPrincipal";
-            Text = "TelaPrincipal";
+            Text = "Lançamentos";
             Load += TelaPrincipal_Load;
             Resize += TelaPrincipal_Resize;
             ((System.ComponentModel.ISupportInitialize)dgvContas).EndInit();

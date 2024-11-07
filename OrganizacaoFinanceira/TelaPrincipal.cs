@@ -30,6 +30,7 @@ namespace OrganizacaoFinanceira
         FuncoesGrid funcoesGrid = new();
 
         string mensagemValorAtualConta = "";
+        bool podeFiltrar = true;
 
         BindingSource bindingSourceContas = new BindingSource();
         BindingSource bindingSourceSaidas = new BindingSource();
@@ -54,7 +55,7 @@ namespace OrganizacaoFinanceira
         private async void TelaPrincipal_Load(object sender, EventArgs e)
         {
             this.Enabled = false;
-
+            podeFiltrar = false;
 
             await CRUD.BuscarTodosDados(false);
             InicializarDatas();
@@ -67,6 +68,9 @@ namespace OrganizacaoFinanceira
 
             funcoesGrid.AjustarTitulo(dgvContas, lblTituloContas, "Contas");
             funcoesGrid.AjustarTitulo(dgvLancamentos, lblTituloSaidas, "Saídas da conta");
+
+            podeFiltrar = true;
+            FiltrarSaidas();
 
             this.Enabled = true;
         }
@@ -91,9 +95,11 @@ namespace OrganizacaoFinanceira
 
         private void InicializarDatas()
         {
+            dtpMesReferencia.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             dtpMesReferencia.CustomFormat = "MM/yyyy";
             dtpMesReferencia.ShowUpDown = true;
 
+            dtpMesReferenciaLancamento.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             dtpMesReferenciaLancamento.CustomFormat = "MM/yyyy";
             dtpMesReferenciaLancamento.ShowUpDown = true;
         }
@@ -135,7 +141,7 @@ namespace OrganizacaoFinanceira
 
         private void InicializarContas()
         {
-            
+
             AtualizarValorTotalConta();
 
             funcoesGrid.ConfigurarGrid(dgvContas, bindingSourceContas, funcoesGrid.ColunasGridContas(), false);
@@ -162,7 +168,7 @@ namespace OrganizacaoFinanceira
             foreach (ContaBanco conta in DadosGerais.contas)
             {
                 saidasConta = DadosGerais.saidas.Where(x => x.chaveConta == conta.chave && DataMenorIgual(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valorParcela);
-                entradasConta = DadosGerais.entradas.Where(x => x.chaveConta == conta.chave).Sum(x => x.valor);
+                entradasConta = DadosGerais.entradas.Where(x => x.chaveConta == conta.chave && DataMenorIgual(x.mesReferencia, DateTime.Now.Date)).Sum(x => x.valor);
 
                 creditoMesAtual = DadosGerais.saidas.Where(x => x.chaveConta == conta.chave && x.tipoSaida == 0 && DatasIguais(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valorParcela);
                 saidasConta -= creditoMesAtual;
@@ -338,13 +344,6 @@ namespace OrganizacaoFinanceira
                 return false;
             }
 
-            // Verificar se o valor do valor inicial é maior que zero
-            if (valorInicial < 0)
-            {
-                MessageBox.Show("O valor inicial deve ser maior que zero.");
-                return false;
-            }
-
             return true;
         }
 
@@ -447,7 +446,7 @@ namespace OrganizacaoFinanceira
             tbxValorExtrapolado.Visible = rbtSaidas.Checked;
             label21.Visible = rbtSaidas.Checked;
 
-            if (!rbtSaidas.Checked)       
+            if (!rbtSaidas.Checked)
             {
                 lblTituloSaidas.Text = "Entradas da conta selecionada";
 
@@ -463,6 +462,7 @@ namespace OrganizacaoFinanceira
 
         private void FiltrarSaidas()
         {
+            if (!podeFiltrar) return;
             if (DadosGerais.contas == null || DadosGerais.contas.Count == 0 || DadosGerais.saidas == null) return;
 
             List<Saida> saidasAux;
@@ -496,6 +496,7 @@ namespace OrganizacaoFinanceira
 
         private void FiltrarEntradas()
         {
+            if (!podeFiltrar) return;
             if (DadosGerais.contas == null || DadosGerais.contas.Count == 0 || DadosGerais.entradas == null) return;
 
             List<Entrada> entradaAux;
@@ -973,6 +974,18 @@ namespace OrganizacaoFinanceira
         }
         private void dtpMesReferencia_ValueChanged(object sender, EventArgs e)
         {
+            // Obtém o valor atual do DateTimePicker
+            DateTime currentDate = dtpMesReferencia.Value;
+
+            // Ajusta a data para o primeiro dia do mês atual
+            DateTime adjustedDate = new DateTime(currentDate.Year, currentDate.Month, 1);
+
+            // Se o dia atual for diferente do dia ajustado, atualize a data
+            if (currentDate != adjustedDate)
+            {
+                dtpMesReferencia.Value = adjustedDate;
+            }
+
             if (rbtSaidas.Checked) FiltrarLancamentosSaida();
             else FiltrarLancamentosEntrada();
         }
@@ -1095,6 +1108,21 @@ namespace OrganizacaoFinanceira
         private void dgvLancamentos_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
             funcoesGrid.ReajustarTamanhoTitulo(dgvLancamentos, lblTituloSaidas);
+        }
+
+        private void dtpMesReferenciaLancamento_ValueChanged(object sender, EventArgs e)
+        {
+            // Obtém o valor atual do DateTimePicker
+            DateTime currentDate = dtpMesReferenciaLancamento.Value;
+
+            // Ajusta a data para o primeiro dia do mês atual
+            DateTime adjustedDate = new DateTime(currentDate.Year, currentDate.Month, 1);
+
+            // Se o dia atual for diferente do dia ajustado, atualize a data
+            if (currentDate != adjustedDate)
+            {
+                dtpMesReferenciaLancamento.Value = adjustedDate;
+            }
         }
     }
 }

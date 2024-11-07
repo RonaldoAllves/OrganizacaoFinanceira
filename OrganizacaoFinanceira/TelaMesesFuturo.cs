@@ -69,8 +69,8 @@ namespace OrganizacaoFinanceira
         {
             double entradasRecorrentes = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).Sum(x => x.valor);
             double entradasMes = DadosGerais.entradas.Where(x => x.chaveCategoria == 0 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valor);
-
-            return entradasRecorrentes - entradasMes;
+            double entradaExtra = entradasRecorrentes - entradasMes;
+            return entradaExtra < 0 ? 0 : entradaExtra;
         }
 
         private double CalcularPrevisaoSaidaExtra()
@@ -97,6 +97,7 @@ namespace OrganizacaoFinanceira
 
                 valorFaltaGastar += valorFaltaGastarCategoria;
             }
+            valorFaltaGastar = valorFaltaGastar < 0? 0 : valorFaltaGastar;
             return valorFaltaGastar;
         }
 
@@ -312,16 +313,23 @@ namespace OrganizacaoFinanceira
             valorAtualContas += Convert.ToDouble(tbxEntradaExtra.Text) - Convert.ToDouble(tbxSaidaExtra.Text);
             valorAtualContas -= saidasMesAtual;
 
+            MesFuturo primeiroMes = new MesFuturo();
+            primeiroMes.mes = DateTime.Now;
+            primeiroMes.saldoGeral = valorAtualContas;
+            primeiroMes.entradasTotais = DadosGerais.entradas.Where(x => x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valor) + Convert.ToDouble(tbxEntradaExtra.Text);
+            primeiroMes.saidasTotais = saidasMesAtual + Convert.ToDouble(tbxSaidaExtra.Text);
+            primeiroMes.saidasParceladas = saidasComSimulacao.Where(x => x.qtdParcelas > 1 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valorParcela);
+
             double entradasTotaisRecorrente = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).Sum(x => x.valor);
             double saidasParceladas;
-            double entradasMesAtual;
+            double entradasMes;
             for (int i = 0; i < 24; i++)
             {
                 DadosGerais.mesesFuturos.Add(new MesFuturo());
                 DadosGerais.mesesFuturos[i].mes = DateTime.Now.AddMonths(i + 1).Date;
 
                 saidasParceladas = 0;
-                entradasMesAtual = 0;
+                entradasMes = 0;
 
                 if (saidasComSimulacao != null && saidasComSimulacao.Count > 0)
                 {
@@ -330,17 +338,19 @@ namespace OrganizacaoFinanceira
 
                 if (DadosGerais.entradas != null && DadosGerais.entradas.Count > 0)
                 {
-                    entradasMesAtual = DadosGerais.entradas.Where(x => x.mesReferencia.Month == DadosGerais.mesesFuturos[i].mes.Month && x.mesReferencia.Year == DadosGerais.mesesFuturos[i].mes.Year).Sum(x => x.valor);
+                    entradasMes = DadosGerais.entradas.Where(x => x.mesReferencia.Month == DadosGerais.mesesFuturos[i].mes.Month && x.mesReferencia.Year == DadosGerais.mesesFuturos[i].mes.Year).Sum(x => x.valor);
                 }
 
                 double saidatotal = CalcularPrevisaoSaidasTotaisMes(DadosGerais.mesesFuturos[i].mes);
 
                 DadosGerais.mesesFuturos[i].saidasTotais = saidatotal;
-                DadosGerais.mesesFuturos[i].entradasTotais = entradasTotaisRecorrente;
+                DadosGerais.mesesFuturos[i].entradasTotais = Math.Max(entradasTotaisRecorrente, entradasMes);
                 DadosGerais.mesesFuturos[i].saidasParceladas = saidasParceladas;
-                DadosGerais.mesesFuturos[i].saldoGeral = valorAtualContas + entradasTotaisRecorrente - saidatotal - entradasMesAtual;
+                DadosGerais.mesesFuturos[i].saldoGeral = valorAtualContas + DadosGerais.mesesFuturos[i].entradasTotais - saidatotal;
                 valorAtualContas = DadosGerais.mesesFuturos[i].saldoGeral;
             }
+
+            DadosGerais.mesesFuturos.Insert(0, primeiroMes);
 
             funcoesGrid.ConfigurarGrid(dgvMesesFuturos, bindingSourceMesesFuturos, funcoesGrid.ColunasGridMesesFuturos(), false);
             bindingSourceMesesFuturos.DataSource = DadosGerais.mesesFuturos;

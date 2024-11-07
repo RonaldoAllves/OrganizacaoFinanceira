@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>icon-logo.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="icon-logo.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FireSharp.Serialization.JsonNet" Version="1.1.0" />

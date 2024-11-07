@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TelaCategorias));
             menu = new MenuStrip();
             lançamentosToolStripMenuItem = new ToolStripMenuItem();
             categoriasToolStripMenuItem = new ToolStripMenuItem();
@@ -271,7 +272,7 @@
             // chxTodosMeses
             // 
             chxTodosMeses.AutoSize = true;
-            chxTodosMeses.Location = new Point(450, 574);
+            chxTodosMeses.Location = new Point(450, 579);
             chxTodosMeses.Margin = new Padding(3, 2, 3, 2);
             chxTodosMeses.Name = "chxTodosMeses";
             chxTodosMeses.Size = new Size(93, 19);
@@ -285,7 +286,7 @@
             dgvMeses.BackgroundColor = SystemColors.ControlLightLight;
             dgvMeses.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMeses.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvMeses.Location = new Point(10, 605);
+            dgvMeses.Location = new Point(10, 610);
             dgvMeses.MultiSelect = false;
             dgvMeses.Name = "dgvMeses";
             dgvMeses.RowHeadersWidth = 51;
@@ -298,7 +299,7 @@
             // 
             // btnLimparMes
             // 
-            btnLimparMes.Location = new Point(368, 572);
+            btnLimparMes.Location = new Point(368, 577);
             btnLimparMes.Name = "btnLimparMes";
             btnLimparMes.Size = new Size(75, 22);
             btnLimparMes.TabIndex = 114;
@@ -309,7 +310,7 @@
             // dtpMesCategoria
             // 
             dtpMesCategoria.Format = DateTimePickerFormat.Custom;
-            dtpMesCategoria.Location = new Point(10, 572);
+            dtpMesCategoria.Location = new Point(10, 577);
             dtpMesCategoria.Name = "dtpMesCategoria";
             dtpMesCategoria.Size = new Size(104, 23);
             dtpMesCategoria.TabIndex = 97;
@@ -318,7 +319,7 @@
             // tbxIdMes
             // 
             tbxIdMes.Enabled = false;
-            tbxIdMes.Location = new Point(126, 572);
+            tbxIdMes.Location = new Point(126, 577);
             tbxIdMes.Name = "tbxIdMes";
             tbxIdMes.Size = new Size(47, 23);
             tbxIdMes.TabIndex = 113;
@@ -326,7 +327,7 @@
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new Point(7, 554);
+            label20.Location = new Point(7, 559);
             label20.Name = "label20";
             label20.Size = new Size(100, 15);
             label20.TabIndex = 98;
@@ -335,7 +336,7 @@
             // label25
             // 
             label25.AutoSize = true;
-            label25.Location = new Point(126, 555);
+            label25.Location = new Point(126, 560);
             label25.Name = "label25";
             label25.Size = new Size(18, 15);
             label25.TabIndex = 112;
@@ -344,7 +345,7 @@
             // label23
             // 
             label23.AutoSize = true;
-            label23.Location = new Point(177, 555);
+            label23.Location = new Point(177, 560);
             label23.Name = "label23";
             label23.Size = new Size(61, 15);
             label23.TabIndex = 104;
@@ -352,7 +353,7 @@
             // 
             // tbxVerbaMesCategoria
             // 
-            tbxVerbaMesCategoria.Location = new Point(179, 572);
+            tbxVerbaMesCategoria.Location = new Point(179, 577);
             tbxVerbaMesCategoria.Margin = new Padding(3, 2, 3, 2);
             tbxVerbaMesCategoria.Name = "tbxVerbaMesCategoria";
             tbxVerbaMesCategoria.Size = new Size(76, 23);
@@ -361,7 +362,7 @@
             // 
             // btnCriarMes
             // 
-            btnCriarMes.Location = new Point(261, 572);
+            btnCriarMes.Location = new Point(261, 577);
             btnCriarMes.Margin = new Padding(3, 2, 3, 2);
             btnCriarMes.Name = "btnCriarMes";
             btnCriarMes.Size = new Size(102, 22);
@@ -487,8 +488,9 @@
             Controls.Add(label1);
             Controls.Add(dtpMesRefVerbaTotal);
             Controls.Add(menu);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "TelaCategorias";
-            Text = "TelaCategorias";
+            Text = "Categorias";
             FormClosed += TelaCategorias_FormClosed;
             Load += TelaCategorias_Load;
             Resize += TelaCategorias_Resize;

@@ -223,13 +223,9 @@ namespace OrganizacaoFinanceira.Dados
         {
             SetResponse response = await DadosGerais.client.SetTaskAsync("Meses/" + "chave-" + mesNovo.chave.ToString(), mesNovo);
 
-            if (response.Exception == null)
-            {
-                if (mostrarMensagem) MessageBox.Show("Mes gravado.");                                            
-            }
-            else
-            {
-                MessageBox.Show("Erro ao gravar mês.\n" + response.Exception);
+            if (response.Exception != null)
+            { 
+                MessageBox.Show("Erro ao adicionar a verba no mês.\n" + response.Exception);
             }
         }
     }

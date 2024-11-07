@@ -40,9 +40,11 @@ namespace OrganizacaoFinanceira
 
         private void TelaCategorias_Load(object sender, EventArgs e)
         {
+            dtpMesCategoria.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             dtpMesCategoria.CustomFormat = "MM/yyyy";
             dtpMesCategoria.ShowUpDown = true;
 
+            dtpMesRefVerbaTotal.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             dtpMesRefVerbaTotal.CustomFormat = "MM/yyyy";
             dtpMesRefVerbaTotal.ShowUpDown = true;
 
@@ -336,6 +338,18 @@ namespace OrganizacaoFinanceira
 
         private void dtpMesCategoria_ValueChanged(object sender, EventArgs e)
         {
+            // Obtém o valor atual do DateTimePicker
+            DateTime currentDate = dtpMesCategoria.Value;
+
+            // Ajusta a data para o primeiro dia do mês atual
+            DateTime adjustedDate = new DateTime(currentDate.Year, currentDate.Month, 1);
+
+            // Se o dia atual for diferente do dia ajustado, atualize a data
+            if (currentDate != adjustedDate)
+            {
+                dtpMesCategoria.Value = adjustedDate;
+            }
+
             FiltrarMeses();
         }
 
@@ -401,6 +415,18 @@ namespace OrganizacaoFinanceira
         }
         private void dtpMesRefVerbaTotal_ValueChanged(object sender, EventArgs e)
         {
+            // Obtém o valor atual do DateTimePicker
+            DateTime currentDate = dtpMesRefVerbaTotal.Value;
+
+            // Ajusta a data para o primeiro dia do mês atual
+            DateTime adjustedDate = new DateTime(currentDate.Year, currentDate.Month, 1);
+
+            // Se o dia atual for diferente do dia ajustado, atualize a data
+            if (currentDate != adjustedDate)
+            {
+                dtpMesRefVerbaTotal.Value = adjustedDate;
+            }
+
             FiltrarVerbasMesCategorias();
         }
 
