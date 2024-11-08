@@ -97,9 +97,9 @@ namespace OrganizacaoFinanceira
                                                           MessageBoxButtons.YesNo,
                                                           MessageBoxIcon.Question);
 
-                    if (DadosGerais.saidas.Any(x => x.chaveCategoria == categoriaSelecionada.chave) || DadosGerais.entradas.Any(x => x.chaveCategoria == categoriaSelecionada.chave) || DadosGerais.lancamentosRecorrentes.Any(x => x.chaveCategoria == categoriaSelecionada.chave))
+                    if (DadosGerais.saidas.Any(x => x.chaveCategoria == categoriaSelecionada.chave) || DadosGerais.entradas.Any(x => x.chaveCategoria == categoriaSelecionada.chave) || DadosGerais.lancamentosRecorrentes.Any(x => x.chaveCategoria == categoriaSelecionada.chave) || DadosGerais.meses.Any(x => x.chaveCategoria == categoriaSelecionada.chave))
                     {
-                        MessageBox.Show("Para excluir uma categoria não deve ter saídas, entradas ou lançamentos recorrentes vinculados. Verifique.");
+                        MessageBox.Show("Para excluir uma categoria não deve ter saídas, entradas, meses ou lançamentos recorrentes vinculados. Verifique.");
                         return;
                     }
 

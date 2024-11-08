@@ -21,6 +21,7 @@ using System.Diagnostics.Eventing.Reader;
 using FireSharp;
 using System.Reflection;
 using OrganizacaoFinanceira.Telas;
+using static System.Windows.Forms.DataFormats;
 
 namespace OrganizacaoFinanceira
 {
@@ -109,6 +110,8 @@ namespace OrganizacaoFinanceira
             int x = (this.ClientSize.Width - panelLancamento.Size.Width) / 2;
             int y = (this.ClientSize.Height - panelLancamento.Size.Height) / 2;
             panelLancamento.Location = new Point(x, y);
+
+            btnRecarregarTela.Left = this.Width - btnRecarregarTela.Width - 50;
 
             AjustarLayout();
         }
@@ -618,6 +621,7 @@ namespace OrganizacaoFinanceira
             string chave;
             bool erro = false;
             Dictionary<string, Saida> dic;
+            this.Enabled = false;
             for (int i = 1; i < saida.qtdParcelas; i++)
             {
                 chave = $"chave-{saida.chave + i}";
@@ -627,10 +631,9 @@ namespace OrganizacaoFinanceira
                 parcela.data = (new DateTime(saida.mesReferencia.Year, saida.mesReferencia.Month, 1)).AddMonths(i);
                 parcela.mesReferencia = parcela.data;
 
-                this.Enabled = false;
                 SetResponse response = await DadosGerais.client.SetTaskAsync("Saidas/" + chave, parcela);
-                this.Enabled = true;
             }
+            this.Enabled = true;
         }
 
         private async Task<bool> SalvarEntrada()
@@ -731,7 +734,7 @@ namespace OrganizacaoFinanceira
 
             if (rbtSaidas.Checked && nudQtdParcelas.Value > 1 && (String.IsNullOrEmpty(tbxValorTotal.Text.Trim()) || !double.TryParse(tbxValorTotal.Text, out double valorTotal) || valorTotal <= 0))
             {
-                sb.AppendLine("Quando há compra é parcelada deve ser informado o valor total.");
+                sb.AppendLine("Quando a compra é parcelada deve ser informado o valor total.");
             }
 
             if (cbxCategoria.SelectedIndex < 0 && rbtSaidas.Checked)
@@ -774,6 +777,7 @@ namespace OrganizacaoFinanceira
             tbxDescricao.Text = "";
             tbxValor.Text = "";
             dtpDataLancamento.Text = DateTime.Now.ToShortDateString();
+            cbxCategoria.Enabled = true;
             cbxCategoria.SelectedIndex = -1;
             dtpMesReferenciaLancamento.Text = DateTime.Now.ToShortDateString();
             tbxNumParcela.Text = "1";
@@ -1123,6 +1127,26 @@ namespace OrganizacaoFinanceira
             {
                 dtpMesReferenciaLancamento.Value = adjustedDate;
             }
+        }
+
+        private async void btnRecarregarTela_Click(object sender, EventArgs e)
+        {
+            this.Enabled = false;
+            podeFiltrar = false;
+
+            await CRUD.BuscarTodosDados(false);
+            InicializarDatas();
+            InicializarContas();
+
+            PreencherComboBoxCategorias();
+
+            ControlesVisiveis(true);
+            panelLancamento.BringToFront();
+
+            podeFiltrar = true;
+            FiltrarSaidas();
+
+            this.Enabled = true;
         }
     }
 }
