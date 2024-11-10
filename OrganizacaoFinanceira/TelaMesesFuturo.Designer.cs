@@ -54,11 +54,6 @@
             label31 = new Label();
             cbxCategoriaLancRecorrente = new ComboBox();
             label37 = new Label();
-            menu = new MenuStrip();
-            lançamentosToolStripMenuItem = new ToolStripMenuItem();
-            categoriasToolStripMenuItem = new ToolStripMenuItem();
-            mesesFuturoToolStripMenuItem = new ToolStripMenuItem();
-            geralToolStripMenuItem = new ToolStripMenuItem();
             tbxEntradaExtra = new TextBox();
             label1 = new Label();
             label2 = new Label();
@@ -81,7 +76,6 @@
             ((System.ComponentModel.ISupportInitialize)dgvLancamentosRecorrentes).BeginInit();
             panelLancRecorrente.SuspendLayout();
             groupBox3.SuspendLayout();
-            menu.SuspendLayout();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -353,42 +347,6 @@
             label37.TabIndex = 26;
             label37.Text = "Categoria";
             // 
-            // menu
-            // 
-            menu.ImageScalingSize = new Size(20, 20);
-            menu.Items.AddRange(new ToolStripItem[] { lançamentosToolStripMenuItem, categoriasToolStripMenuItem, mesesFuturoToolStripMenuItem, geralToolStripMenuItem });
-            menu.Location = new Point(0, 0);
-            menu.Name = "menu";
-            menu.Size = new Size(1545, 24);
-            menu.TabIndex = 91;
-            menu.Text = "menuStrip1";
-            // 
-            // lançamentosToolStripMenuItem
-            // 
-            lançamentosToolStripMenuItem.Name = "lançamentosToolStripMenuItem";
-            lançamentosToolStripMenuItem.Size = new Size(90, 20);
-            lançamentosToolStripMenuItem.Text = "Lançamentos";
-            lançamentosToolStripMenuItem.Click += lançamentosToolStripMenuItem_Click;
-            // 
-            // categoriasToolStripMenuItem
-            // 
-            categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
-            categoriasToolStripMenuItem.Size = new Size(75, 20);
-            categoriasToolStripMenuItem.Text = "Categorias";
-            categoriasToolStripMenuItem.Click += categoriasToolStripMenuItem_Click;
-            // 
-            // mesesFuturoToolStripMenuItem
-            // 
-            mesesFuturoToolStripMenuItem.Name = "mesesFuturoToolStripMenuItem";
-            mesesFuturoToolStripMenuItem.Size = new Size(88, 20);
-            mesesFuturoToolStripMenuItem.Text = "Meses futuro";
-            // 
-            // geralToolStripMenuItem
-            // 
-            geralToolStripMenuItem.Name = "geralToolStripMenuItem";
-            geralToolStripMenuItem.Size = new Size(46, 20);
-            geralToolStripMenuItem.Text = "Geral";
-            // 
             // tbxEntradaExtra
             // 
             tbxEntradaExtra.Location = new Point(839, 97);
@@ -564,7 +522,6 @@
             Controls.Add(tbxSaidaExtra);
             Controls.Add(label1);
             Controls.Add(tbxEntradaExtra);
-            Controls.Add(menu);
             Controls.Add(panelLancRecorrente);
             Controls.Add(dgvMesesFuturos);
             Controls.Add(groupBox2);
@@ -584,8 +541,6 @@
             panelLancRecorrente.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
-            menu.ResumeLayout(false);
-            menu.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ResumeLayout(false);
@@ -616,11 +571,6 @@
         private Label label31;
         private ComboBox cbxCategoriaLancRecorrente;
         private Label label37;
-        private MenuStrip menu;
-        private ToolStripMenuItem lançamentosToolStripMenuItem;
-        private ToolStripMenuItem categoriasToolStripMenuItem;
-        private ToolStripMenuItem mesesFuturoToolStripMenuItem;
-        private ToolStripMenuItem geralToolStripMenuItem;
         private TextBox tbxEntradaExtra;
         private Label label1;
         private Label label2;

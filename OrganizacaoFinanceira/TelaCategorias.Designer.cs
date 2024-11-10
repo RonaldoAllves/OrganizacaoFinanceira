@@ -29,11 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TelaCategorias));
-            menu = new MenuStrip();
-            lançamentosToolStripMenuItem = new ToolStripMenuItem();
-            categoriasToolStripMenuItem = new ToolStripMenuItem();
-            mesesFuturoToolStripMenuItem = new ToolStripMenuItem();
-            geralToolStripMenuItem = new ToolStripMenuItem();
             label1 = new Label();
             dtpMesRefVerbaTotal = new DateTimePicker();
             tbxVerbaTotalMes = new TextBox();
@@ -68,48 +63,11 @@
             lblTituloMesesCriados = new Label();
             lblTituloVerbasPorMes = new Label();
             lblTituloSaidasCategoria = new Label();
-            menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVerbasPorMes).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvMeses).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvSaidasCategoria).BeginInit();
             SuspendLayout();
-            // 
-            // menu
-            // 
-            menu.ImageScalingSize = new Size(20, 20);
-            menu.Items.AddRange(new ToolStripItem[] { lançamentosToolStripMenuItem, categoriasToolStripMenuItem, mesesFuturoToolStripMenuItem, geralToolStripMenuItem });
-            menu.Location = new Point(0, 0);
-            menu.Name = "menu";
-            menu.Size = new Size(1684, 24);
-            menu.TabIndex = 89;
-            menu.Text = "menuStrip1";
-            // 
-            // lançamentosToolStripMenuItem
-            // 
-            lançamentosToolStripMenuItem.Name = "lançamentosToolStripMenuItem";
-            lançamentosToolStripMenuItem.Size = new Size(90, 20);
-            lançamentosToolStripMenuItem.Text = "Lançamentos";
-            lançamentosToolStripMenuItem.Click += lançamentosToolStripMenuItem_Click;
-            // 
-            // categoriasToolStripMenuItem
-            // 
-            categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
-            categoriasToolStripMenuItem.Size = new Size(75, 20);
-            categoriasToolStripMenuItem.Text = "Categorias";
-            // 
-            // mesesFuturoToolStripMenuItem
-            // 
-            mesesFuturoToolStripMenuItem.Name = "mesesFuturoToolStripMenuItem";
-            mesesFuturoToolStripMenuItem.Size = new Size(88, 20);
-            mesesFuturoToolStripMenuItem.Text = "Meses futuro";
-            mesesFuturoToolStripMenuItem.Click += mesesFuturoToolStripMenuItem_Click;
-            // 
-            // geralToolStripMenuItem
-            // 
-            geralToolStripMenuItem.Name = "geralToolStripMenuItem";
-            geralToolStripMenuItem.Size = new Size(46, 20);
-            geralToolStripMenuItem.Text = "Geral";
             // 
             // label1
             // 
@@ -487,15 +445,12 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(dtpMesRefVerbaTotal);
-            Controls.Add(menu);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "TelaCategorias";
             Text = "Categorias";
             FormClosed += TelaCategorias_FormClosed;
             Load += TelaCategorias_Load;
             Resize += TelaCategorias_Resize;
-            menu.ResumeLayout(false);
-            menu.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvVerbasPorMes).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvMeses).EndInit();
@@ -505,11 +460,6 @@
         }
 
         #endregion
-        private MenuStrip menu;
-        private ToolStripMenuItem lançamentosToolStripMenuItem;
-        private ToolStripMenuItem categoriasToolStripMenuItem;
-        private ToolStripMenuItem mesesFuturoToolStripMenuItem;
-        private ToolStripMenuItem geralToolStripMenuItem;
         private Label label1;
         private DateTimePicker dtpMesRefVerbaTotal;
         private TextBox tbxVerbaTotalMes;

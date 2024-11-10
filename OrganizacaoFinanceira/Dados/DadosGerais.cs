@@ -1,14 +1,7 @@
-﻿using FireSharp;
-using FireSharp.Config;
+﻿using FireSharp.Config;
 using FireSharp.Interfaces;
-using FireSharp.Response;
 using OrganizacaoFinanceira.Objetos;
 using OrganizacaoFinanceira.Recursos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrganizacaoFinanceira.Dados
 {

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace OrganizacaoFinanceira.Recursos
+﻿namespace OrganizacaoFinanceira.Recursos
 {
     internal class FuncoesGrid
     {
@@ -28,7 +21,7 @@ namespace OrganizacaoFinanceira.Recursos
                 nameColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 nameColumn.Width = item4;
                 if (autoSizeFill) nameColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                if (item5)nameColumn.DefaultCellStyle.Format = "N2";                
+                if (item5) nameColumn.DefaultCellStyle.Format = "N2";
 
                 dgv.Columns.Add(nameColumn);
             }
@@ -185,7 +178,7 @@ namespace OrganizacaoFinanceira.Recursos
             };
             return colunas;
         }
-        
+
         public List<(string, string, DataGridViewContentAlignment, int, bool)> ColunasGridMesesFuturos()
         {
             List<(string, string, DataGridViewContentAlignment, int, bool)> colunas = new List<(string, string, DataGridViewContentAlignment, int, bool)>

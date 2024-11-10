@@ -1,12 +1,7 @@
-﻿using FireSharp.Response;
-using FireSharp;
+﻿using FireSharp;
+using FireSharp.Response;
 using OrganizacaoFinanceira.Objetos;
 using OrganizacaoFinanceira.Recursos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrganizacaoFinanceira.Dados
 {
@@ -22,11 +17,12 @@ namespace OrganizacaoFinanceira.Dados
                 return;
             }
 
-            if (somenteInicializar) {
+            if (somenteInicializar)
+            {
                 inicializarVazio();
                 return;
             }
-            
+
             DadosGerais.contas = await BuscarContas();
             DadosGerais.saidas = await BuscarSaidas();
             DadosGerais.entradas = await BuscarEntradas();
@@ -224,7 +220,7 @@ namespace OrganizacaoFinanceira.Dados
             SetResponse response = await DadosGerais.client.SetTaskAsync("Meses/" + "chave-" + mesNovo.chave.ToString(), mesNovo);
 
             if (response.Exception != null)
-            { 
+            {
                 MessageBox.Show("Erro ao adicionar a verba no mês.\n" + response.Exception);
             }
         }

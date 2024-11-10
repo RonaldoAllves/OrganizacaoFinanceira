@@ -86,23 +86,16 @@
             label19 = new Label();
             btnNovoLancamento = new Button();
             btnNovaConta = new Button();
-            menu = new MenuStrip();
-            lançamentosToolStripMenuItem = new ToolStripMenuItem();
-            categoriasToolStripMenuItem = new ToolStripMenuItem();
-            mesesFuturoToolStripMenuItem = new ToolStripMenuItem();
-            geralToolStripMenuItem = new ToolStripMenuItem();
             label20 = new Label();
             tbxTotalSelecionados = new TextBox();
             lblTituloContas = new Label();
             lblTituloSaidas = new Label();
-            btnRecarregarTela = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvContas).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvLancamentos).BeginInit();
             groupBox1.SuspendLayout();
             panelParcelas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudQtdParcelas).BeginInit();
             panelLancamento.SuspendLayout();
-            menu.SuspendLayout();
             SuspendLayout();
             // 
             // dgvContas
@@ -662,43 +655,6 @@
             btnNovaConta.UseVisualStyleBackColor = true;
             btnNovaConta.Click += btnNovaConta_Click;
             // 
-            // menu
-            // 
-            menu.ImageScalingSize = new Size(20, 20);
-            menu.Items.AddRange(new ToolStripItem[] { lançamentosToolStripMenuItem, categoriasToolStripMenuItem, mesesFuturoToolStripMenuItem, geralToolStripMenuItem });
-            menu.Location = new Point(0, 0);
-            menu.Name = "menu";
-            menu.Size = new Size(1924, 24);
-            menu.TabIndex = 85;
-            menu.Text = "menuStrip1";
-            // 
-            // lançamentosToolStripMenuItem
-            // 
-            lançamentosToolStripMenuItem.Name = "lançamentosToolStripMenuItem";
-            lançamentosToolStripMenuItem.Size = new Size(90, 20);
-            lançamentosToolStripMenuItem.Text = "Lançamentos";
-            // 
-            // categoriasToolStripMenuItem
-            // 
-            categoriasToolStripMenuItem.Name = "categoriasToolStripMenuItem";
-            categoriasToolStripMenuItem.Size = new Size(75, 20);
-            categoriasToolStripMenuItem.Text = "Categorias";
-            categoriasToolStripMenuItem.Click += categoriasToolStripMenuItem_Click;
-            // 
-            // mesesFuturoToolStripMenuItem
-            // 
-            mesesFuturoToolStripMenuItem.Name = "mesesFuturoToolStripMenuItem";
-            mesesFuturoToolStripMenuItem.Size = new Size(88, 20);
-            mesesFuturoToolStripMenuItem.Text = "Meses futuro";
-            mesesFuturoToolStripMenuItem.Click += mesesFuturoToolStripMenuItem_Click;
-            // 
-            // geralToolStripMenuItem
-            // 
-            geralToolStripMenuItem.Name = "geralToolStripMenuItem";
-            geralToolStripMenuItem.Size = new Size(46, 20);
-            geralToolStripMenuItem.Text = "Geral";
-            geralToolStripMenuItem.Click += geralToolStripMenuItem_Click;
-            // 
             // label20
             // 
             label20.AutoSize = true;
@@ -734,22 +690,11 @@
             lblTituloSaidas.TabIndex = 89;
             lblTituloSaidas.Text = "Saídas da conta";
             // 
-            // btnRecarregarTela
-            // 
-            btnRecarregarTela.Location = new Point(1837, 27);
-            btnRecarregarTela.Name = "btnRecarregarTela";
-            btnRecarregarTela.Size = new Size(75, 23);
-            btnRecarregarTela.TabIndex = 90;
-            btnRecarregarTela.Text = "Atualizar";
-            btnRecarregarTela.UseVisualStyleBackColor = true;
-            btnRecarregarTela.Click += btnRecarregarTela_Click;
-            // 
             // TelaPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1924, 791);
-            Controls.Add(btnRecarregarTela);
             Controls.Add(lblTituloSaidas);
             Controls.Add(lblTituloContas);
             Controls.Add(label20);
@@ -777,9 +722,7 @@
             Controls.Add(txBanco);
             Controls.Add(label1);
             Controls.Add(dgvContas);
-            Controls.Add(menu);
             Icon = (Icon)resources.GetObject("$this.Icon");
-            MainMenuStrip = menu;
             Name = "TelaPrincipal";
             Text = "Lançamentos";
             Load += TelaPrincipal_Load;
@@ -793,8 +736,6 @@
             ((System.ComponentModel.ISupportInitialize)nudQtdParcelas).EndInit();
             panelLancamento.ResumeLayout(false);
             panelLancamento.PerformLayout();
-            menu.ResumeLayout(false);
-            menu.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -858,11 +799,6 @@
         private ComboBox cbxCategoriaRecorrente;
         private Button btnSalvarLancamentoRecorrente;
         private TextBox tbxNumParcela;
-        private MenuStrip menu;
-        private ToolStripMenuItem lançamentosToolStripMenuItem;
-        private ToolStripMenuItem categoriasToolStripMenuItem;
-        private ToolStripMenuItem mesesFuturoToolStripMenuItem;
-        private ToolStripMenuItem geralToolStripMenuItem;
         private Label label20;
         private TextBox tbxTotalSelecionados;
         private Label label21;
@@ -870,6 +806,5 @@
         private CheckBox chkObrigatorio;
         private Label lblTituloContas;
         private Label lblTituloSaidas;
-        private Button btnRecarregarTela;
     }
 }

@@ -1,4 +1,3 @@
-using OrganizacaoFinanceira.Dados;
 using OrganizacaoFinanceira.Telas;
 
 namespace OrganizacaoFinanceira
@@ -15,9 +14,9 @@ namespace OrganizacaoFinanceira
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            Formularios.telaPrincipal = new TelaPrincipal();
+            Formularios.menu = new();
 
-            Application.Run(Formularios.telaPrincipal);
+            Application.Run(Formularios.menu);
         }
     }
 }

@@ -3,15 +3,8 @@ using OrganizacaoFinanceira.Dados;
 using OrganizacaoFinanceira.Objetos;
 using OrganizacaoFinanceira.Recursos;
 using OrganizacaoFinanceira.Telas;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace OrganizacaoFinanceira
 {
@@ -97,7 +90,7 @@ namespace OrganizacaoFinanceira
 
                 valorFaltaGastar += valorFaltaGastarCategoria;
             }
-            valorFaltaGastar = valorFaltaGastar < 0? 0 : valorFaltaGastar;
+            valorFaltaGastar = valorFaltaGastar < 0 ? 0 : valorFaltaGastar;
             return valorFaltaGastar;
         }
 

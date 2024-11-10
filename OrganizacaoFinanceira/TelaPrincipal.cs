@@ -1,27 +1,11 @@
-﻿using OrganizacaoFinanceira.Objetos;
-using OrganizacaoFinanceira.Recursos;
+﻿using FireSharp.Response;
 using OrganizacaoFinanceira.Dados;
-using System;
-using System.Collections.Generic;
+using OrganizacaoFinanceira.Objetos;
+using OrganizacaoFinanceira.Recursos;
+using OrganizacaoFinanceira.Telas;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Newtonsoft.Json;
-
-using FireSharp.Config;
-using FireSharp.Interfaces;
-using FireSharp.Response;
-using Newtonsoft.Json.Bson;
-using System.Net;
-using System.Diagnostics.Eventing.Reader;
-using FireSharp;
-using System.Reflection;
-using OrganizacaoFinanceira.Telas;
-using static System.Windows.Forms.DataFormats;
 
 namespace OrganizacaoFinanceira
 {
@@ -58,7 +42,7 @@ namespace OrganizacaoFinanceira
             this.Enabled = false;
             podeFiltrar = false;
 
-            await CRUD.BuscarTodosDados(false);
+            //await CRUD.BuscarTodosDados(false);
             InicializarDatas();
             InicializarContas();
 
@@ -110,8 +94,6 @@ namespace OrganizacaoFinanceira
             int x = (this.ClientSize.Width - panelLancamento.Size.Width) / 2;
             int y = (this.ClientSize.Height - panelLancamento.Size.Height) / 2;
             panelLancamento.Location = new Point(x, y);
-
-            btnRecarregarTela.Left = this.Width - btnRecarregarTela.Width - 50;
 
             AjustarLayout();
         }
@@ -196,8 +178,6 @@ namespace OrganizacaoFinanceira
 
             return data1SemDia == data2SemDia;
         }
-
-
 
         private void btnNovaConta_Click(object sender, EventArgs e)
         {
@@ -1127,26 +1107,6 @@ namespace OrganizacaoFinanceira
             {
                 dtpMesReferenciaLancamento.Value = adjustedDate;
             }
-        }
-
-        private async void btnRecarregarTela_Click(object sender, EventArgs e)
-        {
-            this.Enabled = false;
-            podeFiltrar = false;
-
-            await CRUD.BuscarTodosDados(false);
-            InicializarDatas();
-            InicializarContas();
-
-            PreencherComboBoxCategorias();
-
-            ControlesVisiveis(true);
-            panelLancamento.BringToFront();
-
-            podeFiltrar = true;
-            FiltrarSaidas();
-
-            this.Enabled = true;
         }
     }
 }

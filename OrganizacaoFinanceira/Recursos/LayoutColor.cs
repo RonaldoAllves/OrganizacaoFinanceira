@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace OrganizacaoFinanceira.Recursos
+﻿namespace OrganizacaoFinanceira.Recursos
 {
     public static class LayoutColor
     {
@@ -29,7 +22,7 @@ namespace OrganizacaoFinanceira.Recursos
         private static void ConfiguracaoControles(Control.ControlCollection controls)
         {
             foreach (Control control in controls)
-            {                
+            {
                 switch (control)
                 {
                     case Label:
@@ -76,7 +69,7 @@ namespace OrganizacaoFinanceira.Recursos
                         MenuStrip menuStrip = (MenuStrip)control;
                         menuStrip.BackColor = corFundoGrid;
                         menuStrip.ForeColor = corLabel;
-                        break;                    
+                        break;
                 }
             }
         }
