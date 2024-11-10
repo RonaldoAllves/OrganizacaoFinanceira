@@ -42,6 +42,9 @@ namespace OrganizacaoFinanceira
             this.Enabled = false;
             podeFiltrar = false;
 
+            mensagemValorAtualConta = "Considera o valor inicial da conta adicionando todas as entradas e retirando todas as saídas já existenste até o mês atual desconsiderando as compras no crédito do mês atual.\n" +
+                                      "O valor atual já considera que foi pago a fatura do último mês fechado, ou seja, caso a fatura ainda não tenha sido paga, pode haver diferença do valor atual mostrado com o valor atual na conta.";
+
             //await CRUD.BuscarTodosDados(false);
             InicializarDatas();
             InicializarContas();
@@ -126,9 +129,6 @@ namespace OrganizacaoFinanceira
 
         private void InicializarContas()
         {
-
-            AtualizarValorTotalConta();
-
             funcoesGrid.ConfigurarGrid(dgvContas, bindingSourceContas, funcoesGrid.ColunasGridContas(), false);
 
             dgvContas.Columns[3].ToolTipText = mensagemValorAtualConta;
@@ -144,40 +144,10 @@ namespace OrganizacaoFinanceira
         }
 
         private void AtualizarValorTotalConta()
-        {
-            mensagemValorAtualConta = "Considera o valor inicial da conta adicionando todas as entradas e retirando todas as saídas já existenste até o mês atual desconsiderando as compras no crédito do mês atual.\n" +
-                                      "O valor atual já considera que foi pago a fatura do último mês fechado, ou seja, caso a fatura ainda não tenha sido paga, pode haver diferença do valor atual mostrado com o valor atual na conta.";
-            double saidasConta;
-            double entradasConta;
-            double creditoMesAtual;
-            foreach (ContaBanco conta in DadosGerais.contas)
-            {
-                saidasConta = DadosGerais.saidas.Where(x => x.chaveConta == conta.chave && DataMenorIgual(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valorParcela);
-                entradasConta = DadosGerais.entradas.Where(x => x.chaveConta == conta.chave && DataMenorIgual(x.mesReferencia, DateTime.Now.Date)).Sum(x => x.valor);
-
-                creditoMesAtual = DadosGerais.saidas.Where(x => x.chaveConta == conta.chave && x.tipoSaida == 0 && DatasIguais(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valorParcela);
-                saidasConta -= creditoMesAtual;
-
-                conta.valorAtual = conta.valorInicial - saidasConta + entradasConta;
-            }
+        {          
+            CRUD.AtualizarValorTotalConta();
             dgvContas.Refresh();
-        }
-
-        static bool DataMenorIgual(DateTime data1, DateTime data2)
-        {
-            var data1SemDia = new DateTime(data1.Year, data1.Month, 1);
-            var data2SemDia = new DateTime(data2.Year, data2.Month, 1);
-
-            return data1SemDia <= data2SemDia;
-        }
-
-        static bool DatasIguais(DateTime data1, DateTime data2)
-        {
-            var data1SemDia = new DateTime(data1.Year, data1.Month, 1);
-            var data2SemDia = new DateTime(data2.Year, data2.Month, 1);
-
-            return data1SemDia == data2SemDia;
-        }
+        }        
 
         private void btnNovaConta_Click(object sender, EventArgs e)
         {

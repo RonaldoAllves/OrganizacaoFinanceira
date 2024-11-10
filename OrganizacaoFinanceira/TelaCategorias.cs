@@ -67,6 +67,7 @@ namespace OrganizacaoFinanceira
 
         private void AtualizarCategorias()
         {
+            PreencherValoresTodosMeses();
             PreencherSaldoTotalCategoria();
             bindingSourceCategorias.DataSource = DadosGerais.categorias;
             dgvCategorias.Refresh();
@@ -216,7 +217,7 @@ namespace OrganizacaoFinanceira
 
             await CRUD.CriarMes(mesNovo, categoriaSelecionada.chave, dtpMesCategoria.Value);
             DadosGerais.meses = await CRUD.BuscarMeses();
-            LimparMes();
+            LimparMes();            
             AtualizarCategorias();
             FiltrarMeses();
             FiltrarVerbasMesCategorias();
@@ -402,7 +403,6 @@ namespace OrganizacaoFinanceira
         {
             funcoesGrid.ConfigurarGrid(dgvVerbasPorMes, bindingSourceVerbasCategorias, funcoesGrid.ColunasGridVerbasCategorias(), false);
             FiltrarVerbasMesCategorias();
-
         }
         private void dtpMesRefVerbaTotal_ValueChanged(object sender, EventArgs e)
         {

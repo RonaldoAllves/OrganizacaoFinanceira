@@ -29,6 +29,40 @@ namespace OrganizacaoFinanceira.Dados
             DadosGerais.meses = await BuscarMeses();
             DadosGerais.categorias = await BuscarCategorias();
             DadosGerais.lancamentosRecorrentes = await BuscarLancamentosRecorrentes();
+            AtualizarValorTotalConta();
+        }
+
+        public void AtualizarValorTotalConta()
+        {
+            double saidasConta;
+            double entradasConta;
+            double creditoMesAtual;
+            foreach (ContaBanco conta in DadosGerais.contas)
+            {
+                saidasConta = DadosGerais.saidas.Where(x => x.chaveConta == conta.chave && DataMenorIgual(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valorParcela);
+                entradasConta = DadosGerais.entradas.Where(x => x.chaveConta == conta.chave && DataMenorIgual(x.mesReferencia, DateTime.Now.Date)).Sum(x => x.valor);
+
+                creditoMesAtual = DadosGerais.saidas.Where(x => x.chaveConta == conta.chave && x.tipoSaida == 0 && DatasIguais(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valorParcela);
+                saidasConta -= creditoMesAtual;
+
+                conta.valorAtual = conta.valorInicial - saidasConta + entradasConta;
+            }
+        }
+
+        static bool DataMenorIgual(DateTime data1, DateTime data2)
+        {
+            var data1SemDia = new DateTime(data1.Year, data1.Month, 1);
+            var data2SemDia = new DateTime(data2.Year, data2.Month, 1);
+
+            return data1SemDia <= data2SemDia;
+        }
+
+        static bool DatasIguais(DateTime data1, DateTime data2)
+        {
+            var data1SemDia = new DateTime(data1.Year, data1.Month, 1);
+            var data2SemDia = new DateTime(data2.Year, data2.Month, 1);
+
+            return data1SemDia == data2SemDia;
         }
 
         private void inicializarVazio()

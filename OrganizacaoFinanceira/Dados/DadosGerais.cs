@@ -24,6 +24,6 @@ namespace OrganizacaoFinanceira.Dados
         public static List<MesFuturo> mesesFuturos;
 
         public static double entradaExtra = 0;
-        public static double saidaExtra = 0;
+        public static double saidaExtra = 0;        
     }
 }
