@@ -8,6 +8,7 @@ namespace OrganizacaoFinanceira
     {
         CRUD CRUD = new CRUD();
         Form formularioAtual = null;
+        private ToolStripMenuItem currentMenuItem = null;
 
         public Menu()
         {
@@ -45,6 +46,7 @@ namespace OrganizacaoFinanceira
         {
             Formularios.telaPrincipal = new();
             formularioAtual = Formularios.telaPrincipal;
+            SetMenuItemActive(lançamentosToolStripMenuItem);
             LoadFormInPanel(Formularios.telaPrincipal);
         }
 
@@ -52,6 +54,7 @@ namespace OrganizacaoFinanceira
         {
             Formularios.telaCategorias = new();
             formularioAtual = Formularios.telaCategorias;
+            SetMenuItemActive(categoriasToolStripMenuItem);
             LoadFormInPanel(Formularios.telaCategorias);
         }
 
@@ -59,6 +62,7 @@ namespace OrganizacaoFinanceira
         {
             Formularios.telaMesesFuturo = new();
             formularioAtual = Formularios.telaMesesFuturo;
+            SetMenuItemActive(mesesFuturoToolStripMenuItem);
             LoadFormInPanel(Formularios.telaMesesFuturo);
         }
 
@@ -69,6 +73,23 @@ namespace OrganizacaoFinanceira
             {
                 formularioAtual = new();
             }
+        }
+
+        private void SetMenuItemActive(ToolStripMenuItem activeMenuItem)
+        {
+            // Se já há um item ativo, restaure suas cores normais
+            if (currentMenuItem != null)
+            {
+                currentMenuItem.BackColor = SystemColors.Control;   // Cor padrão do fundo
+                currentMenuItem.ForeColor = SystemColors.ControlText; // Cor padrão do texto
+            }
+
+            // Atualiza o item ativo
+            currentMenuItem = activeMenuItem;
+
+            // Altere a cor de fundo e texto do item ativo
+            currentMenuItem.BackColor = Color.DarkBlue;  // Cor de fundo do item ativo
+            currentMenuItem.ForeColor = Color.White;     // Cor do texto do item ativo
         }
     }
 }

@@ -56,7 +56,7 @@
                         dataGridView.ForeColor = corLabel;
                         dataGridView.GridColor = corFundoGrid;
                         dataGridView.DefaultCellStyle.BackColor = backGround;
-                        dataGridView.BorderStyle = BorderStyle.None;
+                        dataGridView.BorderStyle = BorderStyle.Fixed3D;
 
                         dataGridView.EnableHeadersVisualStyles = false;
 
@@ -69,6 +69,18 @@
                         MenuStrip menuStrip = (MenuStrip)control;
                         menuStrip.BackColor = corFundoGrid;
                         menuStrip.ForeColor = corLabel;
+                        break;
+                    case SplitContainer:
+                        SplitContainer splitContainer = (SplitContainer)control;
+                        splitContainer.BackColor = backGround;
+                        splitContainer.ForeColor = corLabel;
+                        ConfiguracaoControles(splitContainer.Controls);
+                        break;
+                    case SplitterPanel:
+                        SplitterPanel splitterPanel = (SplitterPanel)control;
+                        splitterPanel.BackColor = backGround;
+                        splitterPanel.ForeColor = corLabel;
+                        ConfiguracaoControles(splitterPanel.Controls);
                         break;
                 }
             }

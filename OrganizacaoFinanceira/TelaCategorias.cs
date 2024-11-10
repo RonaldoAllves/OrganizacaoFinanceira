@@ -50,7 +50,6 @@ namespace OrganizacaoFinanceira
             this.Enabled = true;
         }
 
-
         #region CATEGORIAS
 
         private void InicializarCategorias()
@@ -217,7 +216,7 @@ namespace OrganizacaoFinanceira
 
             await CRUD.CriarMes(mesNovo, categoriaSelecionada.chave, dtpMesCategoria.Value);
             DadosGerais.meses = await CRUD.BuscarMeses();
-            LimparMes();            
+            LimparMes();
             AtualizarCategorias();
             FiltrarMeses();
             FiltrarVerbasMesCategorias();
@@ -478,22 +477,6 @@ namespace OrganizacaoFinanceira
 
         #endregion
 
-        private void TelaCategorias_Resize(object sender, EventArgs e)
-        {
-            dgvVerbasPorMes.Width = this.Width - dgvVerbasPorMes.Left - 50;
-            dgvVerbasPorMes.Height = dgvCategorias.Height;
-
-            lblTotalSaidas.Top = label20.Top;
-            tbxTotalSaida.Top = dtpMesCategoria.Top;
-
-            dgvSaidasCategoria.Width = dgvVerbasPorMes.Width;
-            dgvSaidasCategoria.Top = dgvMeses.Top;
-            dgvSaidasCategoria.Height = this.Height - dgvSaidasCategoria.Top - 50;
-
-            dgvMeses.Height = this.Height - dgvMeses.Top - 50;
-            panelDivisor.Height = this.Height - panelDivisor.Top - 50;
-        }
-
         private void dgvCategorias_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if (dgvCategorias.Columns[e.ColumnIndex].DataPropertyName == "saldoTotal" && e.Value != null && e.Value is double)
@@ -651,6 +634,55 @@ namespace OrganizacaoFinanceira
         private void dgvSaidasCategoria_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
             funcoesGrid.ReajustarTamanhoTitulo(dgvSaidasCategoria, lblTituloSaidasCategoria);
+        }
+
+        private void RedefinirTamanhoGrids()
+        {
+            int topGrid = 75;
+            int distanciaGrid = 25;
+
+            dgvCategorias.Top = topGrid;
+            dgvCategorias.Width = dgvCategorias.Parent.Width - dgvCategorias.Left - distanciaGrid;
+            dgvCategorias.Height = dgvCategorias.Parent.Height - dgvCategorias.Top - distanciaGrid;
+            lblTituloCategorias.Width = dgvCategorias.Width;
+            lblTituloCategorias.Top = dgvCategorias.Top - lblTituloCategorias.Height;
+            panelCategorias.Top = dgvCategorias.Top - lblTituloCategorias.Height - panelCategorias.Height;
+
+            dgvMeses.Top = topGrid;
+            dgvMeses.Width = dgvMeses.Parent.Width - dgvMeses.Left - distanciaGrid;
+            dgvMeses.Height = dgvMeses.Parent.Height - dgvMeses.Top - distanciaGrid;
+            lblTituloMesesCriados.Width = dgvMeses.Width;
+            lblTituloMesesCriados.Top = dgvMeses.Top - lblTituloMesesCriados.Height;
+            panelMesesCriados.Top = dgvMeses.Top - lblTituloMesesCriados.Height - panelMesesCriados.Height;
+
+            dgvVerbasPorMes.Top = topGrid;
+            dgvVerbasPorMes.Width = dgvVerbasPorMes.Parent.Width - dgvVerbasPorMes.Left - distanciaGrid;
+            dgvVerbasPorMes.Height = dgvVerbasPorMes.Parent.Height - dgvVerbasPorMes.Top - distanciaGrid;
+            lblTituloVerbasPorMes.Width = dgvVerbasPorMes.Width;
+            lblTituloVerbasPorMes.Top = dgvVerbasPorMes.Top - lblTituloVerbasPorMes.Height;
+            panelVerbasPorMes.Top = dgvVerbasPorMes.Top - lblTituloVerbasPorMes.Height - panelVerbasPorMes.Height;
+
+            dgvSaidasCategoria.Top = topGrid;
+            dgvSaidasCategoria.Width = dgvSaidasCategoria.Parent.Width - dgvSaidasCategoria.Left - distanciaGrid;
+            dgvSaidasCategoria.Height = dgvSaidasCategoria.Parent.Height - dgvSaidasCategoria.Top - distanciaGrid;
+            lblTituloSaidasCategoria.Width = dgvSaidasCategoria.Width;
+            lblTituloSaidasCategoria.Top = dgvSaidasCategoria.Top - lblTituloSaidasCategoria.Height;
+            panelSaidasCategoria.Top = dgvSaidasCategoria.Top - lblTituloSaidasCategoria.Height - panelSaidasCategoria.Height;            
+        }
+
+        private void splitContainer3_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            RedefinirTamanhoGrids();
+        }
+
+        private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            RedefinirTamanhoGrids();
+        }
+
+        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            RedefinirTamanhoGrids();
         }
     }
 }

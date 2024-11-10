@@ -10,6 +10,7 @@
             dgv.DataSource = bindingSource;
             dgv.Columns.Clear();
             dgv.Rows.Clear();
+
             // Configuração das colunas
             DataGridViewTextBoxColumn nameColumn;
             foreach (var (item1, item2, item3, item4, item5) in colunas)
@@ -31,7 +32,7 @@
             dgv.ReadOnly = true;
             dgv.AllowUserToAddRows = false;
 
-            //dgv.Width = dgv.Parent.Width - gbxCadastrar.Width - 50;
+            //dgv.Width = dgv.Parent.Width - dgv.Parent.Width - 50;
             //dgv.Columns[0].Width = 100;
 
             // Habilitar a ordenação para cada coluna
