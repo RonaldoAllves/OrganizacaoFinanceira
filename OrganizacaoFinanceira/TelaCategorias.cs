@@ -47,6 +47,7 @@ namespace OrganizacaoFinanceira
             funcoesGrid.AjustarTitulo(dgvMeses, lblTituloMesesCriados, "Meses criados");
             funcoesGrid.AjustarTitulo(dgvVerbasPorMes, lblTituloVerbasPorMes, "Verbas por mês");
             funcoesGrid.AjustarTitulo(dgvSaidasCategoria, lblTituloSaidasCategoria, "Saídas da categoria");
+            RedefinirTamanhoGrids();
             this.Enabled = true;
         }
 
