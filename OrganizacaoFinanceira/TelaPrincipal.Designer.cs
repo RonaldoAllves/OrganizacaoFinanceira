@@ -90,12 +90,21 @@
             tbxTotalSelecionados = new TextBox();
             lblTituloContas = new Label();
             lblTituloSaidas = new Label();
+            splitContainer1 = new SplitContainer();
+            panelEditContas = new Panel();
+            panelFiltroLancamentos = new Panel();
             ((System.ComponentModel.ISupportInitialize)dgvContas).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvLancamentos).BeginInit();
             groupBox1.SuspendLayout();
             panelParcelas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudQtdParcelas).BeginInit();
             panelLancamento.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            panelEditContas.SuspendLayout();
+            panelFiltroLancamentos.SuspendLayout();
             SuspendLayout();
             // 
             // dgvContas
@@ -103,7 +112,7 @@
             dgvContas.BackgroundColor = SystemColors.ControlLightLight;
             dgvContas.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvContas.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvContas.Location = new Point(12, 101);
+            dgvContas.Location = new Point(19, 76);
             dgvContas.MultiSelect = false;
             dgvContas.Name = "dgvContas";
             dgvContas.RowHeadersWidth = 51;
@@ -117,7 +126,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(65, 51);
+            label1.Location = new Point(57, 3);
             label1.Name = "label1";
             label1.Size = new Size(40, 15);
             label1.TabIndex = 1;
@@ -125,14 +134,14 @@
             // 
             // txBanco
             // 
-            txBanco.Location = new Point(65, 69);
+            txBanco.Location = new Point(57, 21);
             txBanco.Name = "txBanco";
             txBanco.Size = new Size(100, 23);
             txBanco.TabIndex = 2;
             // 
             // txUsuario
             // 
-            txUsuario.Location = new Point(171, 69);
+            txUsuario.Location = new Point(163, 21);
             txUsuario.Name = "txUsuario";
             txUsuario.Size = new Size(100, 23);
             txUsuario.TabIndex = 4;
@@ -140,7 +149,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(171, 51);
+            label2.Location = new Point(163, 3);
             label2.Name = "label2";
             label2.Size = new Size(47, 15);
             label2.TabIndex = 3;
@@ -148,7 +157,7 @@
             // 
             // txDataFechamento
             // 
-            txDataFechamento.Location = new Point(277, 69);
+            txDataFechamento.Location = new Point(269, 21);
             txDataFechamento.Name = "txDataFechamento";
             txDataFechamento.Size = new Size(100, 23);
             txDataFechamento.TabIndex = 6;
@@ -156,7 +165,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(277, 51);
+            label3.Location = new Point(269, 3);
             label3.Name = "label3";
             label3.Size = new Size(98, 15);
             label3.TabIndex = 5;
@@ -164,7 +173,7 @@
             // 
             // txValorInicial
             // 
-            txValorInicial.Location = new Point(383, 69);
+            txValorInicial.Location = new Point(375, 21);
             txValorInicial.Name = "txValorInicial";
             txValorInicial.Size = new Size(100, 23);
             txValorInicial.TabIndex = 8;
@@ -173,7 +182,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(383, 51);
+            label4.Location = new Point(375, 3);
             label4.Name = "label4";
             label4.Size = new Size(67, 15);
             label4.TabIndex = 7;
@@ -181,7 +190,7 @@
             // 
             // btnSalvar
             // 
-            btnSalvar.Location = new Point(506, 69);
+            btnSalvar.Location = new Point(498, 21);
             btnSalvar.Name = "btnSalvar";
             btnSalvar.Size = new Size(75, 23);
             btnSalvar.TabIndex = 9;
@@ -193,11 +202,11 @@
             // 
             dgvLancamentos.BackgroundColor = SystemColors.ControlLightLight;
             dgvLancamentos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvLancamentos.Location = new Point(12, 320);
+            dgvLancamentos.Location = new Point(12, 66);
             dgvLancamentos.Name = "dgvLancamentos";
             dgvLancamentos.RowHeadersWidth = 51;
             dgvLancamentos.RowTemplate.Height = 25;
-            dgvLancamentos.Size = new Size(844, 459);
+            dgvLancamentos.Size = new Size(844, 270);
             dgvLancamentos.TabIndex = 10;
             dgvLancamentos.CellDoubleClick += dgvLancamentos_CellDoubleClick;
             dgvLancamentos.CellFormatting += dgvLancamentos_CellFormatting;
@@ -208,7 +217,7 @@
             // dtpMesReferencia
             // 
             dtpMesReferencia.Format = DateTimePickerFormat.Custom;
-            dtpMesReferencia.Location = new Point(12, 284);
+            dtpMesReferencia.Location = new Point(8, 22);
             dtpMesReferencia.Name = "dtpMesReferencia";
             dtpMesReferencia.ShowUpDown = true;
             dtpMesReferencia.Size = new Size(104, 23);
@@ -217,7 +226,7 @@
             // 
             // tbxTotalLancamento
             // 
-            tbxTotalLancamento.Location = new Point(736, 284);
+            tbxTotalLancamento.Location = new Point(732, 22);
             tbxTotalLancamento.Name = "tbxTotalLancamento";
             tbxTotalLancamento.Size = new Size(120, 23);
             tbxTotalLancamento.TabIndex = 12;
@@ -226,7 +235,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(736, 266);
+            label5.Location = new Point(732, 4);
             label5.Name = "label5";
             label5.Size = new Size(98, 15);
             label5.TabIndex = 13;
@@ -235,7 +244,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(8, 266);
+            label6.Location = new Point(4, 4);
             label6.Name = "label6";
             label6.Size = new Size(100, 15);
             label6.TabIndex = 14;
@@ -257,7 +266,7 @@
             // 
             groupBox1.Controls.Add(radioButton2);
             groupBox1.Controls.Add(rbtSaidas);
-            groupBox1.Location = new Point(122, 265);
+            groupBox1.Location = new Point(118, 3);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(158, 48);
             groupBox1.TabIndex = 16;
@@ -489,7 +498,7 @@
             // tbxChaveConta
             // 
             tbxChaveConta.Enabled = false;
-            tbxChaveConta.Location = new Point(12, 69);
+            tbxChaveConta.Location = new Point(4, 21);
             tbxChaveConta.Name = "tbxChaveConta";
             tbxChaveConta.Size = new Size(47, 23);
             tbxChaveConta.TabIndex = 42;
@@ -497,7 +506,7 @@
             // label18
             // 
             label18.AutoSize = true;
-            label18.Location = new Point(12, 52);
+            label18.Location = new Point(4, 4);
             label18.Name = "label18";
             label18.Size = new Size(18, 15);
             label18.TabIndex = 41;
@@ -524,7 +533,7 @@
             // chxCredito
             // 
             chxCredito.AutoSize = true;
-            chxCredito.Location = new Point(293, 284);
+            chxCredito.Location = new Point(289, 22);
             chxCredito.Name = "chxCredito";
             chxCredito.Size = new Size(65, 19);
             chxCredito.TabIndex = 45;
@@ -535,7 +544,7 @@
             // chxDinheiro
             // 
             chxDinheiro.AutoSize = true;
-            chxDinheiro.Location = new Point(364, 284);
+            chxDinheiro.Location = new Point(360, 22);
             chxDinheiro.Name = "chxDinheiro";
             chxDinheiro.Size = new Size(71, 19);
             chxDinheiro.TabIndex = 46;
@@ -581,7 +590,7 @@
             panelLancamento.Controls.Add(cbxContas);
             panelLancamento.Controls.Add(dtpMesReferenciaLancamento);
             panelLancamento.Controls.Add(label15);
-            panelLancamento.Location = new Point(933, 195);
+            panelLancamento.Location = new Point(936, 33);
             panelLancamento.Name = "panelLancamento";
             panelLancamento.Size = new Size(543, 303);
             panelLancamento.TabIndex = 48;
@@ -636,7 +645,7 @@
             // 
             // btnNovoLancamento
             // 
-            btnNovoLancamento.Location = new Point(454, 280);
+            btnNovoLancamento.Location = new Point(450, 18);
             btnNovoLancamento.Margin = new Padding(3, 2, 3, 2);
             btnNovoLancamento.Name = "btnNovoLancamento";
             btnNovoLancamento.Size = new Size(82, 22);
@@ -647,7 +656,7 @@
             // 
             // btnNovaConta
             // 
-            btnNovaConta.Location = new Point(587, 69);
+            btnNovaConta.Location = new Point(579, 21);
             btnNovaConta.Name = "btnNovaConta";
             btnNovaConta.Size = new Size(75, 23);
             btnNovaConta.TabIndex = 64;
@@ -658,7 +667,7 @@
             // label20
             // 
             label20.AutoSize = true;
-            label20.Location = new Point(610, 266);
+            label20.Location = new Point(606, 4);
             label20.Name = "label20";
             label20.Size = new Size(103, 15);
             label20.TabIndex = 87;
@@ -666,7 +675,7 @@
             // 
             // tbxTotalSelecionados
             // 
-            tbxTotalSelecionados.Location = new Point(610, 284);
+            tbxTotalSelecionados.Location = new Point(606, 22);
             tbxTotalSelecionados.Name = "tbxTotalSelecionados";
             tbxTotalSelecionados.Size = new Size(120, 23);
             tbxTotalSelecionados.TabIndex = 86;
@@ -675,7 +684,7 @@
             // lblTituloContas
             // 
             lblTituloContas.AutoSize = true;
-            lblTituloContas.Location = new Point(957, 535);
+            lblTituloContas.Location = new Point(19, 239);
             lblTituloContas.Name = "lblTituloContas";
             lblTituloContas.Size = new Size(44, 15);
             lblTituloContas.TabIndex = 88;
@@ -684,44 +693,79 @@
             // lblTituloSaidas
             // 
             lblTituloSaidas.AutoSize = true;
-            lblTituloSaidas.Location = new Point(959, 565);
+            lblTituloSaidas.Location = new Point(35, 414);
             lblTituloSaidas.Name = "lblTituloSaidas";
             lblTituloSaidas.Size = new Size(89, 15);
             lblTituloSaidas.TabIndex = 89;
             lblTituloSaidas.Text = "Saídas da conta";
             // 
+            // splitContainer1
+            // 
+            splitContainer1.BorderStyle = BorderStyle.FixedSingle;
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Name = "splitContainer1";
+            splitContainer1.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(panelEditContas);
+            splitContainer1.Panel1.Controls.Add(lblTituloContas);
+            splitContainer1.Panel1.Controls.Add(dgvContas);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(panelFiltroLancamentos);
+            splitContainer1.Panel2.Controls.Add(dgvLancamentos);
+            splitContainer1.Panel2.Controls.Add(lblTituloSaidas);
+            splitContainer1.Panel2.Controls.Add(panelLancamento);
+            splitContainer1.Size = new Size(2174, 791);
+            splitContainer1.SplitterDistance = 282;
+            splitContainer1.TabIndex = 90;
+            splitContainer1.SplitterMoved += splitContainer1_SplitterMoved;
+            // 
+            // panelEditContas
+            // 
+            panelEditContas.Controls.Add(txUsuario);
+            panelEditContas.Controls.Add(label1);
+            panelEditContas.Controls.Add(txBanco);
+            panelEditContas.Controls.Add(btnNovaConta);
+            panelEditContas.Controls.Add(label2);
+            panelEditContas.Controls.Add(label3);
+            panelEditContas.Controls.Add(txDataFechamento);
+            panelEditContas.Controls.Add(label4);
+            panelEditContas.Controls.Add(tbxChaveConta);
+            panelEditContas.Controls.Add(txValorInicial);
+            panelEditContas.Controls.Add(label18);
+            panelEditContas.Controls.Add(btnSalvar);
+            panelEditContas.Location = new Point(19, 3);
+            panelEditContas.Name = "panelEditContas";
+            panelEditContas.Size = new Size(661, 53);
+            panelEditContas.TabIndex = 89;
+            // 
+            // panelFiltroLancamentos
+            // 
+            panelFiltroLancamentos.Controls.Add(label6);
+            panelFiltroLancamentos.Controls.Add(label20);
+            panelFiltroLancamentos.Controls.Add(dtpMesReferencia);
+            panelFiltroLancamentos.Controls.Add(tbxTotalSelecionados);
+            panelFiltroLancamentos.Controls.Add(tbxTotalLancamento);
+            panelFiltroLancamentos.Controls.Add(btnNovoLancamento);
+            panelFiltroLancamentos.Controls.Add(label5);
+            panelFiltroLancamentos.Controls.Add(chxDinheiro);
+            panelFiltroLancamentos.Controls.Add(groupBox1);
+            panelFiltroLancamentos.Controls.Add(chxCredito);
+            panelFiltroLancamentos.Location = new Point(12, 3);
+            panelFiltroLancamentos.Name = "panelFiltroLancamentos";
+            panelFiltroLancamentos.Size = new Size(859, 57);
+            panelFiltroLancamentos.TabIndex = 90;
+            // 
             // TelaPrincipal
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1924, 791);
-            Controls.Add(lblTituloSaidas);
-            Controls.Add(lblTituloContas);
-            Controls.Add(label20);
-            Controls.Add(tbxTotalSelecionados);
-            Controls.Add(panelLancamento);
-            Controls.Add(btnNovaConta);
-            Controls.Add(btnNovoLancamento);
-            Controls.Add(chxDinheiro);
-            Controls.Add(chxCredito);
-            Controls.Add(tbxChaveConta);
-            Controls.Add(label18);
-            Controls.Add(groupBox1);
-            Controls.Add(label6);
-            Controls.Add(label5);
-            Controls.Add(tbxTotalLancamento);
-            Controls.Add(dtpMesReferencia);
-            Controls.Add(dgvLancamentos);
-            Controls.Add(btnSalvar);
-            Controls.Add(txValorInicial);
-            Controls.Add(label4);
-            Controls.Add(txDataFechamento);
-            Controls.Add(label3);
-            Controls.Add(txUsuario);
-            Controls.Add(label2);
-            Controls.Add(txBanco);
-            Controls.Add(label1);
-            Controls.Add(dgvContas);
+            ClientSize = new Size(2174, 791);
+            Controls.Add(splitContainer1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "TelaPrincipal";
             Text = "Lançamentos";
@@ -736,8 +780,17 @@
             ((System.ComponentModel.ISupportInitialize)nudQtdParcelas).EndInit();
             panelLancamento.ResumeLayout(false);
             panelLancamento.PerformLayout();
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel1.PerformLayout();
+            splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            panelEditContas.ResumeLayout(false);
+            panelEditContas.PerformLayout();
+            panelFiltroLancamentos.ResumeLayout(false);
+            panelFiltroLancamentos.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -806,5 +859,8 @@
         private CheckBox chkObrigatorio;
         private Label lblTituloContas;
         private Label lblTituloSaidas;
+        private SplitContainer splitContainer1;
+        private Panel panelEditContas;
+        private Panel panelFiltroLancamentos;
     }
 }

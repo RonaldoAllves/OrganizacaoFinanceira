@@ -29,27 +29,28 @@
                         Label label = (Label)control;
                         label.ForeColor = corLabel;
                         break;
+
                     case Button:
                         Button button = (Button)control;
                         button.ForeColor = Color.Black;
-                        //button.UseVisualStyleBackColor = false;
-                        /*;
-                        button.BackColor = corButton;
-                        button.ForeColor = corTextButton; */
                         break;
+
                     case RadioButton:
                         RadioButton radioButton = (RadioButton)control;
                         radioButton.ForeColor = corLabel;
                         break;
+
                     case GroupBox:
                         GroupBox groupBox = (GroupBox)control;
                         groupBox.ForeColor = corLabel;
                         ConfiguracaoControles(groupBox.Controls);
                         break;
+
                     case CheckBox:
                         CheckBox checkBox = (CheckBox)control;
                         checkBox.ForeColor = corLabel;
                         break;
+
                     case DataGridView:
                         DataGridView dataGridView = (DataGridView)control;
                         dataGridView.BackgroundColor = backGround;
@@ -57,30 +58,37 @@
                         dataGridView.GridColor = corFundoGrid;
                         dataGridView.DefaultCellStyle.BackColor = backGround;
                         dataGridView.BorderStyle = BorderStyle.Fixed3D;
-
                         dataGridView.EnableHeadersVisualStyles = false;
-
                         dataGridView.ColumnHeadersDefaultCellStyle.BackColor = corHeaderGrid;
                         dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = corLabel;
                         dataGridView.RowHeadersDefaultCellStyle.BackColor = corHeaderGrid;
-
                         break;
+
                     case MenuStrip:
                         MenuStrip menuStrip = (MenuStrip)control;
                         menuStrip.BackColor = corFundoGrid;
                         menuStrip.ForeColor = corLabel;
                         break;
+
                     case SplitContainer:
                         SplitContainer splitContainer = (SplitContainer)control;
                         splitContainer.BackColor = backGround;
                         splitContainer.ForeColor = corLabel;
                         ConfiguracaoControles(splitContainer.Controls);
                         break;
+
                     case SplitterPanel:
                         SplitterPanel splitterPanel = (SplitterPanel)control;
                         splitterPanel.BackColor = backGround;
                         splitterPanel.ForeColor = corLabel;
                         ConfiguracaoControles(splitterPanel.Controls);
+                        break;
+
+                    case Panel:
+                        Panel panel = (Panel)control;
+                        panel.BackColor = backGround;
+                        panel.ForeColor = corLabel;
+                        ConfiguracaoControles(panel.Controls);
                         break;
                 }
             }

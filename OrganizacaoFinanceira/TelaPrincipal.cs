@@ -74,13 +74,6 @@ namespace OrganizacaoFinanceira
             }
         }
 
-        private void AjustarLayout()
-        {
-            dgvContas.Width = this.Width - 3 * dgvContas.Left - 15;
-            dgvLancamentos.Width = dgvContas.Width;
-            dgvLancamentos.Height = this.Height - dgvLancamentos.Top - 50;
-        }
-
         private void InicializarDatas()
         {
             dtpMesReferencia.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -98,7 +91,7 @@ namespace OrganizacaoFinanceira
             int y = (this.ClientSize.Height - panelLancamento.Size.Height) / 2;
             panelLancamento.Location = new Point(x, y);
 
-            AjustarLayout();
+            RedefinirTamanhoGrids();
         }
 
         #region ATUALIZAR BANCO
@@ -144,10 +137,10 @@ namespace OrganizacaoFinanceira
         }
 
         private void AtualizarValorTotalConta()
-        {          
+        {
             CRUD.AtualizarValorTotalConta();
             dgvContas.Refresh();
-        }        
+        }
 
         private void btnNovaConta_Click(object sender, EventArgs e)
         {
@@ -1077,6 +1070,31 @@ namespace OrganizacaoFinanceira
             {
                 dtpMesReferenciaLancamento.Value = adjustedDate;
             }
+        }
+
+        private void RedefinirTamanhoGrids()
+        {
+            int topGrid = 85;
+            int distanciaGrid = 25;
+
+            dgvContas.Top = topGrid;
+            dgvContas.Width = dgvContas.Parent.Width - dgvContas.Left - distanciaGrid;
+            dgvContas.Height = dgvContas.Parent.Height - dgvContas.Top - distanciaGrid;
+            lblTituloContas.Width = dgvContas.Width;
+            lblTituloContas.Top = dgvContas.Top - lblTituloContas.Height;
+            panelEditContas.Top = dgvContas.Top - lblTituloContas.Height - panelEditContas.Height;
+
+            dgvLancamentos.Top = topGrid;
+            dgvLancamentos.Width = dgvLancamentos.Parent.Width - dgvLancamentos.Left - distanciaGrid;
+            dgvLancamentos.Height = dgvLancamentos.Parent.Height - dgvLancamentos.Top - distanciaGrid;
+            lblTituloSaidas.Width = dgvLancamentos.Width;
+            lblTituloSaidas.Top = dgvLancamentos.Top - lblTituloSaidas.Height;
+            panelFiltroLancamentos.Top = dgvLancamentos.Top - lblTituloSaidas.Height - panelFiltroLancamentos.Height;
+        }
+
+        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            RedefinirTamanhoGrids();
         }
     }
 }
