@@ -645,28 +645,28 @@ namespace OrganizacaoFinanceira
             dgvCategorias.Top = topGrid;
             dgvCategorias.Width = dgvCategorias.Parent.Width - dgvCategorias.Left - distanciaGrid;
             dgvCategorias.Height = dgvCategorias.Parent.Height - dgvCategorias.Top - distanciaGrid;
-            lblTituloCategorias.Width = dgvCategorias.Width;
+            funcoesGrid.ReajustarTamanhoTitulo(dgvCategorias, lblTituloCategorias);
             lblTituloCategorias.Top = dgvCategorias.Top - lblTituloCategorias.Height;
             panelCategorias.Top = dgvCategorias.Top - lblTituloCategorias.Height - panelCategorias.Height;
 
             dgvMeses.Top = topGrid;
             dgvMeses.Width = dgvMeses.Parent.Width - dgvMeses.Left - distanciaGrid;
             dgvMeses.Height = dgvMeses.Parent.Height - dgvMeses.Top - distanciaGrid;
-            lblTituloMesesCriados.Width = dgvMeses.Width;
+            funcoesGrid.ReajustarTamanhoTitulo(dgvMeses, lblTituloMesesCriados);
             lblTituloMesesCriados.Top = dgvMeses.Top - lblTituloMesesCriados.Height;
             panelMesesCriados.Top = dgvMeses.Top - lblTituloMesesCriados.Height - panelMesesCriados.Height;
 
             dgvVerbasPorMes.Top = topGrid;
             dgvVerbasPorMes.Width = dgvVerbasPorMes.Parent.Width - dgvVerbasPorMes.Left - distanciaGrid;
             dgvVerbasPorMes.Height = dgvVerbasPorMes.Parent.Height - dgvVerbasPorMes.Top - distanciaGrid;
-            lblTituloVerbasPorMes.Width = dgvVerbasPorMes.Width;
+            funcoesGrid.ReajustarTamanhoTitulo(dgvVerbasPorMes, lblTituloVerbasPorMes);
             lblTituloVerbasPorMes.Top = dgvVerbasPorMes.Top - lblTituloVerbasPorMes.Height;
             panelVerbasPorMes.Top = dgvVerbasPorMes.Top - lblTituloVerbasPorMes.Height - panelVerbasPorMes.Height;
 
             dgvSaidasCategoria.Top = topGrid;
             dgvSaidasCategoria.Width = dgvSaidasCategoria.Parent.Width - dgvSaidasCategoria.Left - distanciaGrid;
             dgvSaidasCategoria.Height = dgvSaidasCategoria.Parent.Height - dgvSaidasCategoria.Top - distanciaGrid;
-            lblTituloSaidasCategoria.Width = dgvSaidasCategoria.Width;
+            funcoesGrid.ReajustarTamanhoTitulo(dgvSaidasCategoria, lblTituloSaidasCategoria);
             lblTituloSaidasCategoria.Top = dgvSaidasCategoria.Top - lblTituloSaidasCategoria.Height;
             panelSaidasCategoria.Top = dgvSaidasCategoria.Top - lblTituloSaidasCategoria.Height - panelSaidasCategoria.Height;            
         }

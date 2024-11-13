@@ -1,4 +1,6 @@
-﻿namespace OrganizacaoFinanceira.Recursos
+﻿using System.Windows.Forms;
+
+namespace OrganizacaoFinanceira.Recursos
 {
     public static class LayoutColor
     {
@@ -57,7 +59,7 @@
                         dataGridView.ForeColor = corLabel;
                         dataGridView.GridColor = corFundoGrid;
                         dataGridView.DefaultCellStyle.BackColor = backGround;
-                        dataGridView.BorderStyle = BorderStyle.Fixed3D;
+                        dataGridView.BorderStyle = BorderStyle.None;
                         dataGridView.EnableHeadersVisualStyles = false;
                         dataGridView.ColumnHeadersDefaultCellStyle.BackColor = corHeaderGrid;
                         dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = corLabel;
@@ -74,6 +76,7 @@
                         SplitContainer splitContainer = (SplitContainer)control;
                         splitContainer.BackColor = backGround;
                         splitContainer.ForeColor = corLabel;
+                        splitContainer.SplitterWidth = 15;
                         ConfiguracaoControles(splitContainer.Controls);
                         break;
 
@@ -92,6 +95,7 @@
                         break;
                 }
             }
-        }
+        }       
+
     }
 }
