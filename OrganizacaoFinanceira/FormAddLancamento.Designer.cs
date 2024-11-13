@@ -102,7 +102,7 @@
             // 
             // btnLimparLancamento
             // 
-            btnLimparLancamento.Location = new Point(280, 305);
+            btnLimparLancamento.Location = new Point(316, 303);
             btnLimparLancamento.Name = "btnLimparLancamento";
             btnLimparLancamento.Size = new Size(75, 23);
             btnLimparLancamento.TabIndex = 71;
@@ -153,7 +153,7 @@
             // 
             // btnSalvarLancamento
             // 
-            btnSalvarLancamento.Location = new Point(103, 305);
+            btnSalvarLancamento.Location = new Point(139, 303);
             btnSalvarLancamento.Name = "btnSalvarLancamento";
             btnSalvarLancamento.Size = new Size(75, 23);
             btnSalvarLancamento.TabIndex = 65;
@@ -367,7 +367,11 @@
             Controls.Add(cbxContas);
             Controls.Add(dtpMesReferenciaLancamento);
             Controls.Add(label15);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "FormAddLancamento";
+            SizeGripStyle = SizeGripStyle.Hide;
             Text = "Adicionar Lançamento";
             Load += FormAddLancamento_Load;
             panelParcelas.ResumeLayout(false);
