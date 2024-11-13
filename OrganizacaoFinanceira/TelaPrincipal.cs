@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing.Drawing2D;
 using System.Text;
+using System.Windows.Forms;
 
 namespace OrganizacaoFinanceira
 {
@@ -14,6 +15,7 @@ namespace OrganizacaoFinanceira
     {
         CRUD CRUD = new CRUD();
         FuncoesGrid funcoesGrid = new();
+        LayoutSplitterContainer layoutSplitter = new();
 
         string mensagemValorAtualConta = "";
         bool podeFiltrar = true;
@@ -57,13 +59,16 @@ namespace OrganizacaoFinanceira
 
             podeFiltrar = true;
             FiltrarSaidas();
-            splitContainer1.Paint += splitContainer1_Paint;
-            splitContainer1.Panel1.Paint += splitContainer1_Panel1_Paint;
-            splitContainer1.Panel2.Paint += splitContainer1_Panel2_Paint;
 
+            splitContainer1.SplitterWidth = 1;
+            splitContainer1.BackColor = SystemColors.Window;
+            splitContainer1.Paint += (s, pe) => layoutSplitter.DesenharLinhaDivisoria(splitContainer1, pe);
+            splitContainer1.Panel1.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer1.Panel1, pe, 20);
+            splitContainer1.Panel2.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer1.Panel2, pe, 20);
+            splitContainer1.MouseEnter += (s, e) => layoutSplitter.ExibirLinhaDivisoria(splitContainer1);
+            splitContainer1.MouseLeave += (s, e) => layoutSplitter.DiminuirLinhaDivisoria(splitContainer1);
 
             RedefinirTamanhoGrids();
-
             this.Enabled = true;
         }
 
@@ -691,91 +696,6 @@ namespace OrganizacaoFinanceira
         private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
         {
             RedefinirTamanhoGrids();
-        }
-
-        private void splitContainer1_Paint(object sender, PaintEventArgs e)
-        {
-            // Defina a cor desejada para a linha
-            Color corDivisoria = Color.Blue;
-
-            // Crie uma nova caneta com a cor desejada
-            using (Pen pen = new Pen(corDivisoria, splitContainer1.SplitterWidth))
-            {
-                // Desenha a linha dependendo da orientação do SplitContainer
-                if (splitContainer1.Orientation == Orientation.Vertical)
-                {
-                    // Linha vertical
-                    int x = splitContainer1.SplitterDistance + (splitContainer1.SplitterWidth / 2);
-                    e.Graphics.DrawLine(pen, x, 0, x, splitContainer1.Height);
-                }
-                else
-                {
-                    // Linha horizontal
-                    int y = splitContainer1.SplitterDistance + (splitContainer1.SplitterWidth / 2);
-                    e.Graphics.DrawLine(pen, 0, y, splitContainer1.Width, y);
-                }
-            }
-        }
-
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
-        {
-            // Define o raio das bordas arredondadas
-            int radius = 20;
-
-            // Define o retângulo para o painel
-            Rectangle panelRect = splitContainer1.Panel1.ClientRectangle;
-
-            // Cria o caminho com bordas arredondadas
-            using (GraphicsPath path = RoundedRect(panelRect, radius))
-            {
-                // Preenche o painel com uma cor, por exemplo, cinza claro
-                using (SolidBrush brush = new SolidBrush(Color.LightGray))
-                {
-                    e.Graphics.FillPath(brush, path);
-                }
-            }
-        }
-
-        private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
-        {
-            int radius = 20;
-            Rectangle panelRect = splitContainer1.Panel2.ClientRectangle;
-
-            using (GraphicsPath path = RoundedRect(panelRect, radius))
-            {
-                using (SolidBrush brush = new SolidBrush(Color.LightGray))
-                {
-                    e.Graphics.FillPath(brush, path);
-                }
-            }
-        }
-
-        // Método auxiliar para criar um retângulo com bordas arredondadas
-        private GraphicsPath RoundedRect(Rectangle bounds, int radius)
-        {
-            int diameter = radius * 2;
-            Size size = new Size(diameter, diameter);
-            Rectangle arc = new Rectangle(bounds.Location, size);
-            GraphicsPath path = new GraphicsPath();
-
-            // Top left arc
-            path.AddArc(arc, 180, 90);
-
-            // Top right arc
-            arc.X = bounds.Right - diameter;
-            path.AddArc(arc, 270, 90);
-
-            // Bottom right arc
-            arc.Y = bounds.Bottom - diameter;
-            path.AddArc(arc, 0, 90);
-
-            // Bottom left arc
-            arc.X = bounds.Left;
-            path.AddArc(arc, 90, 90);
-
-            path.CloseFigure();
-            return path;
-        }
-
+        }       
     }
 }

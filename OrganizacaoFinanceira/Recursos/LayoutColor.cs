@@ -74,16 +74,16 @@ namespace OrganizacaoFinanceira.Recursos
 
                     case SplitContainer:
                         SplitContainer splitContainer = (SplitContainer)control;
-                        splitContainer.BackColor = backGround;
-                        splitContainer.ForeColor = corLabel;
-                        splitContainer.SplitterWidth = 15;
+                        //splitContainer.BackColor = backGround;
+                        //splitContainer.ForeColor = corLabel;
+                        //splitContainer.SplitterWidth = 0;
                         ConfiguracaoControles(splitContainer.Controls);
                         break;
 
                     case SplitterPanel:
                         SplitterPanel splitterPanel = (SplitterPanel)control;
-                        splitterPanel.BackColor = backGround;
-                        splitterPanel.ForeColor = corLabel;
+                        //splitterPanel.BackColor = backGround;
+                        //splitterPanel.ForeColor = corLabel;
                         ConfiguracaoControles(splitterPanel.Controls);
                         break;
 
