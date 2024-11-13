@@ -11,9 +11,11 @@ namespace OrganizacaoFinanceira.Recursos
     internal class LayoutSplitterContainer
     {
         public void DesenharLinhaDivisoria(SplitContainer splitContainer, PaintEventArgs e)
-        {           
+        {
+            splitContainer.BackColor = Color.Black;
+
             // Cria uma caneta com a cor desejada
-            using (Pen pen = new Pen(SystemColors.Window, splitContainer.SplitterWidth))
+            using (Pen pen = new Pen(Color.Black, splitContainer.SplitterWidth))
             {
                 // Verifica a orientação do SplitContainer e desenha a linha adequadamente
                 if (splitContainer.Orientation == Orientation.Vertical)
@@ -31,13 +33,13 @@ namespace OrganizacaoFinanceira.Recursos
             }
         }
 
-        public void PintarPainelComBordasArredondadas(Panel panel, PaintEventArgs e, int radius)
+        public void PintarPainelComBordasArredondadas(Panel panel, PaintEventArgs e)
         {
             // Define o retângulo para o painel
             Rectangle panelRect = panel.ClientRectangle;
 
             // Cria o caminho com bordas arredondadas
-            using (GraphicsPath path = RoundedRect(panelRect, radius))
+            using (GraphicsPath path = RoundedRect(panelRect, 30))
             {
                 // Preenche o painel com a cor especificada
                 using (SolidBrush brush = new SolidBrush(Color.FromArgb(91, 10, 130)))
