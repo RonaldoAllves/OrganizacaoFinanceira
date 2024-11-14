@@ -507,13 +507,13 @@ namespace OrganizacaoFinanceira
         private void tbxEntradaExtra_TextChanged(object sender, EventArgs e)
         {
             if (tbxEntradaExtra.Text.Length == 0) return;
-            DadosGerais.entradaExtra = Convert.ToDouble(tbxEntradaExtra.Text);
+            DadosGerais.entradaExtra = (!string.IsNullOrWhiteSpace(tbxEntradaExtra.Text)) ? Convert.ToDouble(tbxEntradaExtra.Text) : 0;
         }
 
         private void tbxSaidaExtra_TextChanged(object sender, EventArgs e)
         {
             if (tbxSaidaExtra.Text.Length == 0) return;
-            DadosGerais.saidaExtra = Convert.ToDouble(tbxSaidaExtra.Text);
+            DadosGerais.saidaExtra = (!string.IsNullOrWhiteSpace(tbxSaidaExtra.Text)) ? Convert.ToDouble(tbxSaidaExtra.Text) : 0;
         }
 
         private void tbxSaidaExtra_Validated(object sender, EventArgs e)
