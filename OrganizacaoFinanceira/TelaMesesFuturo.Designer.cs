@@ -36,7 +36,10 @@
             dgvLancamentosRecorrentes = new DataGridView();
             btnNovoLancRecorrente = new Button();
             panelLancRecorrente = new Panel();
-            label6 = new Label();
+            chkMesFixo = new CheckBox();
+            lblMesFixo = new Label();
+            dtpMesFixo = new DateTimePicker();
+            lblMesFinal = new Label();
             dtpMesFinal = new DateTimePicker();
             chkLancObrigatorio = new CheckBox();
             tbxIdLancRecorrente = new TextBox();
@@ -84,7 +87,7 @@
             dgvMesesFuturos.BackgroundColor = SystemColors.ControlLightLight;
             dgvMesesFuturos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMesesFuturos.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvMesesFuturos.Location = new Point(839, 125);
+            dgvMesesFuturos.Location = new Point(877, 125);
             dgvMesesFuturos.MultiSelect = false;
             dgvMesesFuturos.Name = "dgvMesesFuturos";
             dgvMesesFuturos.RowHeadersWidth = 51;
@@ -158,7 +161,10 @@
             // 
             panelLancRecorrente.BackColor = Color.FromArgb(255, 224, 192);
             panelLancRecorrente.BorderStyle = BorderStyle.FixedSingle;
-            panelLancRecorrente.Controls.Add(label6);
+            panelLancRecorrente.Controls.Add(chkMesFixo);
+            panelLancRecorrente.Controls.Add(lblMesFixo);
+            panelLancRecorrente.Controls.Add(dtpMesFixo);
+            panelLancRecorrente.Controls.Add(lblMesFinal);
             panelLancRecorrente.Controls.Add(dtpMesFinal);
             panelLancRecorrente.Controls.Add(chkLancObrigatorio);
             panelLancRecorrente.Controls.Add(tbxIdLancRecorrente);
@@ -174,25 +180,52 @@
             panelLancRecorrente.Controls.Add(label31);
             panelLancRecorrente.Controls.Add(cbxCategoriaLancRecorrente);
             panelLancRecorrente.Controls.Add(label37);
-            panelLancRecorrente.Location = new Point(558, 169);
+            panelLancRecorrente.Location = new Point(1099, 477);
             panelLancRecorrente.Name = "panelLancRecorrente";
-            panelLancRecorrente.Size = new Size(539, 215);
+            panelLancRecorrente.Size = new Size(539, 284);
             panelLancRecorrente.TabIndex = 90;
             panelLancRecorrente.Visible = false;
             // 
-            // label6
+            // chkMesFixo
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(26, 96);
-            label6.Name = "label6";
-            label6.Size = new Size(55, 15);
-            label6.TabIndex = 85;
-            label6.Text = "Mês final";
+            chkMesFixo.AutoSize = true;
+            chkMesFixo.Location = new Point(409, 71);
+            chkMesFixo.Name = "chkMesFixo";
+            chkMesFixo.Size = new Size(71, 19);
+            chkMesFixo.TabIndex = 88;
+            chkMesFixo.Text = "Mês fixo";
+            chkMesFixo.UseVisualStyleBackColor = true;
+            // 
+            // lblMesFixo
+            // 
+            lblMesFixo.AutoSize = true;
+            lblMesFixo.Location = new Point(276, 158);
+            lblMesFixo.Name = "lblMesFixo";
+            lblMesFixo.Size = new Size(52, 15);
+            lblMesFixo.TabIndex = 87;
+            lblMesFixo.Text = "Mês fixo";
+            // 
+            // dtpMesFixo
+            // 
+            dtpMesFixo.Format = DateTimePickerFormat.Custom;
+            dtpMesFixo.Location = new Point(280, 176);
+            dtpMesFixo.Name = "dtpMesFixo";
+            dtpMesFixo.Size = new Size(104, 23);
+            dtpMesFixo.TabIndex = 86;
+            // 
+            // lblMesFinal
+            // 
+            lblMesFinal.AutoSize = true;
+            lblMesFinal.Location = new Point(388, 158);
+            lblMesFinal.Name = "lblMesFinal";
+            lblMesFinal.Size = new Size(55, 15);
+            lblMesFinal.TabIndex = 85;
+            lblMesFinal.Text = "Mês final";
             // 
             // dtpMesFinal
             // 
             dtpMesFinal.Format = DateTimePickerFormat.Custom;
-            dtpMesFinal.Location = new Point(30, 114);
+            dtpMesFinal.Location = new Point(392, 176);
             dtpMesFinal.Name = "dtpMesFinal";
             dtpMesFinal.Size = new Size(104, 23);
             dtpMesFinal.TabIndex = 84;
@@ -200,7 +233,7 @@
             // chkLancObrigatorio
             // 
             chkLancObrigatorio.AutoSize = true;
-            chkLancObrigatorio.Location = new Point(401, 113);
+            chkLancObrigatorio.Location = new Point(278, 71);
             chkLancObrigatorio.Name = "chkLancObrigatorio";
             chkLancObrigatorio.Size = new Size(87, 19);
             chkLancObrigatorio.TabIndex = 83;
@@ -210,7 +243,7 @@
             // tbxIdLancRecorrente
             // 
             tbxIdLancRecorrente.Enabled = false;
-            tbxIdLancRecorrente.Location = new Point(30, 69);
+            tbxIdLancRecorrente.Location = new Point(28, 133);
             tbxIdLancRecorrente.Name = "tbxIdLancRecorrente";
             tbxIdLancRecorrente.Size = new Size(47, 23);
             tbxIdLancRecorrente.TabIndex = 82;
@@ -219,7 +252,7 @@
             // 
             groupBox3.Controls.Add(rbtEntradaLancRecorrente);
             groupBox3.Controls.Add(rbtSaidaLancRecorrente);
-            groupBox3.Location = new Point(151, 96);
+            groupBox3.Location = new Point(28, 54);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(226, 42);
             groupBox3.TabIndex = 81;
@@ -236,6 +269,7 @@
             rbtEntradaLancRecorrente.TabStop = true;
             rbtEntradaLancRecorrente.Text = "Entradas";
             rbtEntradaLancRecorrente.UseVisualStyleBackColor = true;
+            rbtEntradaLancRecorrente.CheckedChanged += rbtEntradaLancRecorrente_CheckedChanged;
             // 
             // rbtSaidaLancRecorrente
             // 
@@ -270,7 +304,7 @@
             // 
             // btnLimparLancRecorrente
             // 
-            btnLimparLancRecorrente.Location = new Point(332, 164);
+            btnLimparLancRecorrente.Location = new Point(333, 234);
             btnLimparLancRecorrente.Name = "btnLimparLancRecorrente";
             btnLimparLancRecorrente.Size = new Size(75, 23);
             btnLimparLancRecorrente.TabIndex = 47;
@@ -280,15 +314,15 @@
             // 
             // tbxDescLancRecorrente
             // 
-            tbxDescLancRecorrente.Location = new Point(83, 69);
+            tbxDescLancRecorrente.Location = new Point(81, 133);
             tbxDescLancRecorrente.Name = "tbxDescLancRecorrente";
-            tbxDescLancRecorrente.Size = new Size(191, 23);
+            tbxDescLancRecorrente.Size = new Size(303, 23);
             tbxDescLancRecorrente.TabIndex = 18;
             // 
             // label27
             // 
             label27.AutoSize = true;
-            label27.Location = new Point(83, 51);
+            label27.Location = new Point(81, 115);
             label27.Name = "label27";
             label27.Size = new Size(58, 15);
             label27.TabIndex = 17;
@@ -297,7 +331,7 @@
             // label28
             // 
             label28.AutoSize = true;
-            label28.Location = new Point(280, 51);
+            label28.Location = new Point(392, 114);
             label28.Name = "label28";
             label28.Size = new Size(33, 15);
             label28.TabIndex = 19;
@@ -305,7 +339,7 @@
             // 
             // tbxValorLancRecorrente
             // 
-            tbxValorLancRecorrente.Location = new Point(280, 69);
+            tbxValorLancRecorrente.Location = new Point(392, 132);
             tbxValorLancRecorrente.Name = "tbxValorLancRecorrente";
             tbxValorLancRecorrente.Size = new Size(116, 23);
             tbxValorLancRecorrente.TabIndex = 20;
@@ -313,7 +347,7 @@
             // 
             // btnSalvarLancRecorrente
             // 
-            btnSalvarLancRecorrente.Location = new Point(124, 164);
+            btnSalvarLancRecorrente.Location = new Point(125, 234);
             btnSalvarLancRecorrente.Name = "btnSalvarLancRecorrente";
             btnSalvarLancRecorrente.Size = new Size(75, 23);
             btnSalvarLancRecorrente.TabIndex = 38;
@@ -324,7 +358,7 @@
             // label31
             // 
             label31.AutoSize = true;
-            label31.Location = new Point(30, 52);
+            label31.Location = new Point(28, 116);
             label31.Name = "label31";
             label31.Size = new Size(18, 15);
             label31.TabIndex = 39;
@@ -333,15 +367,15 @@
             // cbxCategoriaLancRecorrente
             // 
             cbxCategoriaLancRecorrente.FormattingEnabled = true;
-            cbxCategoriaLancRecorrente.Location = new Point(401, 68);
+            cbxCategoriaLancRecorrente.Location = new Point(28, 176);
             cbxCategoriaLancRecorrente.Name = "cbxCategoriaLancRecorrente";
-            cbxCategoriaLancRecorrente.Size = new Size(121, 23);
+            cbxCategoriaLancRecorrente.Size = new Size(244, 23);
             cbxCategoriaLancRecorrente.TabIndex = 25;
             // 
             // label37
             // 
             label37.AutoSize = true;
-            label37.Location = new Point(401, 51);
+            label37.Location = new Point(28, 159);
             label37.Name = "label37";
             label37.Size = new Size(58, 15);
             label37.TabIndex = 26;
@@ -349,19 +383,20 @@
             // 
             // tbxEntradaExtra
             // 
-            tbxEntradaExtra.Location = new Point(839, 97);
+            tbxEntradaExtra.Location = new Point(877, 97);
             tbxEntradaExtra.Name = "tbxEntradaExtra";
             tbxEntradaExtra.Size = new Size(100, 23);
             tbxEntradaExtra.TabIndex = 92;
             tbxEntradaExtra.Text = "0";
             tbxEntradaExtra.TextAlign = HorizontalAlignment.Right;
             tbxEntradaExtra.TextChanged += tbxEntradaExtra_TextChanged;
+            tbxEntradaExtra.KeyDown += tbxEntradaExtra_KeyDown;
             tbxEntradaExtra.Validated += tbxEntradaExtra_Validated;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(839, 79);
+            label1.Location = new Point(877, 79);
             label1.Name = "label1";
             label1.Size = new Size(76, 15);
             label1.TabIndex = 93;
@@ -370,7 +405,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(945, 79);
+            label2.Location = new Point(983, 79);
             label2.Name = "label2";
             label2.Size = new Size(64, 15);
             label2.TabIndex = 95;
@@ -378,18 +413,19 @@
             // 
             // tbxSaidaExtra
             // 
-            tbxSaidaExtra.Location = new Point(945, 97);
+            tbxSaidaExtra.Location = new Point(983, 97);
             tbxSaidaExtra.Name = "tbxSaidaExtra";
             tbxSaidaExtra.Size = new Size(100, 23);
             tbxSaidaExtra.TabIndex = 94;
             tbxSaidaExtra.Text = "0";
             tbxSaidaExtra.TextAlign = HorizontalAlignment.Right;
             tbxSaidaExtra.TextChanged += tbxSaidaExtra_TextChanged;
+            tbxSaidaExtra.KeyDown += tbxSaidaExtra_KeyDown;
             tbxSaidaExtra.Validated += tbxSaidaExtra_Validated;
             // 
             // btnRecalcular
             // 
-            btnRecalcular.Location = new Point(1051, 97);
+            btnRecalcular.Location = new Point(1089, 97);
             btnRecalcular.Name = "btnRecalcular";
             btnRecalcular.Size = new Size(75, 23);
             btnRecalcular.TabIndex = 96;
@@ -421,7 +457,7 @@
             cbxCategoriaSimulacao.Location = new Point(341, 42);
             cbxCategoriaSimulacao.Name = "cbxCategoriaSimulacao";
             cbxCategoriaSimulacao.Size = new Size(121, 23);
-            cbxCategoriaSimulacao.TabIndex = 87;
+            cbxCategoriaSimulacao.TabIndex = 4;
             // 
             // label7
             // 
@@ -437,7 +473,7 @@
             btnSimular.Location = new Point(493, 41);
             btnSimular.Name = "btnSimular";
             btnSimular.Size = new Size(75, 23);
-            btnSimular.TabIndex = 86;
+            btnSimular.TabIndex = 5;
             btnSimular.Text = "Simular";
             btnSimular.UseVisualStyleBackColor = true;
             btnSimular.Click += btnSimular_Click;
@@ -447,7 +483,7 @@
             tbxQtdParcelas.Location = new Point(112, 43);
             tbxQtdParcelas.Name = "tbxQtdParcelas";
             tbxQtdParcelas.Size = new Size(100, 23);
-            tbxQtdParcelas.TabIndex = 5;
+            tbxQtdParcelas.TabIndex = 2;
             // 
             // label5
             // 
@@ -473,7 +509,7 @@
             dtpDataInicialParcela.Location = new Point(218, 43);
             dtpDataInicialParcela.Name = "dtpDataInicialParcela";
             dtpDataInicialParcela.Size = new Size(117, 23);
-            dtpDataInicialParcela.TabIndex = 2;
+            dtpDataInicialParcela.TabIndex = 3;
             // 
             // tbxValorMensal
             // 
@@ -513,7 +549,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1545, 791);
+            ClientSize = new Size(1723, 791);
             Controls.Add(lblTituloSaldosFuturo);
             Controls.Add(lblTituloLancamentosCriados);
             Controls.Add(groupBox1);
@@ -576,7 +612,7 @@
         private Label label2;
         private TextBox tbxSaidaExtra;
         private Button btnRecalcular;
-        private Label label6;
+        private Label lblMesFinal;
         private DateTimePicker dtpMesFinal;
         private GroupBox groupBox1;
         private TextBox tbxValorMensal;
@@ -590,5 +626,8 @@
         private Label label7;
         private Label lblTituloLancamentosCriados;
         private Label lblTituloSaldosFuturo;
+        private Label lblMesFixo;
+        private DateTimePicker dtpMesFixo;
+        private CheckBox chkMesFixo;
     }
 }

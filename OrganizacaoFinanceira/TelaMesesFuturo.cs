@@ -60,7 +60,8 @@ namespace OrganizacaoFinanceira
 
         private double CalcularPrevisaoEntradaExtra()
         {
-            double entradasRecorrentes = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).Sum(x => x.valor);
+            double entradasFixa = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && x.usaMesFixo && x.dataFixa.Value.Month == DateTime.Now.Month).Sum(x => x.valor);
+            double entradasRecorrentes = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && !x.usaMesFixo).Sum(x => x.valor) + entradasFixa;
             double entradasMes = DadosGerais.entradas.Where(x => x.chaveCategoria == 0 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valor);
             double entradaExtra = entradasRecorrentes - entradasMes;
             return entradaExtra < 0 ? 0 : entradaExtra;
@@ -159,6 +160,9 @@ namespace OrganizacaoFinanceira
             lancRecorrenteNovo.obrigatorio = chkLancObrigatorio.Checked;
 
             lancRecorrenteNovo.dataFinal = dtpMesFinal.Value;
+
+            lancRecorrenteNovo.usaMesFixo = chkMesFixo.Checked;
+            if (chkMesFixo.Checked) lancRecorrenteNovo.dataFixa = dtpMesFixo.Value;
 
             if (tbxIdLancRecorrente.Text.Length > 0)
             {
@@ -276,6 +280,48 @@ namespace OrganizacaoFinanceira
                 e.Value = (bool)e.Value ? "Sim" : "Não";
                 e.FormattingApplied = true;
             }
+
+            if (dgvLancamentosRecorrentes.Columns[e.ColumnIndex].DataPropertyName == "usaMesFixo")
+            {
+                if (e.Value == null)
+                {
+                    e.Value = "Não";
+                    return;
+                }
+                e.Value = (bool)e.Value ? "Sim" : "Não";
+                e.FormattingApplied = true;
+            }
+
+            if (dgvLancamentosRecorrentes.Columns[e.ColumnIndex].DataPropertyName == "dataFixa" && e.Value != null)
+            {
+                // Verificar se o valor não é nulo e é uma data
+                if (e.Value is DateTime dataFixa)
+                {
+                    // Alterar o valor da célula para o nome do mês
+                    e.Value = dataFixa.ToString("MMMM"); // "MMMM" retorna o nome completo do mês
+                    e.FormattingApplied = true;
+                }
+            }
+
+            if (dgvLancamentosRecorrentes.Columns[e.ColumnIndex].DataPropertyName == "dataFinal" && e.Value != null)
+            {
+                // Verificar se o valor é uma data e não é a data mínima
+                if (e.Value is DateTime dataFinal)
+                {
+                    // Se for a data mínima, não exibe nada
+                    if (dataFinal == DateTime.MinValue)
+                    {
+                        e.Value = string.Empty; // Não mostrar nada
+                    }
+                    else
+                    {
+                        // Alterar o valor da célula para o formato MM/yyyy
+                        e.Value = dataFinal.ToString("MM/yyyy");
+                    }
+                    e.FormattingApplied = true;
+                }
+            }
+
         }
 
         private void rbtFiltroSaidaLancRecorrente_CheckedChanged(object sender, EventArgs e)
@@ -288,8 +334,13 @@ namespace OrganizacaoFinanceira
             if (DadosGerais.lancamentosRecorrentes == null) return;
             SortableBindingList<LancamentoRecorrente> lancamentosFiltro = new(DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == (rbtFiltroSaidaLancRecorrente.Checked ? 0 : 1)).ToList());
             bindingSourceLancRecorrentes.DataSource = lancamentosFiltro;
-            dgvLancamentosRecorrentes.Columns[2].Visible = rbtFiltroSaidaLancRecorrente.Checked;
             if (recarregar) InicializarMesesFuturos();
+
+            dgvLancamentosRecorrentes.Columns[2].Visible = rbtFiltroSaidaLancRecorrente.Checked;
+            dgvLancamentosRecorrentes.Columns[4].Visible = rbtFiltroSaidaLancRecorrente.Checked;
+            dgvLancamentosRecorrentes.Columns[5].Visible = !rbtFiltroSaidaLancRecorrente.Checked;
+            dgvLancamentosRecorrentes.Columns[6].Visible = !rbtFiltroSaidaLancRecorrente.Checked;
+            dgvLancamentosRecorrentes.Columns[7].Visible = rbtFiltroSaidaLancRecorrente.Checked;
         }
 
         #endregion
@@ -313,7 +364,7 @@ namespace OrganizacaoFinanceira
             primeiroMes.saidasTotais = saidasMesAtual + Convert.ToDouble(tbxSaidaExtra.Text);
             primeiroMes.saidasParceladas = saidasComSimulacao.Where(x => x.qtdParcelas > 1 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valorParcela);
 
-            double entradasTotaisRecorrente = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).Sum(x => x.valor);
+            double entradasTotaisRecorrente = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && !x.usaMesFixo).Sum(x => x.valor);
             double saidasParceladas;
             double entradasMes;
             for (int i = 0; i < 24; i++)
@@ -335,9 +386,10 @@ namespace OrganizacaoFinanceira
                 }
 
                 double saidatotal = CalcularPrevisaoSaidasTotaisMes(DadosGerais.mesesFuturos[i].mes);
+                double entradasRecorrentes = entradasTotaisRecorrente + DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && x.usaMesFixo && x.dataFixa.Value.Month == DadosGerais.mesesFuturos[i].mes.Month).Sum(x => x.valor);
 
                 DadosGerais.mesesFuturos[i].saidasTotais = saidatotal;
-                DadosGerais.mesesFuturos[i].entradasTotais = Math.Max(entradasTotaisRecorrente, entradasMes);
+                DadosGerais.mesesFuturos[i].entradasTotais = Math.Max(entradasRecorrentes, entradasMes);
                 DadosGerais.mesesFuturos[i].saidasParceladas = saidasParceladas;
                 DadosGerais.mesesFuturos[i].saldoGeral = valorAtualContas + DadosGerais.mesesFuturos[i].entradasTotais - saidatotal;
                 valorAtualContas = DadosGerais.mesesFuturos[i].saldoGeral;
@@ -471,17 +523,24 @@ namespace OrganizacaoFinanceira
         {
             saidasComSimulacao = DadosGerais.saidas.ToList();
             parcelasSimulacao = new();
-            int qtdParcleas = Convert.ToInt16(tbxQtdParcelas.Text);
+            int qtdParcelas = 0; // Valor padrão
+
+            // Verificar se o campo de texto não está vazio
+            if (!string.IsNullOrWhiteSpace(tbxQtdParcelas.Text))
+            {
+                qtdParcelas = Convert.ToInt16(tbxQtdParcelas.Text);
+            }
+
             int categoria = (int)cbxCategoriaSimulacao.SelectedValue;
             DateTime data = dtpDataInicialParcela.Value.Date;
-            for (int i = 0; i < qtdParcleas; i++)
+            for (int i = 0; i < qtdParcelas; i++)
             {
                 Saida parc = new Saida();
                 parc.tipoSaida = 0;
                 parc.valorParcela = Convert.ToDouble(tbxValorMensal.Text);
                 parc.parcela = i + 1;
                 parc.dataInicio = dtpDataInicialParcela.Value.Date;
-                parc.qtdParcelas = qtdParcleas;
+                parc.qtdParcelas = qtdParcelas;
                 parc.mesReferencia = data;
                 parc.chaveCategoria = categoria;
                 data = data.AddMonths(1);
@@ -501,6 +560,35 @@ namespace OrganizacaoFinanceira
         private void dgvMesesFuturos_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
             funcoesGrid.ReajustarTamanhoTitulo(dgvMesesFuturos, lblTituloSaldosFuturo);
+        }
+
+        private void rbtEntradaLancRecorrente_CheckedChanged(object sender, EventArgs e)
+        {
+            lblMesFinal.Enabled = !rbtEntradaLancRecorrente.Checked;
+            dtpMesFinal.Enabled = !rbtEntradaLancRecorrente.Checked;
+
+            lblMesFixo.Enabled = rbtEntradaLancRecorrente.Checked;
+            dtpMesFixo.Enabled = rbtEntradaLancRecorrente.Checked;
+        }
+
+        private void tbxEntradaExtra_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Verificar se a tecla pressionada foi Enter (código 13)
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Chama o método de ação quando o Enter for pressionado
+                InicializarMesesFuturos();
+            }
+        }
+
+        private void tbxSaidaExtra_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Verificar se a tecla pressionada foi Enter (código 13)
+            if (e.KeyCode == Keys.Enter)
+            {
+                // Chama o método de ação quando o Enter for pressionado
+                InicializarMesesFuturos();
+            }
         }
     }
 }

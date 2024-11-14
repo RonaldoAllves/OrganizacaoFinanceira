@@ -202,6 +202,8 @@
                 ("chaveCategoria", "Categoria", DataGridViewContentAlignment.MiddleCenter, 150, false),
                 ("tipoLancamento", "Tipo do lançamento", DataGridViewContentAlignment.MiddleCenter, 150, false),
                 ("dataFinal", "Data final", DataGridViewContentAlignment.MiddleCenter, 100, false),
+                ("usaMesFixo", "Usa data fixa", DataGridViewContentAlignment.MiddleCenter, 100, false),
+                ("dataFixa", "Mês fixo", DataGridViewContentAlignment.MiddleCenter, 100, false),
                 ("obrigatorio", "Obrigatório", DataGridViewContentAlignment.MiddleCenter, 100, false),
             };
             return colunas;

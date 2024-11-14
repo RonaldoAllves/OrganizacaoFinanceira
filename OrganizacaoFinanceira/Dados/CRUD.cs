@@ -209,7 +209,6 @@ namespace OrganizacaoFinanceira.Dados
                 MessageBox.Show("Erro ao buscar os lançamentos recorrentes.\n\n" + ex.Message);
                 return new SortableBindingList<LancamentoRecorrente>();
             }
-
         }
         #endregion
 
