@@ -5,6 +5,7 @@ using OrganizacaoFinanceira.Recursos;
 using OrganizacaoFinanceira.Telas;
 using System.ComponentModel;
 using System.Data;
+using System.Windows.Forms;
 
 namespace OrganizacaoFinanceira
 {
@@ -42,6 +43,12 @@ namespace OrganizacaoFinanceira
 
             funcoesGrid.AjustarTitulo(dgvLancamentosRecorrentes, lblTituloLancamentosCriados, "Lançamentos criados");
             funcoesGrid.AjustarTitulo(dgvMesesFuturos, lblTituloSaldosFuturo, "Previsão do saldo final por mês");
+
+            dtpMesFinal.Format = DateTimePickerFormat.Custom;
+            dtpMesFinal.CustomFormat = "MM/yyyy";
+
+            dtpMesFixo.Format = DateTimePickerFormat.Custom;
+            dtpMesFixo.CustomFormat = "MM/yyyy";
 
             this.Enabled = true;
         }
@@ -159,10 +166,10 @@ namespace OrganizacaoFinanceira
             else lancRecorrenteNovo.chaveCategoria = 0;
             lancRecorrenteNovo.obrigatorio = chkLancObrigatorio.Checked;
 
-            lancRecorrenteNovo.dataFinal = dtpMesFinal.Value;
+            if (rbtSaidaLancRecorrente.Checked) lancRecorrenteNovo.dataFinal = new DateTime(dtpMesFinal.Value.Year, dtpMesFinal.Value.Month, 1);
 
             lancRecorrenteNovo.usaMesFixo = chkMesFixo.Checked;
-            if (chkMesFixo.Checked) lancRecorrenteNovo.dataFixa = dtpMesFixo.Value;
+            if (chkMesFixo.Checked) lancRecorrenteNovo.dataFixa = new DateTime(dtpMesFixo.Value.Year, dtpMesFixo.Value.Month, 1);
 
             if (tbxIdLancRecorrente.Text.Length > 0)
             {
@@ -537,7 +544,7 @@ namespace OrganizacaoFinanceira
             {
                 Saida parc = new Saida();
                 parc.tipoSaida = 0;
-                parc.valorParcela = Convert.ToDouble(tbxValorMensal.Text);
+                parc.valorParcela = !string.IsNullOrWhiteSpace(tbxValorMensal.Text)? Convert.ToDouble(tbxValorMensal.Text) : 0;
                 parc.parcela = i + 1;
                 parc.dataInicio = dtpDataInicialParcela.Value.Date;
                 parc.qtdParcelas = qtdParcelas;
@@ -569,6 +576,9 @@ namespace OrganizacaoFinanceira
 
             lblMesFixo.Enabled = rbtEntradaLancRecorrente.Checked;
             dtpMesFixo.Enabled = rbtEntradaLancRecorrente.Checked;
+
+            lblCategoria.Enabled = !rbtEntradaLancRecorrente.Checked;
+            cbxCategoriaLancRecorrente.Enabled = !rbtEntradaLancRecorrente.Checked;
         }
 
         private void tbxEntradaExtra_KeyDown(object sender, KeyEventArgs e)

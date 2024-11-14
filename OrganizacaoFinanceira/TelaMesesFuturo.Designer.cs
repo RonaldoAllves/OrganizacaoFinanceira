@@ -56,7 +56,7 @@
             btnSalvarLancRecorrente = new Button();
             label31 = new Label();
             cbxCategoriaLancRecorrente = new ComboBox();
-            label37 = new Label();
+            lblCategoria = new Label();
             tbxEntradaExtra = new TextBox();
             label1 = new Label();
             label2 = new Label();
@@ -179,7 +179,7 @@
             panelLancRecorrente.Controls.Add(btnSalvarLancRecorrente);
             panelLancRecorrente.Controls.Add(label31);
             panelLancRecorrente.Controls.Add(cbxCategoriaLancRecorrente);
-            panelLancRecorrente.Controls.Add(label37);
+            panelLancRecorrente.Controls.Add(lblCategoria);
             panelLancRecorrente.Location = new Point(1099, 477);
             panelLancRecorrente.Name = "panelLancRecorrente";
             panelLancRecorrente.Size = new Size(539, 284);
@@ -372,14 +372,14 @@
             cbxCategoriaLancRecorrente.Size = new Size(244, 23);
             cbxCategoriaLancRecorrente.TabIndex = 25;
             // 
-            // label37
+            // lblCategoria
             // 
-            label37.AutoSize = true;
-            label37.Location = new Point(28, 159);
-            label37.Name = "label37";
-            label37.Size = new Size(58, 15);
-            label37.TabIndex = 26;
-            label37.Text = "Categoria";
+            lblCategoria.AutoSize = true;
+            lblCategoria.Location = new Point(28, 159);
+            lblCategoria.Name = "lblCategoria";
+            lblCategoria.Size = new Size(58, 15);
+            lblCategoria.TabIndex = 26;
+            lblCategoria.Text = "Categoria";
             // 
             // tbxEntradaExtra
             // 
@@ -606,7 +606,7 @@
         private Button btnSalvarLancRecorrente;
         private Label label31;
         private ComboBox cbxCategoriaLancRecorrente;
-        private Label label37;
+        private Label lblCategoria;
         private TextBox tbxEntradaExtra;
         private Label label1;
         private Label label2;
