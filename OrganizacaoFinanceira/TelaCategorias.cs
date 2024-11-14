@@ -49,14 +49,14 @@ namespace OrganizacaoFinanceira
             funcoesGrid.AjustarTitulo(dgvVerbasPorMes, lblTituloVerbasPorMes, "Verbas por mês");
             funcoesGrid.AjustarTitulo(dgvSaidasCategoria, lblTituloSaidasCategoria, "Saídas da categoria");
 
-            splitContainer1.SplitterWidth = 1;
+            splitContainer1.SplitterWidth = 3;
             splitContainer1.Paint += (s, pe) => layoutSplitter.DesenharLinhaDivisoria(splitContainer1, pe);
             splitContainer1.Panel1.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer1.Panel1, pe);
             splitContainer1.Panel2.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer1.Panel2, pe);
             splitContainer1.MouseEnter += (s, e) => layoutSplitter.ExibirLinhaDivisoria(splitContainer1);
             splitContainer1.MouseLeave += (s, e) => layoutSplitter.DiminuirLinhaDivisoria(splitContainer1);
 
-            splitContainer2.SplitterWidth = 1;
+            splitContainer2.SplitterWidth = 3;
             splitContainer2.BackColor = SystemColors.Window;
             splitContainer2.Paint += (s, pe) => layoutSplitter.DesenharLinhaDivisoria(splitContainer2, pe);
             splitContainer2.Panel1.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer2.Panel1, pe);
@@ -64,7 +64,7 @@ namespace OrganizacaoFinanceira
             splitContainer2.MouseEnter += (s, e) => layoutSplitter.ExibirLinhaDivisoria(splitContainer2);
             splitContainer2.MouseLeave += (s, e) => layoutSplitter.DiminuirLinhaDivisoria(splitContainer2);
 
-            splitContainer3.SplitterWidth = 1;
+            splitContainer3.SplitterWidth = 3;
             splitContainer3.BackColor = SystemColors.Window;
             splitContainer3.Paint += (s, pe) => layoutSplitter.DesenharLinhaDivisoria(splitContainer3, pe);
             splitContainer3.Panel1.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer3.Panel1, pe);

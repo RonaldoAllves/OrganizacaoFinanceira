@@ -60,7 +60,7 @@ namespace OrganizacaoFinanceira
             podeFiltrar = true;
             FiltrarSaidas();
 
-            splitContainer1.SplitterWidth = 1;            
+            splitContainer1.SplitterWidth = 3;            
             splitContainer1.Paint += (s, pe) => layoutSplitter.DesenharLinhaDivisoria(splitContainer1, pe);
             splitContainer1.Panel1.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer1.Panel1, pe);
             splitContainer1.Panel2.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer1.Panel2, pe);
@@ -538,6 +538,7 @@ namespace OrganizacaoFinanceira
             if (e.RowIndex >= 0)
             {
                 FormAddLancamento formAddLancamento = new FormAddLancamento();
+                formAddLancamento.Owner = this;
                 formAddLancamento.editar = true;
                 formAddLancamento.contaSelecionada = contaSelecionada;
 
@@ -555,7 +556,7 @@ namespace OrganizacaoFinanceira
                 {
                     AtualizarValorTotalConta();
                     if (rbtSaidas.Checked) FiltrarSaidas();
-                    else FiltrarEntradas();
+                    else FiltrarEntradas();                    
                 }
             }
         }
@@ -579,7 +580,13 @@ namespace OrganizacaoFinanceira
         
         private void btnNovoLancamento_Click(object sender, EventArgs e)
         {
+            novoLancamento();   
+        }
+
+        private void novoLancamento()
+        {
             FormAddLancamento formAddLancamento = new FormAddLancamento();
+            formAddLancamento.Owner = this;
             formAddLancamento.contaSelecionada = contaSelecionada;
             formAddLancamento.saidaSelecionada = null;
             formAddLancamento.entradaSelecionada = null;
@@ -597,6 +604,7 @@ namespace OrganizacaoFinanceira
                 AtualizarValorTotalConta();
                 if (rbtSaidas.Checked) FiltrarSaidas();
                 else FiltrarEntradas();
+                novoLancamento();
             }
         }
 

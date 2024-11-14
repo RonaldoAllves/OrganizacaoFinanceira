@@ -83,7 +83,7 @@ namespace OrganizacaoFinanceira.Recursos
 
         public void DiminuirLinhaDivisoria(SplitContainer splitContainer)
         {
-            splitContainer.SplitterWidth = 1;
+            splitContainer.SplitterWidth = 3;
         }
     }
 }

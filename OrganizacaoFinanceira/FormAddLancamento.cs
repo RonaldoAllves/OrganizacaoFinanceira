@@ -31,6 +31,7 @@ namespace OrganizacaoFinanceira
         private void FormAddLancamento_Load(object sender, EventArgs e)
         {
             this.Enabled = false;
+            centralizar();
             LimparLancamento();
             InicializarDatas();
             PreencherComboBoxContas();
@@ -43,6 +44,20 @@ namespace OrganizacaoFinanceira
                 else EditarEntradas();
             }
             this.Enabled = true;
+        }
+
+        private void centralizar()
+        {
+            if (this.Owner != null)
+            {
+                // Calcula a posição para centralizar o formulário filho em relação ao formulário pai
+                int x = this.Owner.Location.X + (this.Owner.Width - this.Width) / 2;
+                int y = this.Owner.Location.Y + (this.Owner.Height - this.Height) / 2;
+
+                // Define o StartPosition para manual e posiciona o formulário
+                this.StartPosition = FormStartPosition.Manual;
+                this.Location = new Point(x, y);
+            }
         }
 
         private void InicializarDatas()
