@@ -88,9 +88,10 @@ namespace OrganizacaoFinanceira
         private double CalcularPrevisaoEntradaExtra()
         {
             double entradasFixa = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && x.usaMesFixo && x.dataFixa.Value.Month == DateTime.Now.Month).Sum(x => x.valor);
-            double entradasRecorrentes = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && !x.usaMesFixo).Sum(x => x.valor) + entradasFixa;
+            //double entradasRecorrentes = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && !x.usaMesFixo).Sum(x => x.valor) + entradasFixa;
+            double entradasRecorrentesDetalhado = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.tipoLancamento == 1 && x.mes == DateTime.Now.Month).Sum(x => x.valor) + entradasFixa;
             double entradasMes = DadosGerais.entradas.Where(x => x.chaveCategoria == 0 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valor);
-            double entradaExtra = entradasRecorrentes - entradasMes;
+            double entradaExtra = entradasRecorrentesDetalhado - entradasMes;
             return entradaExtra < 0 ? 0 : entradaExtra;
         }
 
@@ -253,6 +254,29 @@ namespace OrganizacaoFinanceira
             }
         }
 
+        private async Task AtualizarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado)
+        {
+            if (lancamentoDetalhado == null || lancamentoDetalhado.chave == 0)
+                return;
+
+            try
+            {
+                // Salvar o detalhe na base
+                SetResponse response = await DadosGerais.client.SetTaskAsync("LancamentosRecorrentesDetalhados/" + "chave-" + lancamentoDetalhado.chave, lancamentoDetalhado);
+
+                if (response.Exception != null)
+                {
+                    MessageBox.Show($"Erro ao atualizar lançamento detalhado.\n{response.Exception}");
+                    return; // Parar o processo em caso de erro
+                }
+                MessageBox.Show("Lançamento recorrente detalhado atualizado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao atualizar lançamento recorrente detalhado: {ex.Message}");
+            }
+        }
+
 
         private void btnNovoLancRecorrente_Click(object sender, EventArgs e)
         {
@@ -324,14 +348,16 @@ namespace OrganizacaoFinanceira
                 // Limpar o grid de detalhes
                 bindingSourceLancRecorrentesDetalhado.DataSource = new SortableBindingList<LancamentoRecorrenteDetalhado>();
                 funcoesGrid.ConfigurarGrid(dgvLancRecorrenteDetalhado, bindingSourceLancRecorrentesDetalhado, funcoesGrid.ColunasGridLancamentosRecorrentesDetalhado(), false);
+                dgvLancRecorrenteDetalhado.Columns[1].ReadOnly = false;
                 return;
             }
 
-            var detalhesExistentes = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.chaveLancRecorrente == lancRecorrenteSelecionado.chave).OrderBy(x=>x.mes).ToList();
+            var detalhesExistentes = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.chaveLancRecorrente == lancRecorrenteSelecionado.chave).OrderBy(x => x.mes).ToList();
 
             // Preencher o grid com os detalhes
             SortableBindingList<LancamentoRecorrenteDetalhado> detalhesParaExibir = new(detalhesExistentes);
             funcoesGrid.ConfigurarGrid(dgvLancRecorrenteDetalhado, bindingSourceLancRecorrentesDetalhado, funcoesGrid.ColunasGridLancamentosRecorrentesDetalhado(), false);
+            dgvLancRecorrenteDetalhado.Columns[1].ReadOnly = false;
             bindingSourceLancRecorrentesDetalhado.DataSource = detalhesParaExibir;
         }
 
@@ -342,6 +368,7 @@ namespace OrganizacaoFinanceira
                 // Limpar o grid de detalhes
                 bindingSourceLancRecorrentesDetalhado.DataSource = new SortableBindingList<LancamentoRecorrenteDetalhado>();
                 funcoesGrid.ConfigurarGrid(dgvLancRecorrenteDetalhado, bindingSourceLancRecorrentesDetalhado, funcoesGrid.ColunasGridLancamentosRecorrentesDetalhado(), false);
+                dgvLancRecorrenteDetalhado.Columns[1].ReadOnly = false;
                 return;
             }
 
@@ -378,6 +405,7 @@ namespace OrganizacaoFinanceira
             // Preencher o grid com os detalhes
             SortableBindingList<LancamentoRecorrenteDetalhado> detalhesParaExibir = new(detalhesExistentes);
             funcoesGrid.ConfigurarGrid(dgvLancRecorrenteDetalhado, bindingSourceLancRecorrentesDetalhado, funcoesGrid.ColunasGridLancamentosRecorrentesDetalhado(), false);
+            dgvLancRecorrenteDetalhado.Columns[1].ReadOnly = false;
             bindingSourceLancRecorrentesDetalhado.DataSource = detalhesParaExibir;
         }
 
@@ -516,7 +544,6 @@ namespace OrganizacaoFinanceira
             primeiroMes.saidasTotais = saidasMesAtual + Convert.ToDouble(tbxSaidaExtra.Text);
             primeiroMes.saidasParceladas = saidasComSimulacao.Where(x => x.qtdParcelas > 1 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valorParcela);
 
-            double entradasTotaisRecorrente = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && !x.usaMesFixo).Sum(x => x.valor);
             double saidasParceladas;
             double entradasMes;
             for (int i = 0; i < qtdMeses - 1; i++)
@@ -538,7 +565,9 @@ namespace OrganizacaoFinanceira
                 }
 
                 double saidatotal = CalcularPrevisaoSaidasTotaisMes(DadosGerais.mesesFuturos[i].mes);
-                double entradasRecorrentes = entradasTotaisRecorrente + DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && x.usaMesFixo && x.dataFixa.Value.Month == DadosGerais.mesesFuturos[i].mes.Month).Sum(x => x.valor);
+                double valorFixo = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && x.usaMesFixo && x.dataFixa.Value.Month == DadosGerais.mesesFuturos[i].mes.Month).Sum(x => x.valor);
+                double entradasTotaisRecorrente = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.tipoLancamento == 1 && x.mes == DadosGerais.mesesFuturos[i].mes.Month).Sum(x => x.valor);
+                double entradasRecorrentes = entradasTotaisRecorrente + valorFixo;
 
                 DadosGerais.mesesFuturos[i].saidasTotais = saidatotal;
                 DadosGerais.mesesFuturos[i].entradasTotais = Math.Max(entradasRecorrentes, entradasMes);
@@ -785,6 +814,46 @@ namespace OrganizacaoFinanceira
         private void btnGerarDetalhes_Click(object sender, EventArgs e)
         {
             GerarLancamentosRecorrentesDetalhado();
+        }
+
+        private void dgvLancRecorrenteDetalhado_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            // Verificar se a coluna é a que precisa de validação
+            if (dgvLancRecorrenteDetalhado.Columns[e.ColumnIndex].DataPropertyName == "valor")
+            {
+                string valor = e.FormattedValue.ToString();
+
+                // Tentar converter para double
+                if (!double.TryParse(valor, out _))
+                {
+                    // Mostrar mensagem de erro e cancelar a edição
+                    MessageBox.Show("Insira um valor numérico válido.", "Valor inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    e.Cancel = true; // Impede que o foco saia da célula até corrigir
+                }
+            }
+        }
+
+        private async void dgvLancRecorrenteDetalhado_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // Verificar se a célula alterada é da coluna que queremos monitorar
+            if (dgvLancRecorrenteDetalhado.Columns[e.ColumnIndex].DataPropertyName == "valor")
+            {
+                // Obter o objeto que foi alterado (linha)
+                var linha = dgvLancRecorrenteDetalhado.Rows[e.RowIndex];
+                var objetoAlterado = linha.DataBoundItem as LancamentoRecorrenteDetalhado;
+
+                if (objetoAlterado != null)
+                {
+                    this.Cursor = Cursors.WaitCursor;
+                    this.Enabled = false;
+                    await AtualizarLancamentosRecorrentesDetalhadosAsync(objetoAlterado);
+                    CarregarEntradaSaidaExtra();
+                    InicializarMesesFuturos();
+                    this.Enabled = true;
+                    this.Cursor = Cursors.Default;
+                }
+            }
         }
     }
 }

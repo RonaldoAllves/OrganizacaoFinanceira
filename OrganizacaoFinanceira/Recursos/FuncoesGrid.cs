@@ -16,6 +16,7 @@
             foreach (var (item1, item2, item3, item4, item5) in colunas)
             {
                 nameColumn = new DataGridViewTextBoxColumn();
+                nameColumn.ReadOnly = true;
                 nameColumn.DataPropertyName = item1; // Nome da propriedade do objeto MyDataItem
                 nameColumn.HeaderText = item2; // Título da coluna no grid
                 nameColumn.DefaultCellStyle.Alignment = item3;
@@ -29,11 +30,7 @@
             dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             dgv.DefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Regular);
             dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 12, FontStyle.Bold);
-            dgv.ReadOnly = true;
             dgv.AllowUserToAddRows = false;
-
-            //dgv.Width = dgv.Parent.Width - dgv.Parent.Width - 50;
-            //dgv.Columns[0].Width = 100;
 
             // Habilitar a ordenação para cada coluna
             foreach (DataGridViewColumn column in dgv.Columns)

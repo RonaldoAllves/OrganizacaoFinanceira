@@ -650,6 +650,8 @@
             dgvLancRecorrenteDetalhado.Size = new Size(821, 267);
             dgvLancRecorrenteDetalhado.TabIndex = 87;
             dgvLancRecorrenteDetalhado.CellFormatting += dgvLancRecorrenteDetalhado_CellFormatting;
+            dgvLancRecorrenteDetalhado.CellValidating += dgvLancRecorrenteDetalhado_CellValidating;
+            dgvLancRecorrenteDetalhado.CellValueChanged += dgvLancRecorrenteDetalhado_CellValueChanged;
             // 
             // panelEntradaSaidaExtra
             // 
