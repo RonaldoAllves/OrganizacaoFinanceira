@@ -74,12 +74,23 @@
             label3 = new Label();
             lblTituloLancamentosCriados = new Label();
             lblTituloSaldosFuturo = new Label();
+            splitContainer1 = new SplitContainer();
+            panelLancaRecorrentes = new Panel();
+            panelEntradaSaidaExtra = new Panel();
+            panelSimularParcelamento = new Panel();
             ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).BeginInit();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvLancamentosRecorrentes).BeginInit();
             panelLancRecorrente.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            panelLancaRecorrentes.SuspendLayout();
+            panelEntradaSaidaExtra.SuspendLayout();
+            panelSimularParcelamento.SuspendLayout();
             SuspendLayout();
             // 
             // dgvMesesFuturos
@@ -87,7 +98,7 @@
             dgvMesesFuturos.BackgroundColor = SystemColors.ControlLightLight;
             dgvMesesFuturos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMesesFuturos.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvMesesFuturos.Location = new Point(877, 125);
+            dgvMesesFuturos.Location = new Point(28, 63);
             dgvMesesFuturos.MultiSelect = false;
             dgvMesesFuturos.Name = "dgvMesesFuturos";
             dgvMesesFuturos.RowHeadersWidth = 51;
@@ -100,7 +111,7 @@
             // 
             groupBox2.Controls.Add(radioButton1);
             groupBox2.Controls.Add(rbtFiltroSaidaLancRecorrente);
-            groupBox2.Location = new Point(12, 78);
+            groupBox2.Location = new Point(6, 6);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(259, 42);
             groupBox2.TabIndex = 87;
@@ -135,7 +146,7 @@
             dgvLancamentosRecorrentes.BackgroundColor = SystemColors.ControlLightLight;
             dgvLancamentosRecorrentes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvLancamentosRecorrentes.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvLancamentosRecorrentes.Location = new Point(12, 125);
+            dgvLancamentosRecorrentes.Location = new Point(12, 63);
             dgvLancamentosRecorrentes.MultiSelect = false;
             dgvLancamentosRecorrentes.Name = "dgvLancamentosRecorrentes";
             dgvLancamentosRecorrentes.RowHeadersWidth = 51;
@@ -149,7 +160,7 @@
             // 
             // btnNovoLancRecorrente
             // 
-            btnNovoLancRecorrente.Location = new Point(316, 93);
+            btnNovoLancRecorrente.Location = new Point(310, 21);
             btnNovoLancRecorrente.Name = "btnNovoLancRecorrente";
             btnNovoLancRecorrente.Size = new Size(75, 23);
             btnNovoLancRecorrente.TabIndex = 85;
@@ -180,7 +191,7 @@
             panelLancRecorrente.Controls.Add(label31);
             panelLancRecorrente.Controls.Add(cbxCategoriaLancRecorrente);
             panelLancRecorrente.Controls.Add(lblCategoria);
-            panelLancRecorrente.Location = new Point(1099, 477);
+            panelLancRecorrente.Location = new Point(186, 91);
             panelLancRecorrente.Name = "panelLancRecorrente";
             panelLancRecorrente.Size = new Size(539, 284);
             panelLancRecorrente.TabIndex = 90;
@@ -383,7 +394,7 @@
             // 
             // tbxEntradaExtra
             // 
-            tbxEntradaExtra.Location = new Point(877, 97);
+            tbxEntradaExtra.Location = new Point(3, 23);
             tbxEntradaExtra.Name = "tbxEntradaExtra";
             tbxEntradaExtra.Size = new Size(100, 23);
             tbxEntradaExtra.TabIndex = 92;
@@ -396,7 +407,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(877, 79);
+            label1.Location = new Point(3, 5);
             label1.Name = "label1";
             label1.Size = new Size(76, 15);
             label1.TabIndex = 93;
@@ -405,7 +416,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(983, 79);
+            label2.Location = new Point(109, 5);
             label2.Name = "label2";
             label2.Size = new Size(64, 15);
             label2.TabIndex = 95;
@@ -413,7 +424,7 @@
             // 
             // tbxSaidaExtra
             // 
-            tbxSaidaExtra.Location = new Point(983, 97);
+            tbxSaidaExtra.Location = new Point(109, 23);
             tbxSaidaExtra.Name = "tbxSaidaExtra";
             tbxSaidaExtra.Size = new Size(100, 23);
             tbxSaidaExtra.TabIndex = 94;
@@ -425,7 +436,7 @@
             // 
             // btnRecalcular
             // 
-            btnRecalcular.Location = new Point(1089, 97);
+            btnRecalcular.Location = new Point(215, 23);
             btnRecalcular.Name = "btnRecalcular";
             btnRecalcular.Size = new Size(75, 23);
             btnRecalcular.TabIndex = 96;
@@ -444,7 +455,7 @@
             groupBox1.Controls.Add(dtpDataInicialParcela);
             groupBox1.Controls.Add(tbxValorMensal);
             groupBox1.Controls.Add(label3);
-            groupBox1.Location = new Point(12, 487);
+            groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(595, 78);
             groupBox1.TabIndex = 97;
@@ -530,7 +541,7 @@
             // lblTituloLancamentosCriados
             // 
             lblTituloLancamentosCriados.AutoSize = true;
-            lblTituloLancamentosCriados.Location = new Point(754, 525);
+            lblTituloLancamentosCriados.Location = new Point(12, 558);
             lblTituloLancamentosCriados.Name = "lblTituloLancamentosCriados";
             lblTituloLancamentosCriados.Size = new Size(119, 15);
             lblTituloLancamentosCriados.TabIndex = 98;
@@ -539,30 +550,71 @@
             // lblTituloSaldosFuturo
             // 
             lblTituloSaldosFuturo.AutoSize = true;
-            lblTituloSaldosFuturo.Location = new Point(910, 525);
+            lblTituloSaldosFuturo.Location = new Point(134, 538);
             lblTituloSaldosFuturo.Name = "lblTituloSaldosFuturo";
             lblTituloSaldosFuturo.Size = new Size(108, 15);
             lblTituloSaldosFuturo.TabIndex = 99;
             lblTituloSaldosFuturo.Text = "Saldo final por mês";
             // 
+            // splitContainer1
+            // 
+            splitContainer1.Dock = DockStyle.Fill;
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(panelSimularParcelamento);
+            splitContainer1.Panel1.Controls.Add(panelLancaRecorrentes);
+            splitContainer1.Panel1.Controls.Add(lblTituloLancamentosCriados);
+            splitContainer1.Panel1.Controls.Add(panelLancRecorrente);
+            splitContainer1.Panel1.Controls.Add(dgvLancamentosRecorrentes);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.Controls.Add(panelEntradaSaidaExtra);
+            splitContainer1.Panel2.Controls.Add(lblTituloSaldosFuturo);
+            splitContainer1.Panel2.Controls.Add(dgvMesesFuturos);
+            splitContainer1.Size = new Size(2202, 791);
+            splitContainer1.SplitterDistance = 1091;
+            splitContainer1.TabIndex = 100;
+            splitContainer1.SplitterMoved += splitContainer1_SplitterMoved;
+            // 
+            // panelLancaRecorrentes
+            // 
+            panelLancaRecorrentes.Controls.Add(groupBox2);
+            panelLancaRecorrentes.Controls.Add(btnNovoLancRecorrente);
+            panelLancaRecorrentes.Location = new Point(12, 3);
+            panelLancaRecorrentes.Name = "panelLancaRecorrentes";
+            panelLancaRecorrentes.Size = new Size(401, 59);
+            panelLancaRecorrentes.TabIndex = 99;
+            // 
+            // panelEntradaSaidaExtra
+            // 
+            panelEntradaSaidaExtra.Controls.Add(tbxEntradaExtra);
+            panelEntradaSaidaExtra.Controls.Add(tbxSaidaExtra);
+            panelEntradaSaidaExtra.Controls.Add(label1);
+            panelEntradaSaidaExtra.Controls.Add(btnRecalcular);
+            panelEntradaSaidaExtra.Controls.Add(label2);
+            panelEntradaSaidaExtra.Location = new Point(28, 12);
+            panelEntradaSaidaExtra.Name = "panelEntradaSaidaExtra";
+            panelEntradaSaidaExtra.Size = new Size(298, 53);
+            panelEntradaSaidaExtra.TabIndex = 100;
+            // 
+            // panelSimularParcelamento
+            // 
+            panelSimularParcelamento.Controls.Add(groupBox1);
+            panelSimularParcelamento.Location = new Point(12, 413);
+            panelSimularParcelamento.Name = "panelSimularParcelamento";
+            panelSimularParcelamento.Size = new Size(611, 87);
+            panelSimularParcelamento.TabIndex = 100;
+            // 
             // TelaMesesFuturo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1723, 791);
-            Controls.Add(lblTituloSaldosFuturo);
-            Controls.Add(lblTituloLancamentosCriados);
-            Controls.Add(groupBox1);
-            Controls.Add(btnRecalcular);
-            Controls.Add(label2);
-            Controls.Add(tbxSaidaExtra);
-            Controls.Add(label1);
-            Controls.Add(tbxEntradaExtra);
-            Controls.Add(panelLancRecorrente);
-            Controls.Add(dgvMesesFuturos);
-            Controls.Add(groupBox2);
-            Controls.Add(dgvLancamentosRecorrentes);
-            Controls.Add(btnNovoLancRecorrente);
+            ClientSize = new Size(2202, 791);
+            Controls.Add(splitContainer1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "TelaMesesFuturo";
             Text = "Previsão meses";
@@ -579,8 +631,17 @@
             groupBox3.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel1.PerformLayout();
+            splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            panelLancaRecorrentes.ResumeLayout(false);
+            panelEntradaSaidaExtra.ResumeLayout(false);
+            panelEntradaSaidaExtra.PerformLayout();
+            panelSimularParcelamento.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -629,5 +690,9 @@
         private Label lblMesFixo;
         private DateTimePicker dtpMesFixo;
         private CheckBox chkMesFixo;
+        private SplitContainer splitContainer1;
+        private Panel panelLancaRecorrentes;
+        private Panel panelEntradaSaidaExtra;
+        private Panel panelSimularParcelamento;
     }
 }

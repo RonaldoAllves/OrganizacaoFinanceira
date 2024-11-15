@@ -18,7 +18,7 @@ namespace OrganizacaoFinanceira
 
         CRUD CRUD = new CRUD();
         FuncoesGrid funcoesGrid = new();
-        private readonly DateTime data;
+        LayoutSplitterContainer layoutSplitter = new();
 
         List<Saida> saidasComSimulacao;
         List<Saida> parcelasSimulacao;
@@ -49,6 +49,15 @@ namespace OrganizacaoFinanceira
 
             dtpMesFixo.Format = DateTimePickerFormat.Custom;
             dtpMesFixo.CustomFormat = "MM/yyyy";
+
+            splitContainer1.SplitterWidth = 3;
+            splitContainer1.Paint += (s, pe) => layoutSplitter.DesenharLinhaDivisoria(splitContainer1, pe);
+            splitContainer1.Panel1.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer1.Panel1, pe);
+            splitContainer1.Panel2.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer1.Panel2, pe);
+            splitContainer1.MouseEnter += (s, e) => layoutSplitter.ExibirLinhaDivisoria(splitContainer1);
+            splitContainer1.MouseLeave += (s, e) => layoutSplitter.DiminuirLinhaDivisoria(splitContainer1);
+
+            RedefinirTamanhoGrids();
 
             this.Enabled = true;
         }
@@ -125,9 +134,7 @@ namespace OrganizacaoFinanceira
             int y = (this.ClientSize.Height - panelLancRecorrente.Size.Height) / 2;
             panelLancRecorrente.Location = new Point(x, y);
 
-            dgvLancamentosRecorrentes.Height = this.Height - dgvLancamentosRecorrentes.Top - 50;
-            dgvMesesFuturos.Height = dgvLancamentosRecorrentes.Height;
-            dgvMesesFuturos.Width = this.Width - dgvMesesFuturos.Left - 50;
+            RedefinirTamanhoGrids();
         }
 
         private void PreencherComboBoxCategorias(ref ComboBox combo)
@@ -334,6 +341,7 @@ namespace OrganizacaoFinanceira
         private void rbtFiltroSaidaLancRecorrente_CheckedChanged(object sender, EventArgs e)
         {
             FiltrarLancamentosRecorrentes(false);
+            funcoesGrid.ReajustarTamanhoTitulo(dgvLancamentosRecorrentes, lblTituloLancamentosCriados);
         }
 
         private void FiltrarLancamentosRecorrentes(bool recarregar = true)
@@ -374,7 +382,7 @@ namespace OrganizacaoFinanceira
             double entradasTotaisRecorrente = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && !x.usaMesFixo).Sum(x => x.valor);
             double saidasParceladas;
             double entradasMes;
-            for (int i = 0; i < 24; i++)
+            for (int i = 0; i < 25; i++)
             {
                 DadosGerais.mesesFuturos.Add(new MesFuturo());
                 DadosGerais.mesesFuturos[i].mes = DateTime.Now.AddMonths(i + 1).Date;
@@ -544,7 +552,7 @@ namespace OrganizacaoFinanceira
             {
                 Saida parc = new Saida();
                 parc.tipoSaida = 0;
-                parc.valorParcela = !string.IsNullOrWhiteSpace(tbxValorMensal.Text)? Convert.ToDouble(tbxValorMensal.Text) : 0;
+                parc.valorParcela = !string.IsNullOrWhiteSpace(tbxValorMensal.Text) ? Convert.ToDouble(tbxValorMensal.Text) : 0;
                 parc.parcela = i + 1;
                 parc.dataInicio = dtpDataInicialParcela.Value.Date;
                 parc.qtdParcelas = qtdParcelas;
@@ -599,6 +607,31 @@ namespace OrganizacaoFinanceira
                 // Chama o método de ação quando o Enter for pressionado
                 InicializarMesesFuturos();
             }
+        }
+
+        private void RedefinirTamanhoGrids()
+        {
+            int topGrid = 85;
+            int distanciaGrid = 25;
+
+            dgvLancamentosRecorrentes.Top = topGrid;
+            dgvLancamentosRecorrentes.Width = dgvLancamentosRecorrentes.Parent.Width - dgvLancamentosRecorrentes.Left - distanciaGrid;
+            dgvLancamentosRecorrentes.Height = dgvLancamentosRecorrentes.Parent.Height - dgvLancamentosRecorrentes.Top - distanciaGrid;
+            funcoesGrid.ReajustarTamanhoTitulo(dgvLancamentosRecorrentes, lblTituloLancamentosCriados);
+            lblTituloLancamentosCriados.Top = dgvLancamentosRecorrentes.Top - lblTituloLancamentosCriados.Height;
+            panelLancaRecorrentes.Top = dgvLancamentosRecorrentes.Top - lblTituloLancamentosCriados.Height - panelLancaRecorrentes.Height;
+
+            dgvMesesFuturos.Top = topGrid;
+            dgvMesesFuturos.Width = dgvMesesFuturos.Parent.Width - dgvMesesFuturos.Left - distanciaGrid;
+            dgvMesesFuturos.Height = dgvMesesFuturos.Parent.Height - dgvMesesFuturos.Top - distanciaGrid;
+            funcoesGrid.ReajustarTamanhoTitulo(dgvMesesFuturos, lblTituloSaldosFuturo);
+            lblTituloSaldosFuturo.Top = dgvMesesFuturos.Top - lblTituloSaldosFuturo.Height;
+            panelEntradaSaidaExtra.Top = dgvMesesFuturos.Top - lblTituloSaldosFuturo.Height - panelEntradaSaidaExtra.Height;
+        }
+
+        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            RedefinirTamanhoGrids();
         }
     }
 }

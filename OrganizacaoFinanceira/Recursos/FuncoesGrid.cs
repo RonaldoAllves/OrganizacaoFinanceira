@@ -69,7 +69,8 @@
             // Somar a largura de cada coluna
             foreach (DataGridViewColumn coluna in dataGridView.Columns)
             {
-                larguraTotal += coluna.Width;
+                if (coluna.Visible)
+                    larguraTotal += coluna.Width;
             }
 
             // Adicionar a largura da borda direita do DataGridView
