@@ -21,6 +21,7 @@ namespace OrganizacaoFinanceira.Dados
         public static SortableBindingList<Categoria> categorias;
         public static SortableBindingList<Mes> meses;
         public static SortableBindingList<LancamentoRecorrente> lancamentosRecorrentes;
+        public static SortableBindingList<LancamentoRecorrenteDetalhado> lancamentosRecorrentesDetalhado;
         public static List<MesFuturo> mesesFuturos;
 
         public static double entradaExtra = 0;

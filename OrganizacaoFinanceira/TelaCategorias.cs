@@ -567,11 +567,6 @@ namespace OrganizacaoFinanceira
             if (verbaCategoriaSelecionada != null)
             {
                 saidasAux = DadosGerais.saidas.Where(x => x.chaveCategoria == verbaCategoriaSelecionada.chaveCategoria && x.mesReferencia.Year == dtpMesRefVerbaTotal.Value.Year && x.mesReferencia.Month == dtpMesRefVerbaTotal.Value.Month).ToList();
-
-                /*
-                saidasAux = saidasAux.Where(x => (chxCredito.Checked && x.tipoSaida == 0) ||
-                                                (chxDinheiro.Checked && x.tipoSaida == 1)).ToList();*/
-
                 saidasDaCategoria = new(saidasAux);
             }
             else

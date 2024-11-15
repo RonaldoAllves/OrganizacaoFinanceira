@@ -75,7 +75,11 @@
             lblTituloLancamentosCriados = new Label();
             lblTituloSaldosFuturo = new Label();
             splitContainer1 = new SplitContainer();
+            splitContainer2 = new SplitContainer();
             panelLancaRecorrentes = new Panel();
+            btnGerarDetalhes = new Button();
+            lblLancamentoDetalhado = new Label();
+            dgvLancRecorrenteDetalhado = new DataGridView();
             panelEntradaSaidaExtra = new Panel();
             panelSimularParcelamento = new Panel();
             ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).BeginInit();
@@ -88,7 +92,12 @@
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+            splitContainer2.Panel1.SuspendLayout();
+            splitContainer2.Panel2.SuspendLayout();
+            splitContainer2.SuspendLayout();
             panelLancaRecorrentes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvLancRecorrenteDetalhado).BeginInit();
             panelEntradaSaidaExtra.SuspendLayout();
             panelSimularParcelamento.SuspendLayout();
             SuspendLayout();
@@ -98,7 +107,7 @@
             dgvMesesFuturos.BackgroundColor = SystemColors.ControlLightLight;
             dgvMesesFuturos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvMesesFuturos.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvMesesFuturos.Location = new Point(28, 63);
+            dgvMesesFuturos.Location = new Point(27, 173);
             dgvMesesFuturos.MultiSelect = false;
             dgvMesesFuturos.Name = "dgvMesesFuturos";
             dgvMesesFuturos.RowHeadersWidth = 51;
@@ -146,7 +155,7 @@
             dgvLancamentosRecorrentes.BackgroundColor = SystemColors.ControlLightLight;
             dgvLancamentosRecorrentes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvLancamentosRecorrentes.EditMode = DataGridViewEditMode.EditOnEnter;
-            dgvLancamentosRecorrentes.Location = new Point(12, 63);
+            dgvLancamentosRecorrentes.Location = new Point(12, 72);
             dgvLancamentosRecorrentes.MultiSelect = false;
             dgvLancamentosRecorrentes.Name = "dgvLancamentosRecorrentes";
             dgvLancamentosRecorrentes.RowHeadersWidth = 51;
@@ -191,7 +200,7 @@
             panelLancRecorrente.Controls.Add(label31);
             panelLancRecorrente.Controls.Add(cbxCategoriaLancRecorrente);
             panelLancRecorrente.Controls.Add(lblCategoria);
-            panelLancRecorrente.Location = new Point(186, 91);
+            panelLancRecorrente.Location = new Point(186, 100);
             panelLancRecorrente.Name = "panelLancRecorrente";
             panelLancRecorrente.Size = new Size(539, 284);
             panelLancRecorrente.TabIndex = 90;
@@ -541,7 +550,7 @@
             // lblTituloLancamentosCriados
             // 
             lblTituloLancamentosCriados.AutoSize = true;
-            lblTituloLancamentosCriados.Location = new Point(12, 558);
+            lblTituloLancamentosCriados.Location = new Point(12, 417);
             lblTituloLancamentosCriados.Name = "lblTituloLancamentosCriados";
             lblTituloLancamentosCriados.Size = new Size(119, 15);
             lblTituloLancamentosCriados.TabIndex = 98;
@@ -550,7 +559,7 @@
             // lblTituloSaldosFuturo
             // 
             lblTituloSaldosFuturo.AutoSize = true;
-            lblTituloSaldosFuturo.Location = new Point(134, 538);
+            lblTituloSaldosFuturo.Location = new Point(907, 45);
             lblTituloSaldosFuturo.Name = "lblTituloSaldosFuturo";
             lblTituloSaldosFuturo.Size = new Size(108, 15);
             lblTituloSaldosFuturo.TabIndex = 99;
@@ -564,30 +573,83 @@
             // 
             // splitContainer1.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(panelSimularParcelamento);
-            splitContainer1.Panel1.Controls.Add(panelLancaRecorrentes);
-            splitContainer1.Panel1.Controls.Add(lblTituloLancamentosCriados);
-            splitContainer1.Panel1.Controls.Add(panelLancRecorrente);
-            splitContainer1.Panel1.Controls.Add(dgvLancamentosRecorrentes);
+            splitContainer1.Panel1.Controls.Add(splitContainer2);
             // 
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(panelEntradaSaidaExtra);
             splitContainer1.Panel2.Controls.Add(lblTituloSaldosFuturo);
             splitContainer1.Panel2.Controls.Add(dgvMesesFuturos);
+            splitContainer1.Panel2.Controls.Add(panelSimularParcelamento);
             splitContainer1.Size = new Size(2202, 791);
             splitContainer1.SplitterDistance = 1091;
             splitContainer1.TabIndex = 100;
             splitContainer1.SplitterMoved += splitContainer1_SplitterMoved;
             // 
+            // splitContainer2
+            // 
+            splitContainer2.Dock = DockStyle.Fill;
+            splitContainer2.Location = new Point(0, 0);
+            splitContainer2.Name = "splitContainer2";
+            splitContainer2.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            splitContainer2.Panel1.Controls.Add(lblTituloLancamentosCriados);
+            splitContainer2.Panel1.Controls.Add(panelLancaRecorrentes);
+            splitContainer2.Panel1.Controls.Add(panelLancRecorrente);
+            splitContainer2.Panel1.Controls.Add(dgvLancamentosRecorrentes);
+            // 
+            // splitContainer2.Panel2
+            // 
+            splitContainer2.Panel2.Controls.Add(lblLancamentoDetalhado);
+            splitContainer2.Panel2.Controls.Add(dgvLancRecorrenteDetalhado);
+            splitContainer2.Size = new Size(1091, 791);
+            splitContainer2.SplitterDistance = 459;
+            splitContainer2.TabIndex = 101;
+            splitContainer2.SplitterMoved += splitContainer2_SplitterMoved;
+            // 
             // panelLancaRecorrentes
             // 
+            panelLancaRecorrentes.Controls.Add(btnGerarDetalhes);
             panelLancaRecorrentes.Controls.Add(groupBox2);
             panelLancaRecorrentes.Controls.Add(btnNovoLancRecorrente);
-            panelLancaRecorrentes.Location = new Point(12, 3);
+            panelLancaRecorrentes.Location = new Point(12, 12);
             panelLancaRecorrentes.Name = "panelLancaRecorrentes";
-            panelLancaRecorrentes.Size = new Size(401, 59);
+            panelLancaRecorrentes.Size = new Size(600, 59);
             panelLancaRecorrentes.TabIndex = 99;
+            // 
+            // btnGerarDetalhes
+            // 
+            btnGerarDetalhes.Location = new Point(420, 21);
+            btnGerarDetalhes.Name = "btnGerarDetalhes";
+            btnGerarDetalhes.Size = new Size(177, 23);
+            btnGerarDetalhes.TabIndex = 88;
+            btnGerarDetalhes.Text = "Gerar entrada detalhado";
+            btnGerarDetalhes.UseVisualStyleBackColor = true;
+            btnGerarDetalhes.Click += btnGerarDetalhes_Click;
+            // 
+            // lblLancamentoDetalhado
+            // 
+            lblLancamentoDetalhado.AutoSize = true;
+            lblLancamentoDetalhado.Location = new Point(883, 78);
+            lblLancamentoDetalhado.Name = "lblLancamentoDetalhado";
+            lblLancamentoDetalhado.Size = new Size(139, 15);
+            lblLancamentoDetalhado.TabIndex = 99;
+            lblLancamentoDetalhado.Text = "Lançamentos detalhados";
+            // 
+            // dgvLancRecorrenteDetalhado
+            // 
+            dgvLancRecorrenteDetalhado.BackgroundColor = SystemColors.ControlLightLight;
+            dgvLancRecorrenteDetalhado.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvLancRecorrenteDetalhado.EditMode = DataGridViewEditMode.EditOnEnter;
+            dgvLancRecorrenteDetalhado.Location = new Point(12, 23);
+            dgvLancRecorrenteDetalhado.MultiSelect = false;
+            dgvLancRecorrenteDetalhado.Name = "dgvLancRecorrenteDetalhado";
+            dgvLancRecorrenteDetalhado.RowHeadersWidth = 51;
+            dgvLancRecorrenteDetalhado.Size = new Size(821, 267);
+            dgvLancRecorrenteDetalhado.TabIndex = 87;
+            dgvLancRecorrenteDetalhado.CellFormatting += dgvLancRecorrenteDetalhado_CellFormatting;
             // 
             // panelEntradaSaidaExtra
             // 
@@ -596,7 +658,7 @@
             panelEntradaSaidaExtra.Controls.Add(label1);
             panelEntradaSaidaExtra.Controls.Add(btnRecalcular);
             panelEntradaSaidaExtra.Controls.Add(label2);
-            panelEntradaSaidaExtra.Location = new Point(28, 12);
+            panelEntradaSaidaExtra.Location = new Point(27, 122);
             panelEntradaSaidaExtra.Name = "panelEntradaSaidaExtra";
             panelEntradaSaidaExtra.Size = new Size(298, 53);
             panelEntradaSaidaExtra.TabIndex = 100;
@@ -604,7 +666,7 @@
             // panelSimularParcelamento
             // 
             panelSimularParcelamento.Controls.Add(groupBox1);
-            panelSimularParcelamento.Location = new Point(12, 413);
+            panelSimularParcelamento.Location = new Point(24, 18);
             panelSimularParcelamento.Name = "panelSimularParcelamento";
             panelSimularParcelamento.Size = new Size(611, 87);
             panelSimularParcelamento.TabIndex = 100;
@@ -632,12 +694,18 @@
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             splitContainer1.Panel1.ResumeLayout(false);
-            splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
             splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            splitContainer2.Panel1.ResumeLayout(false);
+            splitContainer2.Panel1.PerformLayout();
+            splitContainer2.Panel2.ResumeLayout(false);
+            splitContainer2.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+            splitContainer2.ResumeLayout(false);
             panelLancaRecorrentes.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dgvLancRecorrenteDetalhado).EndInit();
             panelEntradaSaidaExtra.ResumeLayout(false);
             panelEntradaSaidaExtra.PerformLayout();
             panelSimularParcelamento.ResumeLayout(false);
@@ -694,5 +762,9 @@
         private Panel panelLancaRecorrentes;
         private Panel panelEntradaSaidaExtra;
         private Panel panelSimularParcelamento;
+        private SplitContainer splitContainer2;
+        private DataGridView dgvLancRecorrenteDetalhado;
+        private Label lblLancamentoDetalhado;
+        private Button btnGerarDetalhes;
     }
 }

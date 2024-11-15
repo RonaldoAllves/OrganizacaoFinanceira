@@ -13,6 +13,7 @@ namespace OrganizacaoFinanceira
     {
         BindingSource bindingSourceLancRecorrentes = new BindingSource();
         BindingSource bindingSourceMesesFuturos = new BindingSource();
+        BindingSource bindingSourceLancRecorrentesDetalhado = new BindingSource();
 
         LancamentoRecorrente lancRecorrenteSelecionado;
 
@@ -22,6 +23,8 @@ namespace OrganizacaoFinanceira
 
         List<Saida> saidasComSimulacao;
         List<Saida> parcelasSimulacao;
+
+        int qtdMeses = 26;
 
         public TelaMesesFuturo()
         {
@@ -43,6 +46,7 @@ namespace OrganizacaoFinanceira
 
             funcoesGrid.AjustarTitulo(dgvLancamentosRecorrentes, lblTituloLancamentosCriados, "Lançamentos criados");
             funcoesGrid.AjustarTitulo(dgvMesesFuturos, lblTituloSaldosFuturo, "Previsão do saldo final por mês");
+            funcoesGrid.AjustarTitulo(dgvLancRecorrenteDetalhado, lblLancamentoDetalhado, "Lançamentos detalhados");
 
             dtpMesFinal.Format = DateTimePickerFormat.Custom;
             dtpMesFinal.CustomFormat = "MM/yyyy";
@@ -56,6 +60,13 @@ namespace OrganizacaoFinanceira
             splitContainer1.Panel2.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer1.Panel2, pe);
             splitContainer1.MouseEnter += (s, e) => layoutSplitter.ExibirLinhaDivisoria(splitContainer1);
             splitContainer1.MouseLeave += (s, e) => layoutSplitter.DiminuirLinhaDivisoria(splitContainer1);
+
+            splitContainer2.SplitterWidth = 3;
+            splitContainer2.Paint += (s, pe) => layoutSplitter.DesenharLinhaDivisoria(splitContainer2, pe);
+            splitContainer2.Panel1.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer2.Panel1, pe);
+            splitContainer2.Panel2.Paint += (s, pe) => layoutSplitter.PintarPainelComBordasArredondadas(splitContainer2.Panel2, pe);
+            splitContainer2.MouseEnter += (s, e) => layoutSplitter.ExibirLinhaDivisoria(splitContainer2);
+            splitContainer2.MouseLeave += (s, e) => layoutSplitter.DiminuirLinhaDivisoria(splitContainer2);
 
             RedefinirTamanhoGrids();
 
@@ -209,6 +220,40 @@ namespace OrganizacaoFinanceira
                 MessageBox.Show("Erro ao gravar lançamento recorrente.\n" + response.Exception);
             }
         }
+
+        private async Task SalvarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado, bool mostrarMensagem)
+        {
+            if (lancamentoDetalhado == null)
+                return;
+
+            try
+            {
+                if (DadosGerais.lancamentosRecorrentesDetalhado == null || DadosGerais.lancamentosRecorrentesDetalhado.Count == 0)
+                {
+                    lancamentoDetalhado.chave = 1;
+                }
+                else
+                {
+                    lancamentoDetalhado.chave = DadosGerais.lancamentosRecorrentesDetalhado.Max(x => x.chave) + 1;
+                }
+
+                // Salvar o detalhe na base
+                SetResponse response = await DadosGerais.client.SetTaskAsync("LancamentosRecorrentesDetalhados/" + "chave-" + lancamentoDetalhado.chave, lancamentoDetalhado);
+
+                if (response.Exception != null)
+                {
+                    MessageBox.Show($"Erro ao gravar lançamento detalhado.\n{response.Exception}");
+                    return; // Parar o processo em caso de erro
+                }
+                if (mostrarMensagem) MessageBox.Show("Lançamentos recorrentes detalhados gravados com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao salvar lançamentos recorrentes detalhados: {ex.Message}");
+            }
+        }
+
+
         private void btnNovoLancRecorrente_Click(object sender, EventArgs e)
         {
             LimparLancamentoRecorrente();
@@ -268,7 +313,74 @@ namespace OrganizacaoFinanceira
             }
             else
                 lancRecorrenteSelecionado = null;
+
+            FiltrarLancamentosRecorrentesDetalhado();
         }
+
+        private void FiltrarLancamentosRecorrentesDetalhado()
+        {
+            if (lancRecorrenteSelecionado == null || DadosGerais.lancamentosRecorrentesDetalhado == null || lancRecorrenteSelecionado.tipoLancamento == 0)
+            {
+                // Limpar o grid de detalhes
+                bindingSourceLancRecorrentesDetalhado.DataSource = new SortableBindingList<LancamentoRecorrenteDetalhado>();
+                funcoesGrid.ConfigurarGrid(dgvLancRecorrenteDetalhado, bindingSourceLancRecorrentesDetalhado, funcoesGrid.ColunasGridLancamentosRecorrentesDetalhado(), false);
+                return;
+            }
+
+            var detalhesExistentes = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.chaveLancRecorrente == lancRecorrenteSelecionado.chave).OrderBy(x=>x.mes).ToList();
+
+            // Preencher o grid com os detalhes
+            SortableBindingList<LancamentoRecorrenteDetalhado> detalhesParaExibir = new(detalhesExistentes);
+            funcoesGrid.ConfigurarGrid(dgvLancRecorrenteDetalhado, bindingSourceLancRecorrentesDetalhado, funcoesGrid.ColunasGridLancamentosRecorrentesDetalhado(), false);
+            bindingSourceLancRecorrentesDetalhado.DataSource = detalhesParaExibir;
+        }
+
+        private async void GerarLancamentosRecorrentesDetalhado()
+        {
+            if (lancRecorrenteSelecionado == null || DadosGerais.lancamentosRecorrentesDetalhado == null || lancRecorrenteSelecionado.tipoLancamento == 0 || lancRecorrenteSelecionado.usaMesFixo)
+            {
+                // Limpar o grid de detalhes
+                bindingSourceLancRecorrentesDetalhado.DataSource = new SortableBindingList<LancamentoRecorrenteDetalhado>();
+                funcoesGrid.ConfigurarGrid(dgvLancRecorrenteDetalhado, bindingSourceLancRecorrentesDetalhado, funcoesGrid.ColunasGridLancamentosRecorrentesDetalhado(), false);
+                return;
+            }
+
+            var detalhesExistentes = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.chaveLancRecorrente == lancRecorrenteSelecionado.chave).ToList();
+
+            // Verificar se já há detalhes
+            if (!detalhesExistentes.Any())
+            {
+                this.Enabled = false;
+                this.Cursor = Cursors.WaitCursor;
+
+                // Caso não haja detalhes, criar novos registros
+                for (byte i = 1; i < 13; i++)
+                {
+                    if (lancRecorrenteSelecionado.tipoLancamento == 0) return;
+                    var novoDetalhe = new LancamentoRecorrenteDetalhado
+                    {
+                        chaveLancRecorrente = lancRecorrenteSelecionado.chave,
+                        descricao = lancRecorrenteSelecionado.descricao,
+                        valor = lancRecorrenteSelecionado.valor,
+                        tipoLancamento = lancRecorrenteSelecionado.tipoLancamento,
+                        mes = i
+                    };
+                    await SalvarLancamentosRecorrentesDetalhadosAsync(novoDetalhe, false);
+                    DadosGerais.lancamentosRecorrentesDetalhado.Add(novoDetalhe);
+                }
+
+                // Atualizar os detalhes existentes com os novos
+                detalhesExistentes = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.chaveLancRecorrente == lancRecorrenteSelecionado.chave).ToList();
+                this.Enabled = true;
+                this.Cursor = Cursors.Default;
+            }
+
+            // Preencher o grid com os detalhes
+            SortableBindingList<LancamentoRecorrenteDetalhado> detalhesParaExibir = new(detalhesExistentes);
+            funcoesGrid.ConfigurarGrid(dgvLancRecorrenteDetalhado, bindingSourceLancRecorrentesDetalhado, funcoesGrid.ColunasGridLancamentosRecorrentesDetalhado(), false);
+            bindingSourceLancRecorrentesDetalhado.DataSource = detalhesParaExibir;
+        }
+
 
         private void dgvLancamentosRecorrentes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -335,7 +447,32 @@ namespace OrganizacaoFinanceira
                     e.FormattingApplied = true;
                 }
             }
+        }
 
+        private void dgvLancRecorrenteDetalhado_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvLancRecorrenteDetalhado.Columns[e.ColumnIndex].DataPropertyName == "tipoLancamento" && e.Value != null)
+            {
+                e.Value = (byte)e.Value == 0 ? "Saída" : "Entrada";
+                e.FormattingApplied = true;
+            }
+
+            if (dgvLancRecorrenteDetalhado.Columns[e.ColumnIndex].DataPropertyName == "mes" && e.Value != null)
+            {
+                // Verificar se o valor não é nulo e é um byte
+                if (e.Value is byte mes && mes >= 1 && mes <= 12)
+                {
+                    // Obter o nome do mês correspondente
+                    string[] nomesMeses =
+                    {
+                        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+                    };
+
+                    e.Value = nomesMeses[mes - 1]; // Ajustar índice para base 0
+                    e.FormattingApplied = true;
+                }
+            }
         }
 
         private void rbtFiltroSaidaLancRecorrente_CheckedChanged(object sender, EventArgs e)
@@ -382,7 +519,7 @@ namespace OrganizacaoFinanceira
             double entradasTotaisRecorrente = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && !x.usaMesFixo).Sum(x => x.valor);
             double saidasParceladas;
             double entradasMes;
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < qtdMeses - 1; i++)
             {
                 DadosGerais.mesesFuturos.Add(new MesFuturo());
                 DadosGerais.mesesFuturos[i].mes = DateTime.Now.AddMonths(i + 1).Date;
@@ -621,7 +758,13 @@ namespace OrganizacaoFinanceira
             lblTituloLancamentosCriados.Top = dgvLancamentosRecorrentes.Top - lblTituloLancamentosCriados.Height;
             panelLancaRecorrentes.Top = dgvLancamentosRecorrentes.Top - lblTituloLancamentosCriados.Height - panelLancaRecorrentes.Height;
 
-            dgvMesesFuturos.Top = topGrid;
+            dgvLancRecorrenteDetalhado.Top = topGrid;
+            dgvLancRecorrenteDetalhado.Width = dgvLancRecorrenteDetalhado.Parent.Width - dgvLancRecorrenteDetalhado.Left - distanciaGrid;
+            dgvLancRecorrenteDetalhado.Height = dgvLancRecorrenteDetalhado.Parent.Height - dgvLancRecorrenteDetalhado.Top - distanciaGrid;
+            funcoesGrid.ReajustarTamanhoTitulo(dgvLancRecorrenteDetalhado, lblLancamentoDetalhado);
+            lblLancamentoDetalhado.Top = dgvLancRecorrenteDetalhado.Top - lblLancamentoDetalhado.Height;
+
+            dgvMesesFuturos.Top = topGrid + panelSimularParcelamento.Top + panelSimularParcelamento.Height;
             dgvMesesFuturos.Width = dgvMesesFuturos.Parent.Width - dgvMesesFuturos.Left - distanciaGrid;
             dgvMesesFuturos.Height = dgvMesesFuturos.Parent.Height - dgvMesesFuturos.Top - distanciaGrid;
             funcoesGrid.ReajustarTamanhoTitulo(dgvMesesFuturos, lblTituloSaldosFuturo);
@@ -632,6 +775,16 @@ namespace OrganizacaoFinanceira
         private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
         {
             RedefinirTamanhoGrids();
+        }
+
+        private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            RedefinirTamanhoGrids();
+        }
+
+        private void btnGerarDetalhes_Click(object sender, EventArgs e)
+        {
+            GerarLancamentosRecorrentesDetalhado();
         }
     }
 }

@@ -209,5 +209,17 @@
             };
             return colunas;
         }
+
+        public List<(string, string, DataGridViewContentAlignment, int, bool)> ColunasGridLancamentosRecorrentesDetalhado()
+        {
+            List<(string, string, DataGridViewContentAlignment, int, bool)> colunas = new List<(string, string, DataGridViewContentAlignment, int, bool)>
+            {
+                ("descricao", "Descrição", DataGridViewContentAlignment.MiddleCenter, 150, false),
+                ("valor", "Valor", DataGridViewContentAlignment.MiddleCenter, 100, true),
+                ("tipoLancamento", "Tipo do lançamento", DataGridViewContentAlignment.MiddleCenter, 150, false),
+                ("mes", "Mês", DataGridViewContentAlignment.MiddleCenter, 100, false),
+            };
+            return colunas;
+        }
     }
 }

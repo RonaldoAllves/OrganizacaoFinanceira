@@ -29,6 +29,7 @@ namespace OrganizacaoFinanceira.Dados
             DadosGerais.meses = await BuscarMeses();
             DadosGerais.categorias = await BuscarCategorias();
             DadosGerais.lancamentosRecorrentes = await BuscarLancamentosRecorrentes();
+            DadosGerais.lancamentosRecorrentesDetalhado = await BuscarLancamentosRecorrentesDetalhado();
             AtualizarValorTotalConta();
         }
 
@@ -210,6 +211,29 @@ namespace OrganizacaoFinanceira.Dados
                 return new SortableBindingList<LancamentoRecorrente>();
             }
         }
+
+        public async Task<SortableBindingList<LancamentoRecorrenteDetalhado>> BuscarLancamentosRecorrentesDetalhado()
+        {
+            try
+            {
+                List<LancamentoRecorrenteDetalhado> lancRecorrentesDetalhadoAux;
+                Dictionary<string, LancamentoRecorrenteDetalhado> chavesLancRecorrentesDetalhados;
+
+                FirebaseResponse firebaseResponse = await DadosGerais.client.GetTaskAsync("LancamentosRecorrentesDetalhados");
+                if (firebaseResponse.Body == "null") return new SortableBindingList<LancamentoRecorrenteDetalhado>();
+
+                chavesLancRecorrentesDetalhados = firebaseResponse.ResultAs<Dictionary<string, LancamentoRecorrenteDetalhado>>();
+                lancRecorrentesDetalhadoAux = chavesLancRecorrentesDetalhados.Select(x => x.Value).ToList();
+
+                return new SortableBindingList<LancamentoRecorrenteDetalhado>(lancRecorrentesDetalhadoAux);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao buscar os lançamentos recorrentes detalhados.\n\n" + ex.Message);
+                return new SortableBindingList<LancamentoRecorrenteDetalhado>();
+            }
+        }
+
         #endregion
 
         public async Task CriarMes(Mes mesNovo, int categoria, DateTime mes)

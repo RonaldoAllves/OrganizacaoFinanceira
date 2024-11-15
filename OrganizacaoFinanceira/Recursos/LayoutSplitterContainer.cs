@@ -78,7 +78,7 @@ namespace OrganizacaoFinanceira.Recursos
 
         public void ExibirLinhaDivisoria(SplitContainer splitContainer)
         {
-            splitContainer.SplitterWidth = 4;
+            splitContainer.SplitterWidth = 3;
         }
 
         public void DiminuirLinhaDivisoria(SplitContainer splitContainer)
