@@ -80,8 +80,8 @@ namespace OrganizacaoFinanceira
 
         private void InicializarCategorias()
         {
-            PreencherValoresTodosMeses();
-            PreencherSaldoTotalCategoria();
+            CRUD.PreencherValoresTodosMeses();
+            CRUD.PreencherSaldoTotalCategoria();
 
             funcoesGrid.ConfigurarGrid(dgvCategorias, bindingSourceCategorias, funcoesGrid.ColunasGridCategorias(), false);
             bindingSourceCategorias.DataSource = DadosGerais.categorias;
@@ -92,8 +92,8 @@ namespace OrganizacaoFinanceira
 
         private void AtualizarCategorias()
         {
-            PreencherValoresTodosMeses();
-            PreencherSaldoTotalCategoria();
+            CRUD.PreencherValoresTodosMeses();
+            CRUD.PreencherSaldoTotalCategoria();
             bindingSourceCategorias.DataSource = DadosGerais.categorias;
             dgvCategorias.Refresh();
             InicializarVerbasCategorias();
@@ -161,17 +161,7 @@ namespace OrganizacaoFinanceira
             tbxDescCategoria.Text = "";
             tbxVerbaPadraoCat.Text = "";
             tbxIdCategoria.Enabled = false;
-        }
-
-        private void PreencherSaldoTotalCategoria()
-        {
-            double verbaTotal;
-            foreach (Categoria categoria in DadosGerais.categorias)
-            {
-                verbaTotal = DadosGerais.meses.Where(x => x.chaveCategoria == categoria.chave && DataMenorIgual(x.mes.Date, DateTime.Now.Date)).Sum(x => x.verbaMes);
-                categoria.saldoTotal = verbaTotal - (DadosGerais.saidas == null ? 0 : DadosGerais.saidas.Where(x => x.chaveCategoria == categoria.chave).Sum(x => x.valorParcela));
-            }
-        }
+        }        
 
         static bool DataMenorIgual(DateTime data1, DateTime data2)
         {
@@ -179,15 +169,7 @@ namespace OrganizacaoFinanceira
             var data2SemDia = new DateTime(data2.Year, data2.Month, 1);
 
             return data1SemDia <= data2SemDia;
-        }
-
-        private void PreencherValoresTodosMeses()
-        {
-            foreach (Mes mes in DadosGerais.meses)
-            {
-                PreencherValoresMes(mes);
-            }
-        }
+        }        
 
         private void FiltrarMeses()
         {
@@ -212,24 +194,13 @@ namespace OrganizacaoFinanceira
 
             foreach (Mes mes in mesesDaCategoria)
             {
-                PreencherValoresMes(mes);
+                CRUD.PreencherValoresMes(mes);
             }
 
             bindingSourceMeses.DataSource = mesesDaCategoria;
         }
 
-        private void PreencherValoresMes(Mes mes)
-        {
-            List<Saida> saidasCategoria = new();
-            List<Saida> saidasMes = new();
-
-            if (DadosGerais.saidas != null)
-            {
-                saidasCategoria = DadosGerais.saidas.Where(x => x.chaveCategoria == mes.chaveCategoria).ToList();
-                saidasMes = saidasCategoria.Where(x => x.mesReferencia.Month == mes.mes.Month && x.mesReferencia.Year == mes.mes.Year).ToList();
-                mes.saldoMes = mes.verbaMes - saidasMes.Sum(x => x.valorParcela);
-            }
-        }
+        
 
         private async void btnCriarMes_Click(object sender, EventArgs e)
         {

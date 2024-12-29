@@ -104,20 +104,35 @@ namespace OrganizacaoFinanceira
             double valorExtrapoladoCategoria;
             double valorFaltaGastarCategoria;
             double valorFaltaGastar = 0;
+
+            Mes mesCategoria;
+            double saldoCategoria;
+
             DateTime data = DateTime.Now;
 
             foreach (Categoria categoria in DadosGerais.categorias)
             {
+
                 valorObrigatorioPrevistoCat = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
                 valorObrigatorioRegistradoCat = saidasComSimulacao.Where(x => x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
                 valorExtrapoladoCategoria = saidasComSimulacao.Where(x => x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorExtrapolado);
-                valorFaltaGastarCategoria = valorObrigatorioPrevistoCat - valorObrigatorioRegistradoCat + valorExtrapoladoCategoria;
+                valorFaltaGastarCategoria = valorObrigatorioPrevistoCat - valorObrigatorioRegistradoCat + valorExtrapoladoCategoria; //Adiciona o valor extrapolado, pois ele foi considerado em valorObrigatorioRegistradoCat.
 
                 valorNaoObrigatorioPrevistoCat = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && !x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
                 valorNaoObrigatorioRegistradoCategoria = saidasComSimulacao.Where(x => !x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
                 valorFaltaGastarCategoria += Math.Max(valorNaoObrigatorioPrevistoCat - valorNaoObrigatorioRegistradoCategoria, 0);
 
+                if (chkUsaVerba.Checked && categoria.descricao != "Poupança")
+                {
+                    mesCategoria = DadosGerais.meses.Where(x => x.chaveCategoria == categoria.chave && x.mes.Month == data.Month && x.mes.Year == data.Year).FirstOrDefault();
+                    saldoCategoria = mesCategoria == null ? 0 : mesCategoria.saldoMes;
+                    saldoCategoria = Math.Max(saldoCategoria, DadosGerais.categorias.Where(x => x.chave == categoria.chave).FirstOrDefault().saldoTotal);
+                    saldoCategoria = Math.Max(saldoCategoria, 0);
+                    valorFaltaGastarCategoria = Math.Max(saldoCategoria, valorFaltaGastarCategoria);
+                }
+
                 valorFaltaGastar += valorFaltaGastarCategoria;
+
             }
             valorFaltaGastar = valorFaltaGastar < 0 ? 0 : valorFaltaGastar;
             return valorFaltaGastar;
@@ -854,6 +869,12 @@ namespace OrganizacaoFinanceira
                     this.Cursor = Cursors.Default;
                 }
             }
+        }
+
+        private void chkUsaVerba_CheckedChanged(object sender, EventArgs e)
+        {
+            CarregarEntradaSaidaExtra();
+            InicializarMesesFuturos();
         }
     }
 }

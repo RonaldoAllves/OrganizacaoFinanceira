@@ -31,6 +31,8 @@ namespace OrganizacaoFinanceira.Dados
             DadosGerais.lancamentosRecorrentes = await BuscarLancamentosRecorrentes();
             DadosGerais.lancamentosRecorrentesDetalhado = await BuscarLancamentosRecorrentesDetalhado();
             AtualizarValorTotalConta();
+            PreencherValoresTodosMeses();
+            PreencherSaldoTotalCategoria();
         }
 
         public void AtualizarValorTotalConta()
@@ -64,6 +66,37 @@ namespace OrganizacaoFinanceira.Dados
             var data2SemDia = new DateTime(data2.Year, data2.Month, 1);
 
             return data1SemDia == data2SemDia;
+        }
+
+        public void PreencherValoresTodosMeses()
+        {
+            foreach (Mes mes in DadosGerais.meses)
+            {
+                PreencherValoresMes(mes);
+            }
+        }
+
+        public void PreencherValoresMes(Mes mes)
+        {
+            List<Saida> saidasCategoria = new();
+            List<Saida> saidasMes = new();
+
+            if (DadosGerais.saidas != null)
+            {
+                saidasCategoria = DadosGerais.saidas.Where(x => x.chaveCategoria == mes.chaveCategoria).ToList();
+                saidasMes = saidasCategoria.Where(x => x.mesReferencia.Month == mes.mes.Month && x.mesReferencia.Year == mes.mes.Year).ToList();
+                mes.saldoMes = mes.verbaMes - saidasMes.Sum(x => x.valorParcela);
+            }
+        }
+
+        public void PreencherSaldoTotalCategoria()
+        {
+            double verbaTotal;
+            foreach (Categoria categoria in DadosGerais.categorias)
+            {
+                verbaTotal = DadosGerais.meses.Where(x => x.chaveCategoria == categoria.chave && DataMenorIgual(x.mes.Date, DateTime.Now.Date)).Sum(x => x.verbaMes);
+                categoria.saldoTotal = verbaTotal - (DadosGerais.saidas == null ? 0 : DadosGerais.saidas.Where(x => x.chaveCategoria == categoria.chave).Sum(x => x.valorParcela));
+            }
         }
 
         private void inicializarVazio()

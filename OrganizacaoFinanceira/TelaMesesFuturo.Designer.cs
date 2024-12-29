@@ -81,6 +81,7 @@
             lblLancamentoDetalhado = new Label();
             dgvLancRecorrenteDetalhado = new DataGridView();
             panelEntradaSaidaExtra = new Panel();
+            chkUsaVerba = new CheckBox();
             panelSimularParcelamento = new Panel();
             ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).BeginInit();
             groupBox2.SuspendLayout();
@@ -445,7 +446,7 @@
             // 
             // btnRecalcular
             // 
-            btnRecalcular.Location = new Point(215, 23);
+            btnRecalcular.Location = new Point(218, 22);
             btnRecalcular.Name = "btnRecalcular";
             btnRecalcular.Size = new Size(75, 23);
             btnRecalcular.TabIndex = 96;
@@ -581,8 +582,8 @@
             splitContainer1.Panel2.Controls.Add(lblTituloSaldosFuturo);
             splitContainer1.Panel2.Controls.Add(dgvMesesFuturos);
             splitContainer1.Panel2.Controls.Add(panelSimularParcelamento);
-            splitContainer1.Size = new Size(2202, 791);
-            splitContainer1.SplitterDistance = 1091;
+            splitContainer1.Size = new Size(1924, 791);
+            splitContainer1.SplitterDistance = 953;
             splitContainer1.TabIndex = 100;
             splitContainer1.SplitterMoved += splitContainer1_SplitterMoved;
             // 
@@ -604,7 +605,7 @@
             // 
             splitContainer2.Panel2.Controls.Add(lblLancamentoDetalhado);
             splitContainer2.Panel2.Controls.Add(dgvLancRecorrenteDetalhado);
-            splitContainer2.Size = new Size(1091, 791);
+            splitContainer2.Size = new Size(953, 791);
             splitContainer2.SplitterDistance = 459;
             splitContainer2.TabIndex = 101;
             splitContainer2.SplitterMoved += splitContainer2_SplitterMoved;
@@ -655,6 +656,7 @@
             // 
             // panelEntradaSaidaExtra
             // 
+            panelEntradaSaidaExtra.Controls.Add(chkUsaVerba);
             panelEntradaSaidaExtra.Controls.Add(tbxEntradaExtra);
             panelEntradaSaidaExtra.Controls.Add(tbxSaidaExtra);
             panelEntradaSaidaExtra.Controls.Add(label1);
@@ -662,8 +664,19 @@
             panelEntradaSaidaExtra.Controls.Add(label2);
             panelEntradaSaidaExtra.Location = new Point(27, 122);
             panelEntradaSaidaExtra.Name = "panelEntradaSaidaExtra";
-            panelEntradaSaidaExtra.Size = new Size(298, 53);
+            panelEntradaSaidaExtra.Size = new Size(608, 53);
             panelEntradaSaidaExtra.TabIndex = 100;
+            // 
+            // chkUsaVerba
+            // 
+            chkUsaVerba.AutoSize = true;
+            chkUsaVerba.Location = new Point(341, 22);
+            chkUsaVerba.Name = "chkUsaVerba";
+            chkUsaVerba.Size = new Size(168, 19);
+            chkUsaVerba.TabIndex = 97;
+            chkUsaVerba.Text = "Usar as verbas da categoria";
+            chkUsaVerba.UseVisualStyleBackColor = true;
+            chkUsaVerba.CheckedChanged += chkUsaVerba_CheckedChanged;
             // 
             // panelSimularParcelamento
             // 
@@ -677,7 +690,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(2202, 791);
+            ClientSize = new Size(1924, 791);
             Controls.Add(splitContainer1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "TelaMesesFuturo";
@@ -768,5 +781,6 @@
         private DataGridView dgvLancRecorrenteDetalhado;
         private Label lblLancamentoDetalhado;
         private Button btnGerarDetalhes;
+        private CheckBox chkUsaVerba;
     }
 }

@@ -40,6 +40,7 @@ namespace OrganizacaoFinanceira
             // Adiciona o formulário ao painel e o exibe
             panelPrincipal.Controls.Add(form);
             form.Show();
+            Application.DoEvents();
         }
 
         private void lançamentosToolStripMenuItem_Click(object sender, EventArgs e)
