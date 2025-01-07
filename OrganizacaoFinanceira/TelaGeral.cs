@@ -122,6 +122,8 @@ namespace OrganizacaoFinanceira
 
         public void ExibirGastosPorCategoria(Panel painelDestino)
         {
+            if (!jaPodePreencherValores) return;
+
             // Definir o início e o fim do período baseado nas datas selecionadas
             var inicioPeriodo = new DateTime(dtpDataInicial.Value.Year, dtpDataInicial.Value.Month, 1);
             var fimPeriodo = new DateTime(dtpDataFinal.Value.Year, dtpDataFinal.Value.Month, DateTime.DaysInMonth(dtpDataFinal.Value.Year, dtpDataFinal.Value.Month));
@@ -186,35 +188,7 @@ namespace OrganizacaoFinanceira
 
                 if (item.Categoria == "Sarah")
                 {
-                    double ultimaVerba = DadosGerais.meses.Where(x => x.chaveCategoria == item.ChaveCategoria && x.mes.Year == DateTime.Now.Year && x.mes.Month == DateTime.Now.Month)
-                                                          .Select(x => x.verbaOriginal)
-                                                          .DefaultIfEmpty(0)
-                                                          .FirstOrDefault();
-
-                    //Obtem toda a verba no periodo, se o periodo for além do mês atual, não deve considerar a verba dos próximos meses, pois não é garantia de te-las.
-                    double verbaTotalPeriodo = DadosGerais.meses.Where(x => x.chaveCategoria == item.ChaveCategoria && x.mes >= inicioPeriodo && x.mes <= fimPeriodo && x.mes <= DateTime.Now)
-                                                                .Select(x => x.verbaMes)
-                                                                .DefaultIfEmpty(0)
-                                                                .Sum();
-
-                    //Calcular a verba dos proximos meses até o fimPeriodo
-                    int proximosMeses = CalcularQuantidadeDeMeses(DateTime.Now, fimPeriodo); //exemplo
-                    double verbaFutura = ultimaVerba * proximosMeses;
-                    verbaTotalPeriodo += verbaFutura;
-
-                    double gastoTotalPeriodo = DadosGerais.saidas.Where(x=>x.chaveCategoria == item.ChaveCategoria && x.data >= inicioPeriodo && x.data <= fimPeriodo)
-                                                                 .Select(x=>x.valorParcela)
-                                                                 .DefaultIfEmpty(0)
-                                                                 .Sum();
-
-                    double saldoPeriodo = verbaTotalPeriodo - gastoTotalPeriodo;
-
-                    labelSaldoPeriodo = new Label
-                    {
-                        Text = $"Saldo no período: {saldoPeriodo:C}",
-                        Location = new Point(600, posicaoY),
-                        AutoSize = true
-                    };
+                    labelSaldoPeriodo = CalcularSaldoSarah(item, inicioPeriodo, fimPeriodo, posicaoY);                    
                 }
 
                 // Adicionar os labels ao painel
@@ -272,6 +246,37 @@ namespace OrganizacaoFinanceira
             painelDestino.Controls.Add(lblTituloDadosCategoria);
         }
 
+        private Label CalcularSaldoSarah(dynamic item, DateTime inicioPeriodo, DateTime fimPeriodo, int posicaoY)
+        {
+            double verba = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.chaveCategoria == item.ChaveCategoria).Select(x => x.valor).DefaultIfEmpty(0).FirstOrDefault();
+
+            //Obtem toda a verba no periodo, se o periodo for além do mês atual, não deve considerar a verba dos próximos meses, pois não é garantia de te-las.
+            double verbaTotalPeriodo = DadosGerais.meses.Where(x => x.chaveCategoria == item.ChaveCategoria && x.mes >= inicioPeriodo && x.mes <= fimPeriodo && x.mes <= DateTime.Now)
+                                                        .Select(x => x.verbaMes)
+                                                        .DefaultIfEmpty(0)
+                                                        .Sum();
+
+            //Calcular a verba dos proximos meses até o fimPeriodo
+            int proximosMeses = CalcularQuantidadeDeMeses(DateTime.Now, fimPeriodo); //exemplo
+            double verbaFutura = verba * proximosMeses;
+            verbaTotalPeriodo += verbaFutura;
+
+            double gastoTotalPeriodo = DadosGerais.saidas.Where(x => x.chaveCategoria == item.ChaveCategoria && x.data >= inicioPeriodo && x.data <= fimPeriodo)
+                                                         .Select(x => x.valorParcela)
+                                                         .DefaultIfEmpty(0)
+                                                         .Sum();
+
+            double saldoPeriodo = verbaTotalPeriodo - gastoTotalPeriodo;
+
+            Label labelSaldoPeriodo = new Label
+            {
+                Text = $"Saldo no período: {saldoPeriodo:C}",
+                Location = new Point(600, posicaoY),
+                AutoSize = true
+            };
+
+            return labelSaldoPeriodo;
+        }
 
         private void dtpDataInicial_ValueChanged(object sender, EventArgs e)
         {

@@ -6,7 +6,7 @@
         public int chaveCategoria { get; set; }
         public string descricao { get; set; }
         public double valor { get; set; }
-        public byte tipoLancamento { get; set; }
+        public byte tipoLancamento { get; set; } // 0 - saída ou 1 - entrada
         public DateTime dataFinal { get; set; }
         public bool obrigatorio { get; set; }
         public bool usaMesFixo { get; set; }
