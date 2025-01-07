@@ -8,27 +8,18 @@ namespace OrganizacaoFinanceira
 {
     public partial class TelaGeral : Form
     {
+        bool jaPodePreencherValores = false;
         public TelaGeral()
         {
             InitializeComponent();
             LayoutColor.EstiloLayout(this);
-
-            // Configurar o DateTimePicker para exibir apenas meses
-            dtpDataInicial.Format = DateTimePickerFormat.Custom;
-            dtpDataInicial.CustomFormat = "MM/yyyy"; // Exibir mês e ano
-            dtpDataInicial.ShowUpDown = true; // Mostra botões de incremento
-
-            dtpDataFinal.Format = DateTimePickerFormat.Custom;
-            dtpDataFinal.CustomFormat = "MM/yyyy"; // Exibir mês e ano
-            dtpDataFinal.ShowUpDown = true; // Mostra botões de incremento
-
-            // Definir período inicial de 12 meses
-            dtpDataInicial.Value = new DateTime(DateTime.Now.AddMonths(-12).Year, DateTime.Now.AddMonths(-12).Month, 1);
-            dtpDataFinal.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         }
 
         private void TelaGeral_Load(object sender, EventArgs e)
         {
+            jaPodePreencherValores = false;
+            ConfigurarPeriodo();
+
             lblValorRendimentosRecentes.ForeColor = Color.FromArgb(181, 230, 29);
             lblValorEntradasRecentes.ForeColor = Color.FromArgb(181, 230, 29);
             lblValorSaidasRecentes.ForeColor = Color.FromArgb(181, 230, 29);
@@ -40,12 +31,32 @@ namespace OrganizacaoFinanceira
             lblValorSaidasRecentes.Font = new Font("Arial", 16, FontStyle.Bold);
             lblValorDividaTotal.Font = new Font("Arial", 16, FontStyle.Bold);
             lblValorSaldoTotal.Font = new Font("Arial", 16, FontStyle.Bold);
+
+            jaPodePreencherValores = true;
             PreencherValores();
             ExibirGastosPorCategoria(panelDadosCategorias);
         }
 
+        private void ConfigurarPeriodo()
+        {
+            // Configurar o DateTimePicker para exibir apenas meses
+            dtpDataInicial.Format = DateTimePickerFormat.Custom;
+            dtpDataInicial.CustomFormat = "MM/yyyy"; // Exibir mês e ano
+            //dtpDataInicial.ShowUpDown = true; // Mostra botões de incremento
+
+            dtpDataFinal.Format = DateTimePickerFormat.Custom;
+            dtpDataFinal.CustomFormat = "MM/yyyy"; // Exibir mês e ano
+            //dtpDataFinal.ShowUpDown = true; // Mostra botões de incremento
+
+            // Definir período inicial de 12 meses
+            dtpDataInicial.Value = new DateTime(DateTime.Now.AddMonths(-12).Year, DateTime.Now.AddMonths(-12).Month, 1);
+            dtpDataFinal.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        }
+
         private void PreencherValores()
         {
+            if (!jaPodePreencherValores) return;
+
             double rendimentos = 0;
             double entradas = 0;
             double saidas = 0;
@@ -98,16 +109,28 @@ namespace OrganizacaoFinanceira
             lblValorSaldoTotal.Text = saldo.ToString("C2", new CultureInfo("pt-BR"));
         }
 
+        private int CalcularQuantidadeDeMeses(DateTime dataInicial, DateTime dataFinal)
+        {
+            // Calcula a diferença em anos e meses
+            int anos = dataFinal.Year - dataInicial.Year;
+            int meses = dataFinal.Month - dataInicial.Month;
+
+            // Soma a diferença total em meses
+            return (anos * 12) + meses;
+        }
+
+
         public void ExibirGastosPorCategoria(Panel painelDestino)
         {
             // Definir o início e o fim do período baseado nas datas selecionadas
             var inicioPeriodo = new DateTime(dtpDataInicial.Value.Year, dtpDataInicial.Value.Month, 1);
             var fimPeriodo = new DateTime(dtpDataFinal.Value.Year, dtpDataFinal.Value.Month, DateTime.DaysInMonth(dtpDataFinal.Value.Year, dtpDataFinal.Value.Month));
+            int quantidadeMeses = ((fimPeriodo.Year - inicioPeriodo.Year) * 12) + fimPeriodo.Month - inicioPeriodo.Month + 1;
 
             // Consulta ajustada com o filtro de data
             var gastosPorCategoria = DadosGerais.saidas
                 .Where(x => x.data >= inicioPeriodo && x.data <= fimPeriodo)
-                        .GroupBy(x => x.chaveCategoria)
+                .GroupBy(x => x.chaveCategoria)
                 .Select(grupo => new { chaveCategoria = grupo.Key, TotalGasto = grupo.Sum(x => x.valorParcela) })
                 .Join(DadosGerais.categorias,
                       gasto => gasto.chaveCategoria,
@@ -116,7 +139,8 @@ namespace OrganizacaoFinanceira
                       {
                           Categoria = categoria.descricao,
                           TotalGasto = gasto.TotalGasto,
-                          MediaMensal = gasto.TotalGasto / 12
+                          MediaMensal = gasto.TotalGasto / quantidadeMeses,
+                          ChaveCategoria = categoria.chave,
                       })
                 .ToList();
 
@@ -124,7 +148,9 @@ namespace OrganizacaoFinanceira
             painelDestino.Controls.Clear();
 
             // Configurar início do layout
-            int posicaoY = 10; // Posição vertical inicial
+            int posicaoY = 50; // Posição vertical inicial
+            int incrementoVertical = 30; // Espaçamento entre linhas
+            int margemInferior = 20; // Margem adicional para ajustar o tamanho do painel
 
             double total = 0;
             double totalMedia = 0;
@@ -156,16 +182,53 @@ namespace OrganizacaoFinanceira
                     AutoSize = true
                 };
 
+                Label labelSaldoPeriodo = new Label();
+
+                if (item.Categoria == "Sarah")
+                {
+                    double ultimaVerba = DadosGerais.meses.Where(x => x.chaveCategoria == item.ChaveCategoria && x.mes.Year == DateTime.Now.Year && x.mes.Month == DateTime.Now.Month)
+                                                          .Select(x => x.verbaOriginal)
+                                                          .DefaultIfEmpty(0)
+                                                          .FirstOrDefault();
+
+                    //Obtem toda a verba no periodo, se o periodo for além do mês atual, não deve considerar a verba dos próximos meses, pois não é garantia de te-las.
+                    double verbaTotalPeriodo = DadosGerais.meses.Where(x => x.chaveCategoria == item.ChaveCategoria && x.mes >= inicioPeriodo && x.mes <= fimPeriodo && x.mes <= DateTime.Now)
+                                                                .Select(x => x.verbaMes)
+                                                                .DefaultIfEmpty(0)
+                                                                .Sum();
+
+                    //Calcular a verba dos proximos meses até o fimPeriodo
+                    int proximosMeses = CalcularQuantidadeDeMeses(DateTime.Now, fimPeriodo); //exemplo
+                    double verbaFutura = ultimaVerba * proximosMeses;
+                    verbaTotalPeriodo += verbaFutura;
+
+                    double gastoTotalPeriodo = DadosGerais.saidas.Where(x=>x.chaveCategoria == item.ChaveCategoria && x.data >= inicioPeriodo && x.data <= fimPeriodo)
+                                                                 .Select(x=>x.valorParcela)
+                                                                 .DefaultIfEmpty(0)
+                                                                 .Sum();
+
+                    double saldoPeriodo = verbaTotalPeriodo - gastoTotalPeriodo;
+
+                    labelSaldoPeriodo = new Label
+                    {
+                        Text = $"Saldo no período: {saldoPeriodo:C}",
+                        Location = new Point(600, posicaoY),
+                        AutoSize = true
+                    };
+                }
+
                 // Adicionar os labels ao painel
                 painelDestino.Controls.Add(labelCategoria);
                 painelDestino.Controls.Add(labelTotalGasto);
                 painelDestino.Controls.Add(labelMediaMensal);
+                painelDestino.Controls.Add(labelSaldoPeriodo);
 
                 // Incrementar a posição vertical para o próximo item
-                posicaoY += 30;
+                posicaoY += incrementoVertical;
             }
 
-            Label labeltotal = new Label
+            // Adicionar labels de totais
+            Label labelTotal = new Label
             {
                 Text = $"Totais",
                 Location = new Point(10, posicaoY),
@@ -174,23 +237,41 @@ namespace OrganizacaoFinanceira
 
             Label labelTotalGeral = new Label
             {
-                Text = $"Total geral: {total:C}",
+                Text = $"{total:C}",
                 Location = new Point(200, posicaoY),
                 AutoSize = true
             };
 
             Label labelTotalMediaMensal = new Label
             {
-                Text = $"Total média: {totalMedia:C}",
+                Text = $"{totalMedia:C}",
                 Location = new Point(400, posicaoY),
                 AutoSize = true
             };
 
-            // Adicionar os labels ao painel
-            painelDestino.Controls.Add(labeltotal);
+            // Definir cores
+            labelTotal.ForeColor = Color.FromArgb(181, 230, 29);
+            labelTotalGeral.ForeColor = Color.FromArgb(181, 230, 29);
+            labelTotalMediaMensal.ForeColor = Color.FromArgb(181, 230, 29);
+
+            // Adicionar labels ao painel
+            painelDestino.Controls.Add(labelTotal);
             painelDestino.Controls.Add(labelTotalGeral);
             painelDestino.Controls.Add(labelTotalMediaMensal);
+
+            // Ajustar a altura do painel com base na última posição Y
+            painelDestino.Height = posicaoY + incrementoVertical + margemInferior;
+            painelDestino.Width += 100;
+
+            Label lblTituloDadosCategoria = new Label();
+            lblTituloDadosCategoria.Text = "Dados por categoria no período";
+            lblTituloDadosCategoria.Width = 300;
+            lblTituloDadosCategoria.Left = painelDestino.Width/2 - lblTituloDadosCategoria.Width/2;
+            lblTituloDadosCategoria.Top = 10; 
+            lblTituloDadosCategoria.Font = new Font("Arial", 12, FontStyle.Bold);
+            painelDestino.Controls.Add(lblTituloDadosCategoria);
         }
+
 
         private void dtpDataInicial_ValueChanged(object sender, EventArgs e)
         {
@@ -202,6 +283,12 @@ namespace OrganizacaoFinanceira
         {
             PreencherValores();
             ExibirGastosPorCategoria(panelDadosCategorias);
+        }
+
+        private void TelaGeral_Resize(object sender, EventArgs e)
+        {
+            panelPeriodo.Width = this.Width - panelPeriodo.Left * 2;
+            panelPeriodo.Height = this.Height - panelPeriodo.Top - 10;
         }
     }
 }

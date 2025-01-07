@@ -43,6 +43,8 @@
             lblDataInicial = new Label();
             lblDataFinal = new Label();
             panelDadosCategorias = new Panel();
+            panelPeriodo = new Panel();
+            panelPeriodo.SuspendLayout();
             SuspendLayout();
             // 
             // lblDividaTotal
@@ -84,7 +86,7 @@
             // lblValorEntradasRecentes
             // 
             lblValorEntradasRecentes.AutoSize = true;
-            lblValorEntradasRecentes.Location = new Point(12, 170);
+            lblValorEntradasRecentes.Location = new Point(14, 90);
             lblValorEntradasRecentes.Name = "lblValorEntradasRecentes";
             lblValorEntradasRecentes.Size = new Size(44, 15);
             lblValorEntradasRecentes.TabIndex = 5;
@@ -93,16 +95,16 @@
             // lblEntradasRecentes
             // 
             lblEntradasRecentes.AutoSize = true;
-            lblEntradasRecentes.Location = new Point(12, 145);
+            lblEntradasRecentes.Location = new Point(14, 65);
             lblEntradasRecentes.Name = "lblEntradasRecentes";
-            lblEntradasRecentes.Size = new Size(178, 15);
+            lblEntradasRecentes.Size = new Size(145, 15);
             lblEntradasRecentes.TabIndex = 4;
-            lblEntradasRecentes.Text = "Entradas totais últimos 12 meses";
+            lblEntradasRecentes.Text = "Entradas totais no período";
             // 
             // lblValorSaidasRecentes
             // 
             lblValorSaidasRecentes.AutoSize = true;
-            lblValorSaidasRecentes.Location = new Point(254, 170);
+            lblValorSaidasRecentes.Location = new Point(256, 90);
             lblValorSaidasRecentes.Name = "lblValorSaidasRecentes";
             lblValorSaidasRecentes.Size = new Size(44, 15);
             lblValorSaidasRecentes.TabIndex = 7;
@@ -111,16 +113,16 @@
             // lblSaidasRecentes
             // 
             lblSaidasRecentes.AutoSize = true;
-            lblSaidasRecentes.Location = new Point(254, 145);
+            lblSaidasRecentes.Location = new Point(256, 65);
             lblSaidasRecentes.Name = "lblSaidasRecentes";
-            lblSaidasRecentes.Size = new Size(166, 15);
+            lblSaidasRecentes.Size = new Size(133, 15);
             lblSaidasRecentes.TabIndex = 6;
-            lblSaidasRecentes.Text = "Saídas totais últimos 12 meses";
+            lblSaidasRecentes.Text = "Saídas totais no período";
             // 
             // lblValorRendimentosRecentes
             // 
             lblValorRendimentosRecentes.AutoSize = true;
-            lblValorRendimentosRecentes.Location = new Point(477, 170);
+            lblValorRendimentosRecentes.Location = new Point(479, 90);
             lblValorRendimentosRecentes.Name = "lblValorRendimentosRecentes";
             lblValorRendimentosRecentes.Size = new Size(44, 15);
             lblValorRendimentosRecentes.TabIndex = 9;
@@ -129,15 +131,15 @@
             // lblRendimenosRecentes
             // 
             lblRendimenosRecentes.AutoSize = true;
-            lblRendimenosRecentes.Location = new Point(477, 145);
+            lblRendimenosRecentes.Location = new Point(479, 65);
             lblRendimenosRecentes.Name = "lblRendimenosRecentes";
-            lblRendimenosRecentes.Size = new Size(171, 15);
+            lblRendimenosRecentes.Size = new Size(142, 15);
             lblRendimenosRecentes.TabIndex = 8;
-            lblRendimenosRecentes.Text = "Rendimentos últimos 12 meses";
+            lblRendimenosRecentes.Text = "Rendimentos por período";
             // 
             // dtpDataInicial
             // 
-            dtpDataInicial.Location = new Point(12, 106);
+            dtpDataInicial.Location = new Point(14, 26);
             dtpDataInicial.Name = "dtpDataInicial";
             dtpDataInicial.Size = new Size(200, 23);
             dtpDataInicial.TabIndex = 10;
@@ -145,7 +147,7 @@
             // 
             // dtpDataFinal
             // 
-            dtpDataFinal.Location = new Point(254, 106);
+            dtpDataFinal.Location = new Point(256, 26);
             dtpDataFinal.Name = "dtpDataFinal";
             dtpDataFinal.Size = new Size(200, 23);
             dtpDataFinal.TabIndex = 11;
@@ -154,7 +156,7 @@
             // lblDataInicial
             // 
             lblDataInicial.AutoSize = true;
-            lblDataInicial.Location = new Point(12, 88);
+            lblDataInicial.Location = new Point(14, 8);
             lblDataInicial.Name = "lblDataInicial";
             lblDataInicial.Size = new Size(63, 15);
             lblDataInicial.TabIndex = 12;
@@ -163,7 +165,7 @@
             // lblDataFinal
             // 
             lblDataFinal.AutoSize = true;
-            lblDataFinal.Location = new Point(254, 88);
+            lblDataFinal.Location = new Point(256, 8);
             lblDataFinal.Name = "lblDataFinal";
             lblDataFinal.Size = new Size(55, 15);
             lblDataFinal.TabIndex = 13;
@@ -171,27 +173,37 @@
             // 
             // panelDadosCategorias
             // 
-            panelDadosCategorias.Location = new Point(12, 211);
+            panelDadosCategorias.BorderStyle = BorderStyle.FixedSingle;
+            panelDadosCategorias.Location = new Point(14, 129);
             panelDadosCategorias.Name = "panelDadosCategorias";
-            panelDadosCategorias.Size = new Size(882, 517);
+            panelDadosCategorias.Size = new Size(706, 343);
             panelDadosCategorias.TabIndex = 14;
+            // 
+            // panelPeriodo
+            // 
+            panelPeriodo.BorderStyle = BorderStyle.FixedSingle;
+            panelPeriodo.Controls.Add(panelDadosCategorias);
+            panelPeriodo.Controls.Add(lblDataFinal);
+            panelPeriodo.Controls.Add(dtpDataInicial);
+            panelPeriodo.Controls.Add(lblDataInicial);
+            panelPeriodo.Controls.Add(lblEntradasRecentes);
+            panelPeriodo.Controls.Add(dtpDataFinal);
+            panelPeriodo.Controls.Add(lblValorEntradasRecentes);
+            panelPeriodo.Controls.Add(lblSaidasRecentes);
+            panelPeriodo.Controls.Add(lblValorRendimentosRecentes);
+            panelPeriodo.Controls.Add(lblValorSaidasRecentes);
+            panelPeriodo.Controls.Add(lblRendimenosRecentes);
+            panelPeriodo.Location = new Point(12, 76);
+            panelPeriodo.Name = "panelPeriodo";
+            panelPeriodo.Size = new Size(757, 506);
+            panelPeriodo.TabIndex = 15;
             // 
             // TelaGeral
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1063, 740);
-            Controls.Add(panelDadosCategorias);
-            Controls.Add(lblDataFinal);
-            Controls.Add(lblDataInicial);
-            Controls.Add(dtpDataFinal);
-            Controls.Add(dtpDataInicial);
-            Controls.Add(lblValorRendimentosRecentes);
-            Controls.Add(lblRendimenosRecentes);
-            Controls.Add(lblValorSaidasRecentes);
-            Controls.Add(lblSaidasRecentes);
-            Controls.Add(lblValorEntradasRecentes);
-            Controls.Add(lblEntradasRecentes);
+            Controls.Add(panelPeriodo);
             Controls.Add(lblValorSaldoTotal);
             Controls.Add(lblSaldoTotal);
             Controls.Add(lblValorDividaTotal);
@@ -199,6 +211,9 @@
             Name = "TelaGeral";
             Text = "TelaGeral";
             Load += TelaGeral_Load;
+            Resize += TelaGeral_Resize;
+            panelPeriodo.ResumeLayout(false);
+            panelPeriodo.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -220,5 +235,6 @@
         private Label lblDataInicial;
         private Label lblDataFinal;
         private Panel panelDadosCategorias;
+        private Panel panelPeriodo;
     }
 }
