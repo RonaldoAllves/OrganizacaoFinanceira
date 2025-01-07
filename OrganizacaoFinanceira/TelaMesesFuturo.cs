@@ -73,6 +73,48 @@ namespace OrganizacaoFinanceira
             this.Enabled = true;
         }
 
+        private void CalcularMediaGastosUltimosMeses()
+        {
+            int chave = DadosGerais.lancamentosRecorrentes.Select(x => x.chave).Max() + 1;
+            DadosGerais.lancamentosRecorrentes = new SortableBindingList<LancamentoRecorrente>();
+            foreach (Categoria categoria in DadosGerais.categorias)
+            {
+                LancamentoRecorrente novo = new();
+                novo.chaveCategoria = categoria.chave;
+                novo.chave = chave;
+                novo.tipoLancamento = 0;
+                novo.obrigatorio = DadosGerais.lancamentosRecorrentesOriginal.Where(x => x.chaveCategoria == categoria.chave).FirstOrDefault()?.obrigatorio ?? false;
+                novo.valor = CalcularMediaGastosUltimosMesesPorCategoria(categoria.chave, 12);
+
+                DadosGerais.lancamentosRecorrentes.Add(novo);
+
+                chave++;
+            }
+
+            foreach (LancamentoRecorrente lanc in DadosGerais.lancamentosRecorrentesOriginal)
+            {
+                if (lanc.tipoLancamento == 1)
+                {
+                    DadosGerais.lancamentosRecorrentes.Add(lanc);
+                }
+            }
+        }
+
+        private double CalcularMediaGastosUltimosMesesPorCategoria(int chaveCategoria, int meses)
+        {
+            if (meses == 0) return 0;
+
+            var dataAtual = DateTime.Now;
+            var dataInicio = dataAtual.AddMonths(-meses).AddDays(1 - dataAtual.Day); // Primeiro dia do mês, X meses atrás
+            var dataFim = new DateTime(dataAtual.Year, dataAtual.Month, 1).AddDays(-1); // Último dia do mês anterior
+
+            var gastos = DadosGerais.saidas
+                .Where(x => x.chaveCategoria == chaveCategoria && x.data >= dataInicio && x.data <= dataFim)
+                .Sum(x => x.valorParcela); // Soma dos gastos no período
+
+            return gastos / meses;
+        }
+
         private void CarregarEntradaSaidaExtra()
         {
             DadosGerais.entradaExtra = CalcularPrevisaoEntradaExtra();
@@ -132,7 +174,6 @@ namespace OrganizacaoFinanceira
                 }
 
                 valorFaltaGastar += valorFaltaGastarCategoria;
-
             }
             valorFaltaGastar = valorFaltaGastar < 0 ? 0 : valorFaltaGastar;
             return valorFaltaGastar;
@@ -328,14 +369,16 @@ namespace OrganizacaoFinanceira
                 panelLancRecorrente.Visible = true;
                 int x = (this.ClientSize.Width - panelLancRecorrente.Size.Width) / 2;
                 int y = (this.ClientSize.Height - panelLancRecorrente.Size.Height) / 2;
-                panelLancRecorrente.Location = new Point(x, y);
+                panelLancRecorrente.Location = new Point(x, y);                
 
                 tbxIdLancRecorrente.Text = lancRecorrenteSelecionado.chave.ToString();
                 tbxDescLancRecorrente.Text = lancRecorrenteSelecionado.descricao.ToString();
                 tbxValorLancRecorrente.Text = lancRecorrenteSelecionado.valor.ToString();
                 rbtSaidaLancRecorrente.Checked = lancRecorrenteSelecionado.tipoLancamento == 0 ? true : false;
+                rbtEntradaLancRecorrente.Checked = lancRecorrenteSelecionado.tipoLancamento == 0 ? false : true;
                 cbxCategoriaLancRecorrente.SelectedValue = lancRecorrenteSelecionado.chaveCategoria;
                 chkLancObrigatorio.Checked = lancRecorrenteSelecionado.obrigatorio;
+                chkMesFixo.Checked = lancRecorrenteSelecionado.usaMesFixo;                
             }
         }
 
@@ -415,6 +458,10 @@ namespace OrganizacaoFinanceira
                 detalhesExistentes = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.chaveLancRecorrente == lancRecorrenteSelecionado.chave).ToList();
                 this.Enabled = true;
                 this.Cursor = Cursors.Default;
+            }
+            else
+            {
+                MessageBox.Show("Já existe o lançamento detalhado. Para alterar deve ajustar manualmente.");
             }
 
             // Preencher o grid com os detalhes
@@ -768,6 +815,7 @@ namespace OrganizacaoFinanceira
 
             lblCategoria.Enabled = !rbtEntradaLancRecorrente.Checked;
             cbxCategoriaLancRecorrente.Enabled = !rbtEntradaLancRecorrente.Checked;
+            chkLancObrigatorio.Enabled = !rbtEntradaLancRecorrente.Checked;
         }
 
         private void tbxEntradaExtra_KeyDown(object sender, KeyEventArgs e)
@@ -873,6 +921,21 @@ namespace OrganizacaoFinanceira
 
         private void chkUsaVerba_CheckedChanged(object sender, EventArgs e)
         {
+            CarregarEntradaSaidaExtra();
+            InicializarMesesFuturos();
+        }
+
+        private void chkUsarMediaVerbas_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkUsarMediaVerbas.Checked)
+            {
+                CalcularMediaGastosUltimosMeses();
+            }
+            else
+            {
+                DadosGerais.lancamentosRecorrentes = new SortableBindingList<LancamentoRecorrente>(DadosGerais.lancamentosRecorrentesOriginal);
+            }
+
             CarregarEntradaSaidaExtra();
             InicializarMesesFuturos();
         }

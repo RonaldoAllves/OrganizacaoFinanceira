@@ -74,6 +74,7 @@
             geralToolStripMenuItem.Name = "geralToolStripMenuItem";
             geralToolStripMenuItem.Size = new Size(46, 20);
             geralToolStripMenuItem.Text = "Geral";
+            geralToolStripMenuItem.Click += geralToolStripMenuItem_Click;
             // 
             // atualizarDadosToolStripMenuItem
             // 

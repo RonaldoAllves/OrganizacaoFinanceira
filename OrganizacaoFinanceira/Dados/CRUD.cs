@@ -30,6 +30,9 @@ namespace OrganizacaoFinanceira.Dados
             DadosGerais.categorias = await BuscarCategorias();
             DadosGerais.lancamentosRecorrentes = await BuscarLancamentosRecorrentes();
             DadosGerais.lancamentosRecorrentesDetalhado = await BuscarLancamentosRecorrentesDetalhado();
+
+            DadosGerais.lancamentosRecorrentesOriginal = DadosGerais.lancamentosRecorrentes.ToList();
+
             AtualizarValorTotalConta();
             PreencherValoresTodosMeses();
             PreencherSaldoTotalCategoria();

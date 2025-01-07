@@ -81,6 +81,7 @@
             lblLancamentoDetalhado = new Label();
             dgvLancRecorrenteDetalhado = new DataGridView();
             panelEntradaSaidaExtra = new Panel();
+            chkUsarMediaVerbas = new CheckBox();
             chkUsaVerba = new CheckBox();
             panelSimularParcelamento = new Panel();
             ((System.ComponentModel.ISupportInitialize)dgvMesesFuturos).BeginInit();
@@ -212,7 +213,7 @@
             chkMesFixo.AutoSize = true;
             chkMesFixo.Location = new Point(409, 71);
             chkMesFixo.Name = "chkMesFixo";
-            chkMesFixo.Size = new Size(71, 19);
+            chkMesFixo.Size = new Size(70, 19);
             chkMesFixo.TabIndex = 88;
             chkMesFixo.Text = "Mês fixo";
             chkMesFixo.UseVisualStyleBackColor = true;
@@ -222,7 +223,7 @@
             lblMesFixo.AutoSize = true;
             lblMesFixo.Location = new Point(276, 158);
             lblMesFixo.Name = "lblMesFixo";
-            lblMesFixo.Size = new Size(52, 15);
+            lblMesFixo.Size = new Size(51, 15);
             lblMesFixo.TabIndex = 87;
             lblMesFixo.Text = "Mês fixo";
             // 
@@ -419,7 +420,7 @@
             label1.AutoSize = true;
             label1.Location = new Point(3, 5);
             label1.Name = "label1";
-            label1.Size = new Size(76, 15);
+            label1.Size = new Size(75, 15);
             label1.TabIndex = 93;
             label1.Text = "Entrada extra";
             // 
@@ -428,7 +429,7 @@
             label2.AutoSize = true;
             label2.Location = new Point(109, 5);
             label2.Name = "label2";
-            label2.Size = new Size(64, 15);
+            label2.Size = new Size(63, 15);
             label2.TabIndex = 95;
             label2.Text = "Saída extra";
             // 
@@ -656,6 +657,7 @@
             // 
             // panelEntradaSaidaExtra
             // 
+            panelEntradaSaidaExtra.Controls.Add(chkUsarMediaVerbas);
             panelEntradaSaidaExtra.Controls.Add(chkUsaVerba);
             panelEntradaSaidaExtra.Controls.Add(tbxEntradaExtra);
             panelEntradaSaidaExtra.Controls.Add(tbxSaidaExtra);
@@ -664,17 +666,30 @@
             panelEntradaSaidaExtra.Controls.Add(label2);
             panelEntradaSaidaExtra.Location = new Point(27, 122);
             panelEntradaSaidaExtra.Name = "panelEntradaSaidaExtra";
-            panelEntradaSaidaExtra.Size = new Size(608, 53);
+            panelEntradaSaidaExtra.Size = new Size(688, 53);
             panelEntradaSaidaExtra.TabIndex = 100;
+            // 
+            // chkUsarMediaVerbas
+            // 
+            chkUsarMediaVerbas.AutoSize = true;
+            chkUsarMediaVerbas.Location = new Point(341, 25);
+            chkUsarMediaVerbas.Name = "chkUsarMediaVerbas";
+            chkUsarMediaVerbas.Size = new Size(211, 19);
+            chkUsarMediaVerbas.TabIndex = 98;
+            chkUsarMediaVerbas.Tag = "Ao marcar irá usar as verbas da categoria no mês atual. Somente mês atual, os demais meses irá continuar usando a verba do mês futuro.";
+            chkUsarMediaVerbas.Text = "Usar média das verbas da categoria";
+            chkUsarMediaVerbas.UseVisualStyleBackColor = true;
+            chkUsarMediaVerbas.CheckedChanged += chkUsarMediaVerbas_CheckedChanged;
             // 
             // chkUsaVerba
             // 
             chkUsaVerba.AutoSize = true;
-            chkUsaVerba.Location = new Point(341, 22);
+            chkUsaVerba.Location = new Point(341, 3);
             chkUsaVerba.Name = "chkUsaVerba";
-            chkUsaVerba.Size = new Size(168, 19);
+            chkUsaVerba.Size = new Size(239, 19);
             chkUsaVerba.TabIndex = 97;
-            chkUsaVerba.Text = "Usar as verbas da categoria";
+            chkUsaVerba.Tag = "Ao marcar irá usar as verbas da categoria no mês atual. Somente mês atual, os demais meses irá continuar usando a verba do mês futuro.";
+            chkUsaVerba.Text = "Calcular saída extra com as verbas atuais";
             chkUsaVerba.UseVisualStyleBackColor = true;
             chkUsaVerba.CheckedChanged += chkUsaVerba_CheckedChanged;
             // 
@@ -782,5 +797,6 @@
         private Label lblLancamentoDetalhado;
         private Button btnGerarDetalhes;
         private CheckBox chkUsaVerba;
+        private CheckBox chkUsarMediaVerbas;
     }
 }

@@ -28,7 +28,7 @@ namespace OrganizacaoFinanceira
         }
 
         private void LoadFormInPanel(Form form)
-        {            
+        {
             // Limpa o painel antes de adicionar o novo formulário
             panelPrincipal.Controls.Clear();
 
@@ -67,6 +67,14 @@ namespace OrganizacaoFinanceira
             LoadFormInPanel(Formularios.telaMesesFuturo);
         }
 
+        private void geralToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Formularios.telaGeral = new();
+            formularioAtual = Formularios.telaGeral;
+            SetMenuItemActive(geralToolStripMenuItem);
+            LoadFormInPanel(Formularios.telaGeral);
+        }
+
         private async void btnAtualizarDados_Click(object sender, EventArgs e)
         {
             await CarregarDados();
@@ -91,6 +99,6 @@ namespace OrganizacaoFinanceira
             // Altere a cor de fundo e texto do item ativo
             currentMenuItem.BackColor = Color.DarkBlue;  // Cor de fundo do item ativo
             currentMenuItem.ForeColor = Color.White;     // Cor do texto do item ativo
-        }
+        }        
     }
 }

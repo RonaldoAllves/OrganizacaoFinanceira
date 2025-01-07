@@ -85,5 +85,26 @@ namespace OrganizacaoFinanceira.Recursos
         {
             splitContainer.SplitterWidth = 3;
         }
+
+        public void AjustarTamanhoSplitContainer(SplitContainer splitContainer, double porcentagem)
+        {
+            // Garantir que o valor da porcentagem esteja entre 0 e 100
+            if (porcentagem < 0 || porcentagem > 100)
+            {
+                throw new ArgumentOutOfRangeException(nameof(porcentagem), "A porcentagem deve estar entre 0 e 100.");
+            }
+
+            // Verifica a orientação do SplitContainer
+            if (splitContainer.Orientation == Orientation.Horizontal)
+            {
+                // Configura o SplitterDistance como a porcentagem da altura
+                splitContainer.SplitterDistance = (int)(splitContainer.Height * (porcentagem / 100.0));
+            }
+            else
+            {
+                // Configura o SplitterDistance como a porcentagem da largura
+                splitContainer.SplitterDistance = (int)(splitContainer.Width * (porcentagem / 100.0));
+            }
+        }
     }
 }

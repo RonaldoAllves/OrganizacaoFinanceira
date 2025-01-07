@@ -73,6 +73,9 @@ namespace OrganizacaoFinanceira
             splitContainer3.MouseLeave += (s, e) => layoutSplitter.DiminuirLinhaDivisoria(splitContainer3);
 
             RedefinirTamanhoGrids();
+            layoutSplitter.AjustarTamanhoSplitContainer(splitContainer1, 25);
+            layoutSplitter.AjustarTamanhoSplitContainer(splitContainer2, 60);
+            layoutSplitter.AjustarTamanhoSplitContainer(splitContainer3, 60);
             this.Enabled = true;
         }
 
