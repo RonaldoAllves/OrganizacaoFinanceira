@@ -429,13 +429,16 @@ namespace OrganizacaoFinanceira
             SortableBindingList<VerbaCategorias> verbasCategorias = new();
 
             Mes mesAux;
+            double verbaOriginalMes = 0;
+            double verbaAdicionalMes = 0;
             double verbaTotalMes = 0;
             double saldoTotalMes = 0;
+            double saidasMes = 0;
             double saidasTotalMes = 0;
             foreach (Categoria categoria in DadosGerais.categorias)
             {
                 mesAux = DadosGerais.meses.Where(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year && x.chaveCategoria == categoria.chave).FirstOrDefault();
-                saidasTotalMes = DadosGerais.saidas.Where(x => x.chaveCategoria == categoria.chave && x.mesReferencia.Month == mes.Month && x.mesReferencia.Year == mes.Year).Sum(x => x.valorParcela);
+                saidasMes = DadosGerais.saidas.Where(x => x.chaveCategoria == categoria.chave && x.mesReferencia.Month == mes.Month && x.mesReferencia.Year == mes.Year).Sum(x => x.valorParcela);
 
                 VerbaCategorias novo = new();
                 novo.chaveCategoria = categoria.chave;
@@ -449,16 +452,22 @@ namespace OrganizacaoFinanceira
                 novo.verbaOriginalMesCategoria = mesAux.verbaOriginal;
                 novo.verbaAdicionalMesCategoria = mesAux.verbaAdicional;
                 novo.verbaMesCategoria = mesAux.verbaMes;
-                novo.gastoMes = saidasTotalMes;
+                novo.gastoMes = saidasMes;
                 novo.saldoMes = mesAux.saldoMes;
                 novo.saldoTotal = categoria.saldoTotal;
 
                 verbasCategorias.Add(novo);
+                verbaOriginalMes += novo.verbaOriginalMesCategoria;
+                verbaAdicionalMes += novo.verbaAdicionalMesCategoria;
                 verbaTotalMes += novo.verbaMesCategoria;
+                saidasTotalMes += novo.gastoMes;
                 saldoTotalMes += novo.saldoMes;
             }
 
+            tbxVerbaOriginal.Text = verbaOriginalMes.ToString("N2");
+            tbxVerbaAdicionalMes.Text = verbaAdicionalMes.ToString("N2");
             tbxVerbaTotalMes.Text = verbaTotalMes.ToString("N2");
+            tbxSaidaTotalMes.Text = saidasTotalMes.ToString("N2");
             tbxSaldoTotalMes.Text = saldoTotalMes.ToString("N2");
             bindingSourceVerbasCategorias.DataSource = verbasCategorias;
 

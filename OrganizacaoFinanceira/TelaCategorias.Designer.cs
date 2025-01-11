@@ -68,7 +68,13 @@
             panelMesesCriados = new Panel();
             splitContainer2 = new SplitContainer();
             panelVerbasPorMes = new Panel();
+            tbxVerbaAdicionalMes = new TextBox();
+            label5 = new Label();
+            tbxVerbaOriginal = new TextBox();
+            label4 = new Label();
             panelSaidasCategoria = new Panel();
+            tbxSaidaTotalMes = new TextBox();
+            label6 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvVerbasPorMes).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvMeses).BeginInit();
@@ -111,7 +117,7 @@
             // 
             // tbxVerbaTotalMes
             // 
-            tbxVerbaTotalMes.Location = new Point(138, 21);
+            tbxVerbaTotalMes.Location = new Point(472, 19);
             tbxVerbaTotalMes.Margin = new Padding(3, 2, 3, 2);
             tbxVerbaTotalMes.Name = "tbxVerbaTotalMes";
             tbxVerbaTotalMes.Size = new Size(131, 23);
@@ -121,7 +127,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(135, 4);
+            label2.Location = new Point(469, 2);
             label2.Name = "label2";
             label2.Size = new Size(105, 15);
             label2.TabIndex = 92;
@@ -144,7 +150,7 @@
             // 
             // tbxSaldoTotalMes
             // 
-            tbxSaldoTotalMes.Location = new Point(274, 21);
+            tbxSaldoTotalMes.Location = new Point(837, 19);
             tbxSaldoTotalMes.Margin = new Padding(3, 2, 3, 2);
             tbxSaldoTotalMes.Name = "tbxSaldoTotalMes";
             tbxSaldoTotalMes.Size = new Size(131, 23);
@@ -154,7 +160,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(270, 4);
+            label3.Location = new Point(833, 2);
             label3.Name = "label3";
             label3.Size = new Size(105, 15);
             label3.TabIndex = 95;
@@ -255,7 +261,7 @@
             chxTodosMeses.Location = new Point(448, 23);
             chxTodosMeses.Margin = new Padding(3, 2, 3, 2);
             chxTodosMeses.Name = "chxTodosMeses";
-            chxTodosMeses.Size = new Size(93, 19);
+            chxTodosMeses.Size = new Size(94, 19);
             chxTodosMeses.TabIndex = 115;
             chxTodosMeses.Text = "Todos meses";
             chxTodosMeses.UseVisualStyleBackColor = true;
@@ -379,7 +385,7 @@
             lblTotalSaidas.AutoSize = true;
             lblTotalSaidas.Location = new Point(3, 3);
             lblTotalSaidas.Name = "lblTotalSaidas";
-            lblTotalSaidas.Size = new Size(67, 15);
+            lblTotalSaidas.Size = new Size(68, 15);
             lblTotalSaidas.TabIndex = 118;
             lblTotalSaidas.Text = "Total saídas";
             // 
@@ -520,6 +526,12 @@
             // 
             // panelVerbasPorMes
             // 
+            panelVerbasPorMes.Controls.Add(tbxSaidaTotalMes);
+            panelVerbasPorMes.Controls.Add(label6);
+            panelVerbasPorMes.Controls.Add(tbxVerbaAdicionalMes);
+            panelVerbasPorMes.Controls.Add(label5);
+            panelVerbasPorMes.Controls.Add(tbxVerbaOriginal);
+            panelVerbasPorMes.Controls.Add(label4);
             panelVerbasPorMes.Controls.Add(dtpMesRefVerbaTotal);
             panelVerbasPorMes.Controls.Add(tbxSaldoTotalMes);
             panelVerbasPorMes.Controls.Add(label3);
@@ -528,8 +540,44 @@
             panelVerbasPorMes.Controls.Add(label2);
             panelVerbasPorMes.Location = new Point(25, 3);
             panelVerbasPorMes.Name = "panelVerbasPorMes";
-            panelVerbasPorMes.Size = new Size(411, 49);
+            panelVerbasPorMes.Size = new Size(1016, 49);
             panelVerbasPorMes.TabIndex = 123;
+            // 
+            // tbxVerbaAdicionalMes
+            // 
+            tbxVerbaAdicionalMes.Location = new Point(302, 19);
+            tbxVerbaAdicionalMes.Margin = new Padding(3, 2, 3, 2);
+            tbxVerbaAdicionalMes.Name = "tbxVerbaAdicionalMes";
+            tbxVerbaAdicionalMes.Size = new Size(131, 23);
+            tbxVerbaAdicionalMes.TabIndex = 100;
+            tbxVerbaAdicionalMes.TextAlign = HorizontalAlignment.Right;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(302, 2);
+            label5.Name = "label5";
+            label5.Size = new Size(129, 15);
+            label5.TabIndex = 99;
+            label5.Text = "Verba adicional no mês";
+            // 
+            // tbxVerbaOriginal
+            // 
+            tbxVerbaOriginal.Location = new Point(137, 20);
+            tbxVerbaOriginal.Margin = new Padding(3, 2, 3, 2);
+            tbxVerbaOriginal.Name = "tbxVerbaOriginal";
+            tbxVerbaOriginal.Size = new Size(131, 23);
+            tbxVerbaOriginal.TabIndex = 98;
+            tbxVerbaOriginal.TextAlign = HorizontalAlignment.Right;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(137, 3);
+            label4.Name = "label4";
+            label4.Size = new Size(121, 15);
+            label4.TabIndex = 97;
+            label4.Text = "Verba original no mês";
             // 
             // panelSaidasCategoria
             // 
@@ -539,6 +587,24 @@
             panelSaidasCategoria.Name = "panelSaidasCategoria";
             panelSaidasCategoria.Size = new Size(145, 51);
             panelSaidasCategoria.TabIndex = 124;
+            // 
+            // tbxSaidaTotalMes
+            // 
+            tbxSaidaTotalMes.Location = new Point(650, 19);
+            tbxSaidaTotalMes.Margin = new Padding(3, 2, 3, 2);
+            tbxSaidaTotalMes.Name = "tbxSaidaTotalMes";
+            tbxSaidaTotalMes.Size = new Size(131, 23);
+            tbxSaidaTotalMes.TabIndex = 102;
+            tbxSaidaTotalMes.TextAlign = HorizontalAlignment.Right;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(647, 2);
+            label6.Name = "label6";
+            label6.Size = new Size(104, 15);
+            label6.TabIndex = 101;
+            label6.Text = "Saída total no mês";
             // 
             // TelaCategorias
             // 
@@ -624,5 +690,11 @@
         private Panel panelCategorias;
         private Panel panelVerbasPorMes;
         private Panel panelSaidasCategoria;
+        private TextBox tbxVerbaOriginal;
+        private Label label4;
+        private TextBox tbxVerbaAdicionalMes;
+        private Label label5;
+        private TextBox tbxSaidaTotalMes;
+        private Label label6;
     }
 }
