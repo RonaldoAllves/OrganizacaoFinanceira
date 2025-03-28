@@ -147,6 +147,7 @@ namespace OrganizacaoFinanceira
             //double entradasRecorrentes = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && !x.usaMesFixo).Sum(x => x.valor) + entradasFixa;
             double entradasRecorrentesDetalhado = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.tipoLancamento == 1 && x.mes == DateTime.Now.Month).Sum(x => x.valor) + entradasFixa;
             double entradasMes = DadosGerais.entradas.Where(x => x.chaveCategoria == 0 && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Sum(x => x.valor);
+            entradasMes += DadosGerais.entradas.Where(x => x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year && x.chaveCategoriaMesFuturo > 0).Sum(x => x.valor);
             double entradaExtra = entradasRecorrentesDetalhado - entradasMes;
             return entradaExtra < 0 ? 0 : entradaExtra;
         }
@@ -420,7 +421,14 @@ namespace OrganizacaoFinanceira
                 cbxCategoriaLancRecorrente.SelectedValue = lancRecorrenteSelecionado.chaveCategoria;
                 chkLancObrigatorio.Checked = lancRecorrenteSelecionado.obrigatorio;
                 chkMesFixo.Checked = lancRecorrenteSelecionado.usaMesFixo;
-                dtpMesFinal.Value = lancRecorrenteSelecionado.dataFinal;
+                if (lancRecorrenteSelecionado.dataFinal != null && lancRecorrenteSelecionado.dataFinal.Date > DateTime.MinValue) {
+                    dtpMesFinal.Value = lancRecorrenteSelecionado.dataFinal;
+                }
+
+                if (lancRecorrenteSelecionado.dataFixa != null && lancRecorrenteSelecionado.dataFixa?.Date > DateTime.MinValue)
+                {
+                    dtpMesFixo.Value = (DateTime)lancRecorrenteSelecionado.dataFixa;
+                }
             }
         }
 

@@ -5,6 +5,7 @@
         public int chave { get; set; }
         public int chaveConta { get; set; }
         public int chaveCategoria { get; set; }
+        public int chaveCategoriaMesFuturo { get; set; }
         public string descricao { get; set; }
         public double valor { get; set; }
         public DateTime mesReferencia { get; set; }

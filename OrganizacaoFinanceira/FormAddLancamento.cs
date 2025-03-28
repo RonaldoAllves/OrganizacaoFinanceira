@@ -79,8 +79,8 @@ namespace OrganizacaoFinanceira
             chkObrigatorio.Visible = lancamentoSaida;
             tbxValorExtrapolado.Visible = lancamentoSaida;
             label21.Visible = lancamentoSaida;
-            label1.Visible = lancamentoSaida;
-            cbxCategoriaVerbaMesFuturo.Visible = lancamentoSaida;
+            //label1.Visible = lancamentoSaida;
+            //cbxCategoriaVerbaMesFuturo.Visible = lancamentoSaida;
         }
 
         private async void btnSalvarLancamento_Click(object sender, EventArgs e)
@@ -215,6 +215,7 @@ namespace OrganizacaoFinanceira
             entrada.mesReferencia = dtpMesReferenciaLancamento.Value;
             entrada.chaveConta = conta.chave;
             entrada.valor = Convert.ToDouble(tbxValor.Text);
+            entrada.chaveCategoriaMesFuturo = cbxCategoriaVerbaMesFuturo.SelectedValue == null ? 0 : (int)cbxCategoriaVerbaMesFuturo.SelectedValue;
 
             if (DadosGerais.entradas != null && DadosGerais.entradas.Count > 0 && DadosGerais.entradas.Any(x => x.chave == entrada.chave))
             {
@@ -377,10 +378,38 @@ namespace OrganizacaoFinanceira
         {
             cbxCategoriaVerbaMesFuturo.DataSource = null;
             cbxCategoriaVerbaMesFuturo.Items.Clear();
+            if (tipoSaida)
+            {
+                PreencherComboBoxCategoriasMesFuturoSaidas();
+                return;
+            }
 
-            if (DadosGerais.lancamentosRecorrentes != null && DadosGerais.lancamentosRecorrentes.Where(x=>x.tipoLancamento == 0).Count() > 0)
+            PreencherComboBoxCategoriasMesFuturoEntradas();
+
+        }
+
+        private void PreencherComboBoxCategoriasMesFuturoSaidas()
+        {
+            if (DadosGerais.lancamentosRecorrentes != null && DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0).Count() > 0)
             {
                 BindingList<LancamentoRecorrente> bindingList = new BindingList<LancamentoRecorrente>(DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0).ToList());
+                cbxCategoriaVerbaMesFuturo.DataSource = bindingList;
+
+                cbxCategoriaVerbaMesFuturo.DisplayMember = "descricao";
+                cbxCategoriaVerbaMesFuturo.ValueMember = "chave";
+
+                cbxCategoriaVerbaMesFuturo.SelectedIndex = -1;
+            }
+        }
+
+        private void PreencherComboBoxCategoriasMesFuturoEntradas()
+        {
+            label1.Location = new System.Drawing.Point(379, 107);
+            cbxCategoriaVerbaMesFuturo.Location = new System.Drawing.Point(379, 124);
+
+            if (DadosGerais.lancamentosRecorrentes != null && DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).Count() > 0)
+            {
+                BindingList<LancamentoRecorrente> bindingList = new BindingList<LancamentoRecorrente>(DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).ToList());
                 cbxCategoriaVerbaMesFuturo.DataSource = bindingList;
 
                 cbxCategoriaVerbaMesFuturo.DisplayMember = "descricao";
@@ -437,6 +466,12 @@ namespace OrganizacaoFinanceira
                 cbxCategoria.SelectedValue = entradaSelecionada.chaveCategoria;
             }
             else cbxCategoria.SelectedIndex = -1;
+
+            if (entradaSelecionada.chaveCategoriaMesFuturo > 0)
+            {
+                cbxCategoriaVerbaMesFuturo.SelectedValue = entradaSelecionada.chaveCategoriaMesFuturo;
+            }
+            else cbxCategoriaVerbaMesFuturo.SelectedIndex = -1;
         }
 
         private void btnLimparLancamento_Click(object sender, EventArgs e)
