@@ -13,6 +13,6 @@
             get { return verbaOriginal + verbaAdicional; }
         }
 
-        public double saldoMes { get; set; }
+        public double saldoMes { get; set; }        
     }
 }

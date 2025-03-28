@@ -36,6 +36,7 @@ namespace OrganizacaoFinanceira
             InicializarDatas();
             PreencherComboBoxContas();
             PreencherComboBoxCategorias();
+            PreencherComboBoxCategoriasMesFuturo();
             HabilitarControles(tipoSaida);
             SelecionarValorComboboxContas();
             if (editar)
@@ -78,6 +79,8 @@ namespace OrganizacaoFinanceira
             chkObrigatorio.Visible = lancamentoSaida;
             tbxValorExtrapolado.Visible = lancamentoSaida;
             label21.Visible = lancamentoSaida;
+            label1.Visible = lancamentoSaida;
+            cbxCategoriaVerbaMesFuturo.Visible = lancamentoSaida;
         }
 
         private async void btnSalvarLancamento_Click(object sender, EventArgs e)
@@ -92,7 +95,7 @@ namespace OrganizacaoFinanceira
                 sucesso = await SalvarEntrada();
             }
             if (sucesso) this.DialogResult = DialogResult.OK;
-            else this.DialogResult = DialogResult.Cancel;
+            //else this.DialogResult = DialogResult.Cancel;
         }
 
         private async Task<bool> SalvarSaida()
@@ -115,6 +118,7 @@ namespace OrganizacaoFinanceira
             saida.dataInicio = dtpDataInicial.Value.Date;
             saida.gastoObrigatorio = chkObrigatorio.Checked;
             saida.valorExtrapolado = (string.IsNullOrEmpty(tbxValorExtrapolado.Text) ? 0 : Convert.ToDouble(tbxValorExtrapolado.Text));
+            saida.chaveCategoriaMesFuturo = (int)cbxCategoriaVerbaMesFuturo.SelectedValue;
 
             switch (cbxTipoSaida.SelectedItem)
             {
@@ -286,6 +290,11 @@ namespace OrganizacaoFinanceira
                 sb.AppendLine("Preencha o valor extrapolado corretamente. Deve ser númerico.");
             }
 
+            if (cbxCategoriaVerbaMesFuturo.SelectedIndex < 0 && tipoSaida)
+            {
+                sb.AppendLine("Deve preencher o mês futuro. Verifique.");
+            }
+
             /*
             if (nudQtdParcelas.Value > 1 && Convert.ToInt32(tbxNumParcela.Text) == 1 && !(dtpMesReferenciaLancamento.Value.Date.Year == dtpDataInicial.Value.Year && dtpMesReferenciaLancamento.Value.Month == dtpDataInicial.Value.Month))
             {
@@ -364,6 +373,23 @@ namespace OrganizacaoFinanceira
             }
         }
 
+        private void PreencherComboBoxCategoriasMesFuturo()
+        {
+            cbxCategoriaVerbaMesFuturo.DataSource = null;
+            cbxCategoriaVerbaMesFuturo.Items.Clear();
+
+            if (DadosGerais.lancamentosRecorrentes != null && DadosGerais.lancamentosRecorrentes.Where(x=>x.tipoLancamento == 0).Count() > 0)
+            {
+                BindingList<LancamentoRecorrente> bindingList = new BindingList<LancamentoRecorrente>(DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0).ToList());
+                cbxCategoriaVerbaMesFuturo.DataSource = bindingList;
+
+                cbxCategoriaVerbaMesFuturo.DisplayMember = "descricao";
+                cbxCategoriaVerbaMesFuturo.ValueMember = "chave";
+
+                cbxCategoriaVerbaMesFuturo.SelectedIndex = -1;
+            }
+        }
+
         private void SelecionarValorComboboxContas()
         {
             if (cbxContas.Items.Count > 0 && cbxContas.DataBindings != null && DadosGerais.contas != null && DadosGerais.contas.Count > 0)
@@ -393,6 +419,8 @@ namespace OrganizacaoFinanceira
             chkObrigatorio.Checked = saidaSelecionada.gastoObrigatorio;
             tbxValorExtrapolado.Text = saidaSelecionada.valorExtrapolado.ToString();
             tbxValorExtrapolado.Enabled = chkObrigatorio.Checked;
+
+            cbxCategoriaVerbaMesFuturo.SelectedValue = saidaSelecionada.chaveCategoriaMesFuturo;
         }
 
         private void EditarEntradas()
@@ -445,7 +473,7 @@ namespace OrganizacaoFinanceira
                 if (mes != null)
                 {
                     mes.verbaAdicional += entrada.valor;
-                    await CRUD.SalvarMes(mes, false);
+                    await CRUD.SalvarMes(mes);
                 }
                 else
                 {

@@ -67,14 +67,22 @@
             panelCategorias = new Panel();
             panelMesesCriados = new Panel();
             splitContainer2 = new SplitContainer();
+            btnSalvarObsMes = new Button();
+            textObsMes = new RichTextBox();
             panelVerbasPorMes = new Panel();
+            tbxNaoDistribuidoMes = new TextBox();
+            label9 = new Label();
+            tbxParcelasFuturas = new TextBox();
+            label8 = new Label();
+            tbxNaoDistribuido = new TextBox();
+            label7 = new Label();
+            tbxSaidaTotalMes = new TextBox();
+            label6 = new Label();
             tbxVerbaAdicionalMes = new TextBox();
             label5 = new Label();
             tbxVerbaOriginal = new TextBox();
             label4 = new Label();
             panelSaidasCategoria = new Panel();
-            tbxSaidaTotalMes = new TextBox();
-            label6 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvVerbasPorMes).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvMeses).BeginInit();
@@ -117,17 +125,17 @@
             // 
             // tbxVerbaTotalMes
             // 
-            tbxVerbaTotalMes.Location = new Point(472, 19);
+            tbxVerbaTotalMes.Location = new Point(415, 20);
             tbxVerbaTotalMes.Margin = new Padding(3, 2, 3, 2);
             tbxVerbaTotalMes.Name = "tbxVerbaTotalMes";
-            tbxVerbaTotalMes.Size = new Size(131, 23);
+            tbxVerbaTotalMes.Size = new Size(102, 23);
             tbxVerbaTotalMes.TabIndex = 93;
             tbxVerbaTotalMes.TextAlign = HorizontalAlignment.Right;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(469, 2);
+            label2.Location = new Point(412, 3);
             label2.Name = "label2";
             label2.Size = new Size(105, 15);
             label2.TabIndex = 92;
@@ -150,17 +158,17 @@
             // 
             // tbxSaldoTotalMes
             // 
-            tbxSaldoTotalMes.Location = new Point(837, 19);
+            tbxSaldoTotalMes.Location = new Point(630, 19);
             tbxSaldoTotalMes.Margin = new Padding(3, 2, 3, 2);
             tbxSaldoTotalMes.Name = "tbxSaldoTotalMes";
-            tbxSaldoTotalMes.Size = new Size(131, 23);
+            tbxSaldoTotalMes.Size = new Size(101, 23);
             tbxSaldoTotalMes.TabIndex = 96;
             tbxSaldoTotalMes.TextAlign = HorizontalAlignment.Right;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(833, 2);
+            label3.Location = new Point(626, 2);
             label3.Name = "label3";
             label3.Size = new Size(105, 15);
             label3.TabIndex = 95;
@@ -510,6 +518,8 @@
             // 
             // splitContainer2.Panel1
             // 
+            splitContainer2.Panel1.Controls.Add(btnSalvarObsMes);
+            splitContainer2.Panel1.Controls.Add(textObsMes);
             splitContainer2.Panel1.Controls.Add(panelVerbasPorMes);
             splitContainer2.Panel1.Controls.Add(dgvVerbasPorMes);
             splitContainer2.Panel1.Controls.Add(lblTituloVerbasPorMes);
@@ -524,8 +534,32 @@
             splitContainer2.TabIndex = 0;
             splitContainer2.SplitterMoved += splitContainer2_SplitterMoved;
             // 
+            // btnSalvarObsMes
+            // 
+            btnSalvarObsMes.Location = new Point(442, 229);
+            btnSalvarObsMes.Name = "btnSalvarObsMes";
+            btnSalvarObsMes.Size = new Size(314, 23);
+            btnSalvarObsMes.TabIndex = 125;
+            btnSalvarObsMes.Text = "Salvar";
+            btnSalvarObsMes.UseVisualStyleBackColor = true;
+            btnSalvarObsMes.Click += btnSalvarObsMes_Click;
+            // 
+            // textObsMes
+            // 
+            textObsMes.Location = new Point(442, 55);
+            textObsMes.Name = "textObsMes";
+            textObsMes.Size = new Size(314, 168);
+            textObsMes.TabIndex = 124;
+            textObsMes.Text = "";
+            // 
             // panelVerbasPorMes
             // 
+            panelVerbasPorMes.Controls.Add(tbxNaoDistribuidoMes);
+            panelVerbasPorMes.Controls.Add(label9);
+            panelVerbasPorMes.Controls.Add(tbxParcelasFuturas);
+            panelVerbasPorMes.Controls.Add(label8);
+            panelVerbasPorMes.Controls.Add(tbxNaoDistribuido);
+            panelVerbasPorMes.Controls.Add(label7);
             panelVerbasPorMes.Controls.Add(tbxSaidaTotalMes);
             panelVerbasPorMes.Controls.Add(label6);
             panelVerbasPorMes.Controls.Add(tbxVerbaAdicionalMes);
@@ -540,12 +574,84 @@
             panelVerbasPorMes.Controls.Add(label2);
             panelVerbasPorMes.Location = new Point(25, 3);
             panelVerbasPorMes.Name = "panelVerbasPorMes";
-            panelVerbasPorMes.Size = new Size(1016, 49);
+            panelVerbasPorMes.Size = new Size(1143, 49);
             panelVerbasPorMes.TabIndex = 123;
+            // 
+            // tbxNaoDistribuidoMes
+            // 
+            tbxNaoDistribuidoMes.Location = new Point(737, 19);
+            tbxNaoDistribuidoMes.Margin = new Padding(3, 2, 3, 2);
+            tbxNaoDistribuidoMes.Name = "tbxNaoDistribuidoMes";
+            tbxNaoDistribuidoMes.Size = new Size(101, 23);
+            tbxNaoDistribuidoMes.TabIndex = 108;
+            tbxNaoDistribuidoMes.TextAlign = HorizontalAlignment.Right;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(733, 2);
+            label9.Name = "label9";
+            label9.Size = new Size(131, 15);
+            label9.TabIndex = 107;
+            label9.Text = "Não distribuído no mês";
+            // 
+            // tbxParcelasFuturas
+            // 
+            tbxParcelasFuturas.Location = new Point(1020, 19);
+            tbxParcelasFuturas.Margin = new Padding(3, 2, 3, 2);
+            tbxParcelasFuturas.Name = "tbxParcelasFuturas";
+            tbxParcelasFuturas.Size = new Size(101, 23);
+            tbxParcelasFuturas.TabIndex = 106;
+            tbxParcelasFuturas.TextAlign = HorizontalAlignment.Right;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(1016, 2);
+            label8.Name = "label8";
+            label8.Size = new Size(90, 15);
+            label8.TabIndex = 105;
+            label8.Text = "Parcelas futuras";
+            // 
+            // tbxNaoDistribuido
+            // 
+            tbxNaoDistribuido.Location = new Point(900, 19);
+            tbxNaoDistribuido.Margin = new Padding(3, 2, 3, 2);
+            tbxNaoDistribuido.Name = "tbxNaoDistribuido";
+            tbxNaoDistribuido.Size = new Size(101, 23);
+            tbxNaoDistribuido.TabIndex = 104;
+            tbxNaoDistribuido.TextAlign = HorizontalAlignment.Right;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(896, 2);
+            label7.Name = "label7";
+            label7.Size = new Size(118, 15);
+            label7.TabIndex = 103;
+            label7.Text = "Não distribuído geral";
+            // 
+            // tbxSaidaTotalMes
+            // 
+            tbxSaidaTotalMes.Location = new Point(523, 19);
+            tbxSaidaTotalMes.Margin = new Padding(3, 2, 3, 2);
+            tbxSaidaTotalMes.Name = "tbxSaidaTotalMes";
+            tbxSaidaTotalMes.Size = new Size(101, 23);
+            tbxSaidaTotalMes.TabIndex = 102;
+            tbxSaidaTotalMes.TextAlign = HorizontalAlignment.Right;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(520, 2);
+            label6.Name = "label6";
+            label6.Size = new Size(104, 15);
+            label6.TabIndex = 101;
+            label6.Text = "Saída total no mês";
             // 
             // tbxVerbaAdicionalMes
             // 
-            tbxVerbaAdicionalMes.Location = new Point(302, 19);
+            tbxVerbaAdicionalMes.Location = new Point(278, 20);
             tbxVerbaAdicionalMes.Margin = new Padding(3, 2, 3, 2);
             tbxVerbaAdicionalMes.Name = "tbxVerbaAdicionalMes";
             tbxVerbaAdicionalMes.Size = new Size(131, 23);
@@ -555,7 +661,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(302, 2);
+            label5.Location = new Point(278, 3);
             label5.Name = "label5";
             label5.Size = new Size(129, 15);
             label5.TabIndex = 99;
@@ -587,24 +693,6 @@
             panelSaidasCategoria.Name = "panelSaidasCategoria";
             panelSaidasCategoria.Size = new Size(145, 51);
             panelSaidasCategoria.TabIndex = 124;
-            // 
-            // tbxSaidaTotalMes
-            // 
-            tbxSaidaTotalMes.Location = new Point(650, 19);
-            tbxSaidaTotalMes.Margin = new Padding(3, 2, 3, 2);
-            tbxSaidaTotalMes.Name = "tbxSaidaTotalMes";
-            tbxSaidaTotalMes.Size = new Size(131, 23);
-            tbxSaidaTotalMes.TabIndex = 102;
-            tbxSaidaTotalMes.TextAlign = HorizontalAlignment.Right;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(647, 2);
-            label6.Name = "label6";
-            label6.Size = new Size(104, 15);
-            label6.TabIndex = 101;
-            label6.Text = "Saída total no mês";
             // 
             // TelaCategorias
             // 
@@ -696,5 +784,13 @@
         private Label label5;
         private TextBox tbxSaidaTotalMes;
         private Label label6;
+        private TextBox tbxNaoDistribuido;
+        private Label label7;
+        private TextBox tbxParcelasFuturas;
+        private Label label8;
+        private TextBox tbxNaoDistribuidoMes;
+        private Label label9;
+        private Button btnSalvarObsMes;
+        private RichTextBox textObsMes;
     }
 }

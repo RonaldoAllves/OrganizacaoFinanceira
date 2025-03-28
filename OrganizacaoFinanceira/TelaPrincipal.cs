@@ -483,6 +483,17 @@ namespace OrganizacaoFinanceira
                 e.FormattingApplied = true;
             }
 
+            if (dgvLancamentos.Columns[e.ColumnIndex].DataPropertyName == "chaveCategoriaMesFuturo" && e.Value != null)
+            {
+                string descricao = "";
+                int chave = (int)e.Value;
+                if (DadosGerais.categorias != null) descricao = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.chave == chave).Select(x => x.descricao).FirstOrDefault();
+                e.Value = descricao == null ? "" : descricao;
+
+                // Define o formato de exibição da célula como texto
+                e.FormattingApplied = true;
+            }
+
             if ((dgvLancamentos.Columns[e.ColumnIndex].DataPropertyName == "data" ||
                 dgvLancamentos.Columns[e.ColumnIndex].DataPropertyName == "dataInicio") &&
                 e.Value != null && e.Value is DateTime)

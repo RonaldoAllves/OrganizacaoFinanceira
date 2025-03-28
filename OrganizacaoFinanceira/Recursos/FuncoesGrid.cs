@@ -112,7 +112,8 @@
                 ("qtdParcelas", "Qtd. de parcelas", DataGridViewContentAlignment.MiddleCenter, 100, false),
                 ("dataInicio", "Dt. primeira parcela", DataGridViewContentAlignment.MiddleCenter, 150, false),
                 ("dataCadastro", "Dt. de cadastro", DataGridViewContentAlignment.MiddleCenter, 150, false),
-                ("dataAlteracao", "Dt. de alteração", DataGridViewContentAlignment.MiddleCenter, 150, false)
+                ("dataAlteracao", "Dt. de alteração", DataGridViewContentAlignment.MiddleCenter, 150, false),
+                ("chaveCategoriaMesFuturo", "Categoria mês futuro", DataGridViewContentAlignment.MiddleCenter, 150, false)
             };
 
             // Se comConta for verdadeiro, adicione uma nova coluna após "tipoSaida"
@@ -197,6 +198,7 @@
             {
                 ("descricao", "Descrição", DataGridViewContentAlignment.MiddleCenter, 150, false),
                 ("valor", "Valor", DataGridViewContentAlignment.MiddleCenter, 100, true),
+                ("saldo", "Saldo", DataGridViewContentAlignment.MiddleCenter, 100, true),
                 ("chaveCategoria", "Categoria", DataGridViewContentAlignment.MiddleCenter, 150, false),
                 ("tipoLancamento", "Tipo do lançamento", DataGridViewContentAlignment.MiddleCenter, 150, false),
                 ("dataFinal", "Data final", DataGridViewContentAlignment.MiddleCenter, 100, false),

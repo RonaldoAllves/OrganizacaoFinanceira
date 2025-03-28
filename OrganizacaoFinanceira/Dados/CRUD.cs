@@ -32,6 +32,7 @@ namespace OrganizacaoFinanceira.Dados
             DadosGerais.lancamentosRecorrentesDetalhado = await BuscarLancamentosRecorrentesDetalhado();
 
             DadosGerais.lancamentosRecorrentesOriginal = DadosGerais.lancamentosRecorrentes.ToList();
+            DadosGerais.obsMes = await BuscarObsMeses();
 
             AtualizarValorTotalConta();
             PreencherValoresTodosMeses();
@@ -203,6 +204,29 @@ namespace OrganizacaoFinanceira.Dados
 
         }
 
+        public async Task<List<ObsMes>> BuscarObsMeses()
+        {
+            try
+            {
+                List<ObsMes> mesesAux;
+                Dictionary<string, ObsMes> chavesMeses;
+
+                FirebaseResponse firebaseResponse = await DadosGerais.client.GetTaskAsync("ObsMeses");
+                if (firebaseResponse.Body == "null") return new List<ObsMes>();
+
+                chavesMeses = firebaseResponse.ResultAs<Dictionary<string, ObsMes>>();
+                mesesAux = chavesMeses.Select(x => x.Value).ToList();
+
+                return new List<ObsMes>(mesesAux);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao buscar as observações dos meses.\n\n" + ex.Message);
+                return new List<ObsMes>();
+            }
+
+        }
+
         public async Task<SortableBindingList<Categoria>> BuscarCategorias()
         {
             try
@@ -305,16 +329,26 @@ namespace OrganizacaoFinanceira.Dados
             mesNovo.mes = mes.Date;
             mesNovo.chaveCategoria = categoria;
 
-            await SalvarMes(mesNovo, true);
+            await SalvarMes(mesNovo);
         }
 
-        public async Task SalvarMes(Mes mesNovo, bool mostrarMensagem)
+        public async Task SalvarMes(Mes mesNovo)
         {
             SetResponse response = await DadosGerais.client.SetTaskAsync("Meses/" + "chave-" + mesNovo.chave.ToString(), mesNovo);
 
             if (response.Exception != null)
             {
                 MessageBox.Show("Erro ao adicionar a verba no mês.\n" + response.Exception);
+            }
+        }
+
+        public async Task SalvarObsMes(ObsMes obsMes)
+        {
+            SetResponse response = await DadosGerais.client.SetTaskAsync("ObsMeses/" + "chave-" + obsMes.chave.ToString(), obsMes);
+
+            if (response.Exception != null)
+            {
+                MessageBox.Show("Erro ao adicionar observação no mês.\n" + response.Exception);
             }
         }
     }

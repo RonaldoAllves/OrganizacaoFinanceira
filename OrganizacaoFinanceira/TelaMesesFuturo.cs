@@ -40,6 +40,7 @@ namespace OrganizacaoFinanceira
             parcelasSimulacao = null;
 
             CarregarEntradaSaidaExtra();
+            CarregarSaldoCategoriasLancamentosSaida();
             InicializarLancamentosRecorrentes();
             PreencherComboBoxCategorias(ref cbxCategoriaLancRecorrente);
             PreencherComboBoxCategorias(ref cbxCategoriaSimulacao);
@@ -71,6 +72,16 @@ namespace OrganizacaoFinanceira
             RedefinirTamanhoGrids();
 
             this.Enabled = true;
+        }
+
+        private void CarregarSaldoCategoriasLancamentosSaida()
+        {
+            if (DadosGerais.lancamentosRecorrentes == null || DadosGerais.saidas == null || DadosGerais.saidas.Count == 0) return;
+
+            foreach(LancamentoRecorrente lanc in DadosGerais.lancamentosRecorrentes.Where(x=>x.tipoLancamento == 0).ToList())
+            {
+                lanc.saldo = lanc.valor - DadosGerais.saidas.Where(x => x.chaveCategoriaMesFuturo == lanc.chave && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Select(x => x.valorParcela).Sum();
+            }
         }
 
         private void CalcularMediaGastosUltimosMeses()
@@ -117,8 +128,11 @@ namespace OrganizacaoFinanceira
 
         private void CarregarEntradaSaidaExtra()
         {
-            DadosGerais.entradaExtra = CalcularPrevisaoEntradaExtra();
-            DadosGerais.saidaExtra = CalcularPrevisaoSaidaExtra();
+            if (DadosGerais.calcularEntradaSaidaExtra)
+            {
+                DadosGerais.entradaExtra = CalcularPrevisaoEntradaExtra();
+                DadosGerais.saidaExtra = CalcularPrevisaoSaidaExtra();
+            }
 
             if (DadosGerais.entradaExtra == 0) DadosGerais.entradaExtra = 0;
             if (DadosGerais.saidaExtra == 0) DadosGerais.saidaExtra = 0;
@@ -154,7 +168,6 @@ namespace OrganizacaoFinanceira
 
             foreach (Categoria categoria in DadosGerais.categorias)
             {
-
                 valorObrigatorioPrevistoCat = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
                 valorObrigatorioRegistradoCat = saidasComSimulacao.Where(x => x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
                 valorExtrapoladoCategoria = saidasComSimulacao.Where(x => x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorExtrapolado);
@@ -310,6 +323,34 @@ namespace OrganizacaoFinanceira
             }
         }
 
+        private async Task AtualizarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado, bool mostrarMensagem)
+        {
+            if (lancamentoDetalhado == null)
+                return;
+
+            try
+            {
+                if (DadosGerais.lancamentosRecorrentesDetalhado == null || DadosGerais.lancamentosRecorrentesDetalhado.Count == 0)
+                {
+                    lancamentoDetalhado.chave = 1;
+                }
+
+                // Salvar o detalhe na base
+                SetResponse response = await DadosGerais.client.SetTaskAsync("LancamentosRecorrentesDetalhados/" + "chave-" + lancamentoDetalhado.chave, lancamentoDetalhado);
+
+                if (response.Exception != null)
+                {
+                    MessageBox.Show($"Erro ao atualizar lançamento detalhado.\n{response.Exception}");
+                    return; // Parar o processo em caso de erro
+                }
+                if (mostrarMensagem) MessageBox.Show("Lançamentos recorrentes detalhados atualizados com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao atualizar lançamentos recorrentes detalhados: {ex.Message}");
+            }
+        }
+
         private async Task AtualizarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado)
         {
             if (lancamentoDetalhado == null || lancamentoDetalhado.chave == 0)
@@ -378,7 +419,8 @@ namespace OrganizacaoFinanceira
                 rbtEntradaLancRecorrente.Checked = lancRecorrenteSelecionado.tipoLancamento == 0 ? false : true;
                 cbxCategoriaLancRecorrente.SelectedValue = lancRecorrenteSelecionado.chaveCategoria;
                 chkLancObrigatorio.Checked = lancRecorrenteSelecionado.obrigatorio;
-                chkMesFixo.Checked = lancRecorrenteSelecionado.usaMesFixo;                
+                chkMesFixo.Checked = lancRecorrenteSelecionado.usaMesFixo;
+                dtpMesFinal.Value = lancRecorrenteSelecionado.dataFinal;
             }
         }
 
@@ -461,7 +503,30 @@ namespace OrganizacaoFinanceira
             }
             else
             {
-                MessageBox.Show("Já existe o lançamento detalhado. Para alterar deve ajustar manualmente.");
+                DialogResult result = MessageBox.Show("Já existe o lançamento detalhado. Tem certeza que deseja substituí-lo?",
+                                                          "Atualizar lançamento detalhado",
+                                                          MessageBoxButtons.YesNo,
+                                                          MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    this.Enabled = false;
+                    this.Cursor = Cursors.WaitCursor;
+
+                    // Caso não haja detalhes, criar novos registros
+                    for (byte i = 1; i < 13; i++)
+                    {
+                        if (lancRecorrenteSelecionado.tipoLancamento == 0) return;
+                        var detalhe = detalhesExistentes.Where(x=>x.mes == i).FirstOrDefault();
+                        detalhe.valor = lancRecorrenteSelecionado.valor;
+
+                        await AtualizarLancamentosRecorrentesDetalhadosAsync(detalhe, false);
+                    }
+
+                    this.Enabled = true;
+                    this.Cursor = Cursors.Default;
+                }
+
             }
 
             // Preencher o grid com os detalhes
@@ -469,8 +534,12 @@ namespace OrganizacaoFinanceira
             funcoesGrid.ConfigurarGrid(dgvLancRecorrenteDetalhado, bindingSourceLancRecorrentesDetalhado, funcoesGrid.ColunasGridLancamentosRecorrentesDetalhado(), false);
             dgvLancRecorrenteDetalhado.Columns[1].ReadOnly = false;
             bindingSourceLancRecorrentesDetalhado.DataSource = detalhesParaExibir;
-        }
 
+            CarregarEntradaSaidaExtra();
+            CarregarSaldoCategoriasLancamentosSaida();
+            InicializarLancamentosRecorrentes();
+            InicializarMesesFuturos();
+        }
 
         private void dgvLancamentosRecorrentes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -579,10 +648,12 @@ namespace OrganizacaoFinanceira
             if (recarregar) InicializarMesesFuturos();
 
             dgvLancamentosRecorrentes.Columns[2].Visible = rbtFiltroSaidaLancRecorrente.Checked;
-            dgvLancamentosRecorrentes.Columns[4].Visible = rbtFiltroSaidaLancRecorrente.Checked;
-            dgvLancamentosRecorrentes.Columns[5].Visible = !rbtFiltroSaidaLancRecorrente.Checked;
+            dgvLancamentosRecorrentes.Columns[3].Visible = rbtFiltroSaidaLancRecorrente.Checked;
+            dgvLancamentosRecorrentes.Columns[5].Visible = rbtFiltroSaidaLancRecorrente.Checked;
+            dgvLancamentosRecorrentes.Columns[8].Visible = rbtFiltroSaidaLancRecorrente.Checked;
+
             dgvLancamentosRecorrentes.Columns[6].Visible = !rbtFiltroSaidaLancRecorrente.Checked;
-            dgvLancamentosRecorrentes.Columns[7].Visible = rbtFiltroSaidaLancRecorrente.Checked;
+            dgvLancamentosRecorrentes.Columns[7].Visible = !rbtFiltroSaidaLancRecorrente.Checked;
         }
 
         #endregion
@@ -744,12 +815,14 @@ namespace OrganizacaoFinanceira
         {
             if (tbxEntradaExtra.Text.Length == 0) return;
             DadosGerais.entradaExtra = (!string.IsNullOrWhiteSpace(tbxEntradaExtra.Text)) ? Convert.ToDouble(tbxEntradaExtra.Text) : 0;
+            DadosGerais.calcularEntradaSaidaExtra = false;
         }
 
         private void tbxSaidaExtra_TextChanged(object sender, EventArgs e)
         {
             if (tbxSaidaExtra.Text.Length == 0) return;
             DadosGerais.saidaExtra = (!string.IsNullOrWhiteSpace(tbxSaidaExtra.Text)) ? Convert.ToDouble(tbxSaidaExtra.Text) : 0;
+            DadosGerais.calcularEntradaSaidaExtra = false;
         }
 
         private void tbxSaidaExtra_Validated(object sender, EventArgs e)

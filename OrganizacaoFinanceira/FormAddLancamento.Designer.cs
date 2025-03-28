@@ -59,6 +59,8 @@
             cbxContas = new ComboBox();
             dtpMesReferenciaLancamento = new DateTimePicker();
             label15 = new Label();
+            cbxCategoriaVerbaMesFuturo = new ComboBox();
+            label1 = new Label();
             panelParcelas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudQtdParcelas).BeginInit();
             SuspendLayout();
@@ -66,15 +68,15 @@
             // label21
             // 
             label21.AutoSize = true;
-            label21.Location = new Point(147, 220);
+            label21.Location = new Point(281, 220);
             label21.Name = "label21";
-            label21.Size = new Size(99, 15);
+            label21.Size = new Size(98, 15);
             label21.TabIndex = 74;
             label21.Text = "Valor extrapolado";
             // 
             // tbxValorExtrapolado
             // 
-            tbxValorExtrapolado.Location = new Point(147, 236);
+            tbxValorExtrapolado.Location = new Point(281, 236);
             tbxValorExtrapolado.Name = "tbxValorExtrapolado";
             tbxValorExtrapolado.Size = new Size(113, 23);
             tbxValorExtrapolado.TabIndex = 75;
@@ -140,7 +142,7 @@
             lblTipoSaida.AutoSize = true;
             lblTipoSaida.Location = new Point(379, 107);
             lblTipoSaida.Name = "lblTipoSaida";
-            lblTipoSaida.Size = new Size(76, 15);
+            lblTipoSaida.Size = new Size(77, 15);
             lblTipoSaida.TabIndex = 70;
             lblTipoSaida.Text = "Tipo de saída";
             // 
@@ -339,11 +341,30 @@
             label15.TabIndex = 61;
             label15.Text = "Mês de referência";
             // 
+            // cbxCategoriaVerbaMesFuturo
+            // 
+            cbxCategoriaVerbaMesFuturo.FormattingEnabled = true;
+            cbxCategoriaVerbaMesFuturo.Location = new Point(139, 236);
+            cbxCategoriaVerbaMesFuturo.Name = "cbxCategoriaVerbaMesFuturo";
+            cbxCategoriaVerbaMesFuturo.Size = new Size(121, 23);
+            cbxCategoriaVerbaMesFuturo.TabIndex = 76;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(139, 219);
+            label1.Name = "label1";
+            label1.Size = new Size(97, 15);
+            label1.TabIndex = 77;
+            label1.Text = "Verba mês futuro";
+            // 
             // FormAddLancamento
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(528, 348);
+            Controls.Add(cbxCategoriaVerbaMesFuturo);
+            Controls.Add(label1);
             Controls.Add(label21);
             Controls.Add(tbxValorExtrapolado);
             Controls.Add(chkObrigatorio);
@@ -414,5 +435,7 @@
         private ComboBox cbxContas;
         private DateTimePicker dtpMesReferenciaLancamento;
         private Label label15;
+        private ComboBox cbxCategoriaVerbaMesFuturo;
+        private Label label1;
     }
 }

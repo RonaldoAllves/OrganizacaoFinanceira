@@ -164,7 +164,7 @@ namespace OrganizacaoFinanceira
             tbxDescCategoria.Text = "";
             tbxVerbaPadraoCat.Text = "";
             tbxIdCategoria.Enabled = false;
-        }        
+        }
 
         static bool DataMenorIgual(DateTime data1, DateTime data2)
         {
@@ -172,7 +172,7 @@ namespace OrganizacaoFinanceira
             var data2SemDia = new DateTime(data2.Year, data2.Month, 1);
 
             return data1SemDia <= data2SemDia;
-        }        
+        }
 
         private void FiltrarMeses()
         {
@@ -198,12 +198,10 @@ namespace OrganizacaoFinanceira
             foreach (Mes mes in mesesDaCategoria)
             {
                 CRUD.PreencherValoresMes(mes);
-            }
+            }            
 
             bindingSourceMeses.DataSource = mesesDaCategoria;
         }
-
-        
 
         private async void btnCriarMes_Click(object sender, EventArgs e)
         {
@@ -417,7 +415,22 @@ namespace OrganizacaoFinanceira
                 dtpMesRefVerbaTotal.Value = adjustedDate;
             }
 
+            CarregarObsMes();
             FiltrarVerbasMesCategorias();
+        }
+
+        private void CarregarObsMes()
+        {
+            string obs = "";
+            if (DadosGerais.obsMes != null && DadosGerais.obsMes.Count > 0)
+            {
+                ObsMes obsMes = DadosGerais.obsMes.Where(x => x.mes.Year == dtpMesRefVerbaTotal.Value.Year && x.mes.Month == dtpMesRefVerbaTotal.Value.Month).FirstOrDefault();
+                if (obsMes != null)
+                {
+                    obs = obsMes.observacacao;
+                }
+            }
+            textObsMes.Text = obs;
         }
 
         private void FiltrarVerbasMesCategorias()
@@ -435,6 +448,8 @@ namespace OrganizacaoFinanceira
             double saldoTotalMes = 0;
             double saidasMes = 0;
             double saidasTotalMes = 0;
+            double naoDistribuido = 0;
+
             foreach (Categoria categoria in DadosGerais.categorias)
             {
                 mesAux = DadosGerais.meses.Where(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year && x.chaveCategoria == categoria.chave).FirstOrDefault();
@@ -469,6 +484,15 @@ namespace OrganizacaoFinanceira
             tbxVerbaTotalMes.Text = verbaTotalMes.ToString("N2");
             tbxSaidaTotalMes.Text = saidasTotalMes.ToString("N2");
             tbxSaldoTotalMes.Text = saldoTotalMes.ToString("N2");
+
+            tbxNaoDistribuidoMes.Text = (DadosGerais.entradas.Where(x => x.mesReferencia.Month == mes.Month && x.mesReferencia.Year == mes.Year).Sum(x => x.valor) - DadosGerais.meses.Where(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year).Select(x => x.verbaMes).Sum()).ToString("N2");
+            tbxParcelasFuturas.Text = DadosGerais.saidas.Where(x => x.mesReferencia.Year > mes.Year || (x.mesReferencia.Year == mes.Year && x.mesReferencia.Month > mes.Month)).Select(x => x.valorParcela).Sum().ToString("N2");
+
+            // vou pegar como valor inicial o que foi distribuido a mais no primeiro mês
+            DateTime primeiroMes = DadosGerais.meses.Min(x => x.mes);
+            double valorInicial = -1 * (DadosGerais.entradas.Where(x => x.mesReferencia.Month == primeiroMes.Month && x.mesReferencia.Year == primeiroMes.Year).Sum(x => x.valor) - DadosGerais.meses.Where(x => x.mes.Month == primeiroMes.Month && x.mes.Year == primeiroMes.Year).Select(x => x.verbaMes).Sum());
+            tbxNaoDistribuido.Text = ((DadosGerais.entradas.Sum(x => x.valor) + valorInicial) - DadosGerais.meses.Where(x => x.mes.Year < DateTime.Now.Year || (x.mes.Year == DateTime.Now.Year && x.mes.Month <= DateTime.Now.Month)).Select(x => x.verbaMes).Sum()).ToString("N2");
+
             bindingSourceVerbasCategorias.DataSource = verbasCategorias;
 
             if (dgvVerbasPorMes != null && dgvVerbasPorMes.Rows.Count > 0)
@@ -671,7 +695,10 @@ namespace OrganizacaoFinanceira
             dgvSaidasCategoria.Height = dgvSaidasCategoria.Parent.Height - dgvSaidasCategoria.Top - distanciaGrid;
             funcoesGrid.ReajustarTamanhoTitulo(dgvSaidasCategoria, lblTituloSaidasCategoria);
             lblTituloSaidasCategoria.Top = dgvSaidasCategoria.Top - lblTituloSaidasCategoria.Height;
-            panelSaidasCategoria.Top = dgvSaidasCategoria.Top - lblTituloSaidasCategoria.Height - panelSaidasCategoria.Height;            
+            panelSaidasCategoria.Top = dgvSaidasCategoria.Top - lblTituloSaidasCategoria.Height - panelSaidasCategoria.Height;
+
+            textObsMes.Left = lblTituloVerbasPorMes.Left + lblTituloVerbasPorMes.Width + 15;
+            btnSalvarObsMes.Left = textObsMes.Left;
         }
 
         private void splitContainer3_SplitterMoved(object sender, SplitterEventArgs e)
@@ -687,6 +714,45 @@ namespace OrganizacaoFinanceira
         private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
         {
             RedefinirTamanhoGrids();
+        }
+
+        private async void btnSalvarObsMes_Click(object sender, EventArgs e)
+        {
+            this.Enabled = false;
+            Cursor cursor = Cursors.WaitCursor;
+            ObsMes obsMes;
+            if (DadosGerais.obsMes == null || DadosGerais.obsMes.Count == 0)
+            {
+                obsMes = new ObsMes();
+                obsMes.chave = 1;
+                obsMes.mes = dtpMesRefVerbaTotal.Value.Date;
+                obsMes.observacacao = textObsMes.Text;
+                salvarMes(obsMes);
+                return;
+            }
+
+            obsMes = DadosGerais.obsMes.Where(x => x.mes.Month == dtpMesRefVerbaTotal.Value.Month && x.mes.Year == dtpMesRefVerbaTotal.Value.Year).FirstOrDefault();
+
+            if (obsMes == null)
+            {
+                obsMes = new ObsMes();
+                obsMes.chave = DadosGerais.obsMes.Max(x => x.chave) + 1;
+                obsMes.mes = dtpMesRefVerbaTotal.Value.Date;
+                obsMes.observacacao = textObsMes.Text;
+                salvarMes(obsMes);
+                return;
+            }
+
+            obsMes.observacacao = textObsMes.Text;
+            salvarMes(obsMes);
+            this.Enabled = true;
+            cursor = Cursors.Default;
+        }
+
+        private async void salvarMes(ObsMes obsMes)
+        {
+            await CRUD.SalvarObsMes(obsMes);
+            DadosGerais.obsMes = await CRUD.BuscarObsMeses();
         }
     }
 }

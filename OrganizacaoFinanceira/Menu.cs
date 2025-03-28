@@ -1,5 +1,9 @@
-﻿using OrganizacaoFinanceira.Dados;
+﻿using FireSharp.Response;
+using OrganizacaoFinanceira.Dados;
+using OrganizacaoFinanceira.Objetos;
 using OrganizacaoFinanceira.Telas;
+using System.Globalization;
+using System.Text;
 using System.Windows.Forms;
 
 namespace OrganizacaoFinanceira
@@ -22,9 +26,91 @@ namespace OrganizacaoFinanceira
             this.Cursor = Cursors.WaitCursor;
 
             await CRUD.BuscarTodosDados(false);
+            //await AtualizarSaidasComCategoriaMesFuturo();
 
             this.Cursor = Cursors.Default;
             this.Enabled = true;
+        }
+
+        private async Task AtualizarSaidasComCategoriaMesFuturo()
+        {
+            List<string> erros = new List<string>();
+            // Mapeamento das chaves e valores para chaveCategoriaMesFuturo
+            var mapeamentoChaves = new Dictionary<int, int>
+            {
+                { 2, 4 },
+                { 3, 9 },
+                { 5, 7 },
+                { 7, 6 },
+                { 8, 5 },
+                { 9, 8 },
+                { 13, 19 }
+            };
+
+            foreach (var saida in DadosGerais.saidas)
+            {
+                if (mapeamentoChaves.ContainsKey(saida.chaveCategoria))
+                {
+                    // Atualiza de acordo com o mapeamento
+                    saida.chaveCategoriaMesFuturo = mapeamentoChaves[saida.chaveCategoria];
+                }
+                else if (saida.chaveCategoria == 1)
+                {
+                    // Para chaveCategoria 1, verificar a descrição
+                    if (!string.IsNullOrEmpty(saida.descricao))
+                    {
+                        var descricaoNormalizada = RemoverAcentos(saida.descricao).ToLower();
+                        if (descricaoNormalizada.Contains("emprestimo"))
+                        {
+                            saida.chaveCategoriaMesFuturo = 10;
+                        }
+                        else if (descricaoNormalizada.Contains("financiamento"))
+                        {
+                            saida.chaveCategoriaMesFuturo = 11;
+                        }
+                        else
+                        {
+                            saida.chaveCategoriaMesFuturo = 3;
+                        }
+                    }
+                    else
+                    {
+                        saida.chaveCategoriaMesFuturo = 3; // Valor padrão caso a descrição seja nula ou vazia
+                    }
+                }
+                else
+                {
+                    // Valor padrão para outras chaves
+                    saida.chaveCategoriaMesFuturo = 9;
+                }
+
+                SetResponse response = await DadosGerais.client.SetTaskAsync("Saidas/" + "chave-" + saida.chave, saida);
+                if (response.Exception != null)
+                {
+                    erros.Add($"{saida.descricao} - {saida.chave} - {saida.mesReferencia}");
+                }
+            }
+            MessageBox.Show($"Ocorreu {erros.Count} erros");
+        }
+
+        // Método auxiliar para remover acentos de uma string
+        private static string RemoverAcentos(string texto)
+        {
+            if (string.IsNullOrEmpty(texto)) return texto;
+
+            var normalizedString = texto.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new System.Text.StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
 
         private void LoadFormInPanel(Form form)

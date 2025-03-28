@@ -13,6 +13,7 @@
         public int qtdParcelas { get; set; }
         public bool gastoObrigatorio { get; set; }
         public double valorExtrapolado { get; set; }
+        public int chaveCategoriaMesFuturo { get; set; }
         public DateTime mesReferencia { get; set; }
         public DateTime data { get; set; }
         public DateTime dataInicio { get; set; }

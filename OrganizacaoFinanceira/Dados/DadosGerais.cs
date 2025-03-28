@@ -25,7 +25,9 @@ namespace OrganizacaoFinanceira.Dados
         public static List<MesFuturo> mesesFuturos;
 
         public static List<LancamentoRecorrente> lancamentosRecorrentesOriginal;
+        public static List<ObsMes> obsMes;
 
+        public static bool calcularEntradaSaidaExtra = true;
         public static double entradaExtra = 0;
         public static double saidaExtra = 0;        
     }
