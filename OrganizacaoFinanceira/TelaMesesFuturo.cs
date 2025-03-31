@@ -198,9 +198,32 @@ namespace OrganizacaoFinanceira
             double saidatotal = 0;
             double saidasCategoria;
             double saidasMesCategoria;
+            
             foreach (Categoria categoria in DadosGerais.categorias)
             {
-                saidatotal += DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
+                List<LancamentoRecorrente> lancRec = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).ToList();
+                double valor = 0;
+                if (DadosGerais.lancamentosRecorrentesDetalhado != null && DadosGerais.lancamentosRecorrentesDetalhado.Count > 0)
+                {
+                    foreach (LancamentoRecorrente lanc in lancRec)
+                    {
+                        LancamentoRecorrenteDetalhado lancRecDet = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.chaveLancRecorrente == lanc.chave && DateTime.Now.AddMonths(x.mes-1).Date == data.Date).FirstOrDefault();
+                        if (lancRecDet != null)
+                        {
+                            valor += lancRecDet.valor;
+                        }
+                        else
+                        {
+                            valor += lanc.valor;
+                        }
+                    }                    
+                }
+                else
+                {
+                    valor = lancRec.Sum(x=>x.valor);
+                }
+
+                saidatotal += valor;
                 saidasCategoria = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && !x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
                 saidasMesCategoria = saidasComSimulacao.Where(x => x.tipoSaida == 0 && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
 
@@ -451,7 +474,7 @@ namespace OrganizacaoFinanceira
 
         private void FiltrarLancamentosRecorrentesDetalhado()
         {
-            if (lancRecorrenteSelecionado == null || DadosGerais.lancamentosRecorrentesDetalhado == null || lancRecorrenteSelecionado.tipoLancamento == 0)
+            if (lancRecorrenteSelecionado == null || DadosGerais.lancamentosRecorrentesDetalhado == null)
             {
                 // Limpar o grid de detalhes
                 bindingSourceLancRecorrentesDetalhado.DataSource = new SortableBindingList<LancamentoRecorrenteDetalhado>();
@@ -471,7 +494,7 @@ namespace OrganizacaoFinanceira
 
         private async void GerarLancamentosRecorrentesDetalhado()
         {
-            if (lancRecorrenteSelecionado == null || DadosGerais.lancamentosRecorrentesDetalhado == null || lancRecorrenteSelecionado.tipoLancamento == 0 || lancRecorrenteSelecionado.usaMesFixo)
+            if (lancRecorrenteSelecionado == null || DadosGerais.lancamentosRecorrentesDetalhado == null || lancRecorrenteSelecionado.usaMesFixo)
             {
                 // Limpar o grid de detalhes
                 bindingSourceLancRecorrentesDetalhado.DataSource = new SortableBindingList<LancamentoRecorrenteDetalhado>();
@@ -489,9 +512,10 @@ namespace OrganizacaoFinanceira
                 this.Cursor = Cursors.WaitCursor;
 
                 // Caso não haja detalhes, criar novos registros
-                for (byte i = 1; i < 13; i++)
+                int qtdM = lancRecorrenteSelecionado.tipoLancamento == 0? qtdMeses+1: 13;
+
+                for (byte i = 1; i < qtdM; i++)
                 {
-                    if (lancRecorrenteSelecionado.tipoLancamento == 0) return;
                     var novoDetalhe = new LancamentoRecorrenteDetalhado
                     {
                         chaveLancRecorrente = lancRecorrenteSelecionado.chave,
@@ -516,17 +540,34 @@ namespace OrganizacaoFinanceira
                                                           MessageBoxButtons.YesNo,
                                                           MessageBoxIcon.Question);
 
+                int qtdM = lancRecorrenteSelecionado.tipoLancamento == 0 ? qtdMeses+1 : 13;
+
                 if (result == DialogResult.Yes)
                 {
-                    this.Enabled = false;
                     this.Cursor = Cursors.WaitCursor;
+                    this.Enabled = false;
 
                     // Caso não haja detalhes, criar novos registros
-                    for (byte i = 1; i < 13; i++)
-                    {
-                        if (lancRecorrenteSelecionado.tipoLancamento == 0) return;
-                        var detalhe = detalhesExistentes.Where(x=>x.mes == i).FirstOrDefault();
-                        detalhe.valor = lancRecorrenteSelecionado.valor;
+                    for (byte i = 1; i < qtdM; i++)
+                    {                       
+                        var detalhe = detalhesExistentes.Where(x => x.mes == i).FirstOrDefault();
+                        if (detalhe != null)
+                        {
+                            detalhe.valor = lancRecorrenteSelecionado.valor;
+                        }
+                        else
+                        {
+                            detalhe = new LancamentoRecorrenteDetalhado
+                            {
+                                chave = DadosGerais.lancamentosRecorrentesDetalhado.Max(x => x.chave) + 1,
+                                chaveLancRecorrente = lancRecorrenteSelecionado.chave,
+                                descricao = lancRecorrenteSelecionado.descricao,
+                                valor = lancRecorrenteSelecionado.valor,
+                                tipoLancamento = lancRecorrenteSelecionado.tipoLancamento,
+                                mes = i
+                            };
+                            DadosGerais.lancamentosRecorrentesDetalhado.Add(detalhe);
+                        }
 
                         await AtualizarLancamentosRecorrentesDetalhadosAsync(detalhe, false);
                     }
@@ -534,7 +575,6 @@ namespace OrganizacaoFinanceira
                     this.Enabled = true;
                     this.Cursor = Cursors.Default;
                 }
-
             }
 
             // Preencher o grid com os detalhes
@@ -547,7 +587,10 @@ namespace OrganizacaoFinanceira
             CarregarSaldoCategoriasLancamentosSaida();
             InicializarLancamentosRecorrentes();
             InicializarMesesFuturos();
+
         }
+
+
 
         private void dgvLancamentosRecorrentes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
@@ -618,26 +661,58 @@ namespace OrganizacaoFinanceira
 
         private void dgvLancRecorrenteDetalhado_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvLancRecorrenteDetalhado.Columns[e.ColumnIndex].DataPropertyName == "tipoLancamento" && e.Value != null)
+            var colunaAtual = dgvLancRecorrenteDetalhado.Columns[e.ColumnIndex];
+
+            if (colunaAtual.DataPropertyName == "tipoLancamento" && e.Value != null)
             {
                 e.Value = (byte)e.Value == 0 ? "Saída" : "Entrada";
                 e.FormattingApplied = true;
             }
 
-            if (dgvLancRecorrenteDetalhado.Columns[e.ColumnIndex].DataPropertyName == "mes" && e.Value != null)
+            if (colunaAtual.DataPropertyName == "mes" && e.Value != null)
             {
-                // Verificar se o valor não é nulo e é um byte
-                if (e.Value is byte mes && mes >= 1 && mes <= 12)
-                {
-                    // Obter o nome do mês correspondente
-                    string[] nomesMeses =
-                    {
-                        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-                        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-                    };
+                int colunaTipoLancamentoIndex = -1;
 
-                    e.Value = nomesMeses[mes - 1]; // Ajustar índice para base 0
-                    e.FormattingApplied = true;
+                // Buscar índice da coluna "tipoLancamento"
+                foreach (DataGridViewColumn col in dgvLancRecorrenteDetalhado.Columns)
+                {
+                    if (col.DataPropertyName == "tipoLancamento")
+                    {
+                        colunaTipoLancamentoIndex = col.Index;
+                        break;
+                    }
+                }
+
+                // Se encontrou a coluna "tipoLancamento"
+                if (colunaTipoLancamentoIndex != -1)
+                {
+                    var cellTipo = dgvLancRecorrenteDetalhado.Rows[e.RowIndex].Cells[colunaTipoLancamentoIndex].Value;
+
+                    if (cellTipo is byte tipoLancamento)
+                    {
+                        if (tipoLancamento == 1) // Entrada
+                        {
+                            if (e.Value is byte mes && mes >= 1 && mes <= 12)
+                            {
+                                string[] nomesMeses =
+                                {
+                            "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+                            "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+                        };
+                                e.Value = nomesMeses[mes - 1];
+                                e.FormattingApplied = true;
+                            }
+                        }
+                        else if (tipoLancamento == 0) // Saída
+                        {
+                            if (e.Value is byte mesSaida && mesSaida >= 0 && mesSaida <= qtdMeses)
+                            {
+                                DateTime dataReferencia = DateTime.Now.AddMonths(mesSaida-1);
+                                e.Value = dataReferencia.ToString("MM-yyyy");
+                                e.FormattingApplied = true;
+                            }
+                        }
+                    }
                 }
             }
         }
