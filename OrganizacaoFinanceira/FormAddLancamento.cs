@@ -25,7 +25,7 @@ namespace OrganizacaoFinanceira
 
         public FormAddLancamento()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         private void FormAddLancamento_Load(object sender, EventArgs e)
@@ -409,7 +409,7 @@ namespace OrganizacaoFinanceira
 
             if (DadosGerais.lancamentosRecorrentes != null && DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).Count() > 0)
             {
-                BindingList<LancamentoRecorrente> bindingList = new BindingList<LancamentoRecorrente>(DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1).ToList());
+                BindingList<LancamentoRecorrente> bindingList = new BindingList<LancamentoRecorrente>(DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 1 && x.usaMesFixo).ToList());
                 cbxCategoriaVerbaMesFuturo.DataSource = bindingList;
 
                 cbxCategoriaVerbaMesFuturo.DisplayMember = "descricao";
@@ -517,6 +517,31 @@ namespace OrganizacaoFinanceira
                     await CRUD.CriarMes(mesNovo, entrada.chaveCategoria, entrada.mesReferencia);
                 }
             }
-        }        
+        }
+
+        private void cbxCategoria_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!editar && cbxCategoria.SelectedItem != null)
+            {
+                var itemAux = cbxCategoria.SelectedItem;
+                string categoriaSelecionada = itemAux.GetType().GetProperty("descricao")?.GetValue(itemAux)?.ToString();
+
+                for (int i = 0; i < cbxCategoriaVerbaMesFuturo.Items.Count; i++)
+                {
+                    var item = cbxCategoriaVerbaMesFuturo.Items[i];
+                    string descricao = item.GetType().GetProperty("descricao")?.GetValue(item)?.ToString();
+
+                    if (!string.IsNullOrEmpty(descricao) &&
+                        string.Equals(descricao, categoriaSelecionada, StringComparison.OrdinalIgnoreCase))
+                    {
+                        cbxCategoriaVerbaMesFuturo.SelectedIndex = i;
+                        return;
+                    }
+                }
+
+                // Se não encontrar correspondência
+                cbxCategoriaVerbaMesFuturo.SelectedIndex = -1;
+            }
+        }
     }
 }

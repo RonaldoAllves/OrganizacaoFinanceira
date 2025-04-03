@@ -296,6 +296,7 @@
             cbxCategoria.Name = "cbxCategoria";
             cbxCategoria.Size = new Size(121, 23);
             cbxCategoria.TabIndex = 56;
+            cbxCategoria.SelectedIndexChanged += cbxCategoria_SelectedIndexChanged;
             // 
             // label16
             // 

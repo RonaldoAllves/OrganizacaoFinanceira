@@ -26,7 +26,7 @@ namespace OrganizacaoFinanceira
             this.Cursor = Cursors.WaitCursor;
 
             await CRUD.BuscarTodosDados(false);
-            //await AtualizarSaidasComCategoriaMesFuturo();
+            //await AtualizarSaidasComCategoriaMesFuturo(); Está defasado, já foi criado novas categorias, verificar.
 
             this.Cursor = Cursors.Default;
             this.Enabled = true;

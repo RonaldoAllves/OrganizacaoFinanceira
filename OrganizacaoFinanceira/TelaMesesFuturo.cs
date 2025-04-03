@@ -39,11 +39,7 @@ namespace OrganizacaoFinanceira
             saidasComSimulacao = DadosGerais.saidas.ToList();
             parcelasSimulacao = null;
 
-            CarregarEntradaSaidaExtra();
-            CarregarSaldoCategoriasLancamentosSaida();
-            InicializarLancamentosRecorrentes();
-            PreencherComboBoxCategorias(ref cbxCategoriaLancRecorrente);
-            PreencherComboBoxCategorias(ref cbxCategoriaSimulacao);
+            AtualizarTela();
 
             funcoesGrid.AjustarTitulo(dgvLancamentosRecorrentes, lblTituloLancamentosCriados, "Lançamentos criados");
             funcoesGrid.AjustarTitulo(dgvMesesFuturos, lblTituloSaldosFuturo, "Previsão do saldo final por mês");
@@ -72,6 +68,16 @@ namespace OrganizacaoFinanceira
             RedefinirTamanhoGrids();
 
             this.Enabled = true;
+        }
+
+        private void AtualizarTela()
+        {
+            CarregarEntradaSaidaExtra();
+            CarregarSaldoCategoriasLancamentosSaida();
+            InicializarLancamentosRecorrentes(false);
+            PreencherComboBoxCategorias(ref cbxCategoriaLancRecorrente);
+            PreencherComboBoxCategorias(ref cbxCategoriaSimulacao);
+            InicializarMesesFuturos();
         }
 
         private void CarregarSaldoCategoriasLancamentosSaida()
@@ -137,8 +143,10 @@ namespace OrganizacaoFinanceira
             if (DadosGerais.entradaExtra == 0) DadosGerais.entradaExtra = 0;
             if (DadosGerais.saidaExtra == 0) DadosGerais.saidaExtra = 0;
 
+            bool bkp = DadosGerais.calcularEntradaSaidaExtra;
             tbxEntradaExtra.Text = DadosGerais.entradaExtra.ToString("N2");
             tbxSaidaExtra.Text = DadosGerais.saidaExtra.ToString("N2");
+            DadosGerais.calcularEntradaSaidaExtra = bkp;
         }
 
         private double CalcularPrevisaoEntradaExtra()
@@ -261,58 +269,65 @@ namespace OrganizacaoFinanceira
 
         #region LANÇAMENTOS RECORRENTES
 
-        private void InicializarLancamentosRecorrentes()
+        private void InicializarLancamentosRecorrentes(bool recarregar = true)
         {
             funcoesGrid.ConfigurarGrid(dgvLancamentosRecorrentes, bindingSourceLancRecorrentes, funcoesGrid.ColunasGridLancamentosRecorrentes(), false);
             bindingSourceLancRecorrentes.DataSource = DadosGerais.lancamentosRecorrentes;
-            FiltrarLancamentosRecorrentes();
+            FiltrarLancamentosRecorrentes(recarregar);
         }
 
         private async void btnSalvarLancRecorrente_Click(object sender, EventArgs e)
         {
-            LancamentoRecorrente lancRecorrenteNovo = new();
-            lancRecorrenteNovo.descricao = tbxDescLancRecorrente.Text.Trim();
-            lancRecorrenteNovo.valor = Convert.ToDouble(tbxValorLancRecorrente.Text);
-            lancRecorrenteNovo.tipoLancamento = rbtSaidaLancRecorrente.Checked == true ? (byte)0 : (byte)1;
-            if (rbtSaidaLancRecorrente.Checked) lancRecorrenteNovo.chaveCategoria = (int)cbxCategoriaLancRecorrente.SelectedValue;
-            else lancRecorrenteNovo.chaveCategoria = 0;
-            lancRecorrenteNovo.obrigatorio = chkLancObrigatorio.Checked;
-
-            if (rbtSaidaLancRecorrente.Checked) lancRecorrenteNovo.dataFinal = new DateTime(dtpMesFinal.Value.Year, dtpMesFinal.Value.Month, 1);
-
-            lancRecorrenteNovo.usaMesFixo = chkMesFixo.Checked;
-            if (chkMesFixo.Checked) lancRecorrenteNovo.dataFixa = new DateTime(dtpMesFixo.Value.Year, dtpMesFixo.Value.Month, 1);
-
-            if (tbxIdLancRecorrente.Text.Length > 0)
+            try
             {
-                lancRecorrenteNovo.chave = Convert.ToInt32(tbxIdLancRecorrente.Text);
-            }
-            else
-            {
-                if (DadosGerais.lancamentosRecorrentes == null || DadosGerais.lancamentosRecorrentes.Count == 0)
-                    lancRecorrenteNovo.chave = 1;
+                LancamentoRecorrente lancRecorrenteNovo = new();
+                lancRecorrenteNovo.descricao = tbxDescLancRecorrente.Text.Trim();
+                lancRecorrenteNovo.valor = string.IsNullOrWhiteSpace(tbxValorLancRecorrente.Text) ? 0.0 : Convert.ToDouble(tbxValorLancRecorrente.Text);
+                lancRecorrenteNovo.tipoLancamento = rbtSaidaLancRecorrente.Checked == true ? (byte)0 : (byte)1;
+                if (rbtSaidaLancRecorrente.Checked) lancRecorrenteNovo.chaveCategoria = (int)cbxCategoriaLancRecorrente.SelectedValue;
+                else lancRecorrenteNovo.chaveCategoria = 0;
+                lancRecorrenteNovo.obrigatorio = chkLancObrigatorio.Checked;
+
+                if (rbtSaidaLancRecorrente.Checked) lancRecorrenteNovo.dataFinal = new DateTime(dtpMesFinal.Value.Year, dtpMesFinal.Value.Month, 1);
+
+                lancRecorrenteNovo.usaMesFixo = chkMesFixo.Checked;
+                if (chkMesFixo.Checked) lancRecorrenteNovo.dataFixa = new DateTime(dtpMesFixo.Value.Year, dtpMesFixo.Value.Month, 1);
+
+                if (tbxIdLancRecorrente.Text.Length > 0)
+                {
+                    lancRecorrenteNovo.chave = Convert.ToInt32(tbxIdLancRecorrente.Text);
+                }
                 else
-                    lancRecorrenteNovo.chave = DadosGerais.lancamentosRecorrentes.Max(x => x.chave) + 1;
+                {
+                    if (DadosGerais.lancamentosRecorrentes == null || DadosGerais.lancamentosRecorrentes.Count == 0)
+                        lancRecorrenteNovo.chave = 1;
+                    else
+                        lancRecorrenteNovo.chave = DadosGerais.lancamentosRecorrentes.Max(x => x.chave) + 1;
+                }
+
+                this.Enabled = false;
+                SetResponse response = await DadosGerais.client.SetTaskAsync("LancamentosRecorrentes/" + "chave-" + lancRecorrenteNovo.chave.ToString(), lancRecorrenteNovo);
+                this.Enabled = true;
+
+                if (response.Exception == null)
+                {
+                    MessageBox.Show("Lançamento recorrente gravado.");
+
+                    DadosGerais.lancamentosRecorrentes = await CRUD.BuscarLancamentosRecorrentes();
+                    FiltrarLancamentosRecorrentes();
+                    LimparLancamentoRecorrente();
+                    AtualizarTela();
+                    panelLancRecorrente.Visible = false;
+                }
+                else
+                {
+                    MessageBox.Show("Erro ao gravar lançamento recorrente.\n" + response.Exception);
+                }
             }
-
-            this.Enabled = false;
-            SetResponse response = await DadosGerais.client.SetTaskAsync("LancamentosRecorrentes/" + "chave-" + lancRecorrenteNovo.chave.ToString(), lancRecorrenteNovo);
-            this.Enabled = true;
-
-            if (response.Exception == null)
+            catch(Exception ex)
             {
-                MessageBox.Show("Lançamento recorrente gravado.");
-
-                DadosGerais.lancamentosRecorrentes = await CRUD.BuscarLancamentosRecorrentes();
-                FiltrarLancamentosRecorrentes();
-
-                LimparLancamentoRecorrente();
-                panelLancRecorrente.Visible = false;
-            }
-            else
-            {
-                MessageBox.Show("Erro ao gravar lançamento recorrente.\n" + response.Exception);
-            }
+                MessageBox.Show("Erro ao gravar lançamento recorrente.\n" + ex.Message);
+            }            
         }
 
         private async Task SalvarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado, bool mostrarMensagem)
@@ -340,6 +355,7 @@ namespace OrganizacaoFinanceira
                     return; // Parar o processo em caso de erro
                 }
                 if (mostrarMensagem) MessageBox.Show("Lançamentos recorrentes detalhados gravados com sucesso!");
+                AtualizarTela();
             }
             catch (Exception ex)
             {
@@ -349,7 +365,7 @@ namespace OrganizacaoFinanceira
 
         private async Task AtualizarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado, bool mostrarMensagem)
         {
-            if (lancamentoDetalhado == null)
+            if (lancamentoDetalhado == null || lancamentoDetalhado.chave == 0)
                 return;
 
             try
@@ -368,33 +384,11 @@ namespace OrganizacaoFinanceira
                     return; // Parar o processo em caso de erro
                 }
                 if (mostrarMensagem) MessageBox.Show("Lançamentos recorrentes detalhados atualizados com sucesso!");
+                AtualizarTela();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erro ao atualizar lançamentos recorrentes detalhados: {ex.Message}");
-            }
-        }
-
-        private async Task AtualizarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado)
-        {
-            if (lancamentoDetalhado == null || lancamentoDetalhado.chave == 0)
-                return;
-
-            try
-            {
-                // Salvar o detalhe na base
-                SetResponse response = await DadosGerais.client.SetTaskAsync("LancamentosRecorrentesDetalhados/" + "chave-" + lancamentoDetalhado.chave, lancamentoDetalhado);
-
-                if (response.Exception != null)
-                {
-                    MessageBox.Show($"Erro ao atualizar lançamento detalhado.\n{response.Exception}");
-                    return; // Parar o processo em caso de erro
-                }
-                MessageBox.Show("Lançamento recorrente detalhado atualizado com sucesso!");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao atualizar lançamento recorrente detalhado: {ex.Message}");
             }
         }
 
@@ -583,11 +577,7 @@ namespace OrganizacaoFinanceira
             dgvLancRecorrenteDetalhado.Columns[1].ReadOnly = false;
             bindingSourceLancRecorrentesDetalhado.DataSource = detalhesParaExibir;
 
-            CarregarEntradaSaidaExtra();
-            CarregarSaldoCategoriasLancamentosSaida();
-            InicializarLancamentosRecorrentes();
-            InicializarMesesFuturos();
-
+            AtualizarTela();
         }
 
 
@@ -1066,7 +1056,7 @@ namespace OrganizacaoFinanceira
                 {
                     this.Cursor = Cursors.WaitCursor;
                     this.Enabled = false;
-                    await AtualizarLancamentosRecorrentesDetalhadosAsync(objetoAlterado);
+                    await AtualizarLancamentosRecorrentesDetalhadosAsync(objetoAlterado, true);
                     CarregarEntradaSaidaExtra();
                     InicializarMesesFuturos();
                     this.Enabled = true;
