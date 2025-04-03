@@ -11,5 +11,6 @@
         public double gastoMes { get; set; }
         public double saldoMes { get; set; }
         public double saldoTotal { get; set; }
+        public double saldoGeral { get; set; }
     }
 }

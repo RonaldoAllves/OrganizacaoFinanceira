@@ -31,11 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TelaCategorias));
             label1 = new Label();
             dtpMesRefVerbaTotal = new DateTimePicker();
-            tbxVerbaTotalMes = new TextBox();
-            label2 = new Label();
             dgvVerbasPorMes = new DataGridView();
-            tbxSaldoTotalMes = new TextBox();
-            label3 = new Label();
             dgvCategorias = new DataGridView();
             label21 = new Label();
             tbxDescCategoria = new TextBox();
@@ -76,12 +72,6 @@
             label8 = new Label();
             tbxNaoDistribuido = new TextBox();
             label7 = new Label();
-            tbxSaidaTotalMes = new TextBox();
-            label6 = new Label();
-            tbxVerbaAdicionalMes = new TextBox();
-            label5 = new Label();
-            tbxVerbaOriginal = new TextBox();
-            label4 = new Label();
             panelSaidasCategoria = new Panel();
             ((System.ComponentModel.ISupportInitialize)dgvVerbasPorMes).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvCategorias).BeginInit();
@@ -123,24 +113,6 @@
             dtpMesRefVerbaTotal.TabIndex = 90;
             dtpMesRefVerbaTotal.ValueChanged += dtpMesRefVerbaTotal_ValueChanged;
             // 
-            // tbxVerbaTotalMes
-            // 
-            tbxVerbaTotalMes.Location = new Point(415, 20);
-            tbxVerbaTotalMes.Margin = new Padding(3, 2, 3, 2);
-            tbxVerbaTotalMes.Name = "tbxVerbaTotalMes";
-            tbxVerbaTotalMes.Size = new Size(102, 23);
-            tbxVerbaTotalMes.TabIndex = 93;
-            tbxVerbaTotalMes.TextAlign = HorizontalAlignment.Right;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(412, 3);
-            label2.Name = "label2";
-            label2.Size = new Size(105, 15);
-            label2.TabIndex = 92;
-            label2.Text = "Verba total no mês";
-            // 
             // dgvVerbasPorMes
             // 
             dgvVerbasPorMes.BackgroundColor = SystemColors.ControlLightLight;
@@ -155,24 +127,6 @@
             dgvVerbasPorMes.CellFormatting += dgvVerbasPorMes_CellFormatting;
             dgvVerbasPorMes.ColumnWidthChanged += dgvVerbasPorMes_ColumnWidthChanged;
             dgvVerbasPorMes.SelectionChanged += dgvVerbasPorMes_SelectionChanged;
-            // 
-            // tbxSaldoTotalMes
-            // 
-            tbxSaldoTotalMes.Location = new Point(630, 19);
-            tbxSaldoTotalMes.Margin = new Padding(3, 2, 3, 2);
-            tbxSaldoTotalMes.Name = "tbxSaldoTotalMes";
-            tbxSaldoTotalMes.Size = new Size(101, 23);
-            tbxSaldoTotalMes.TabIndex = 96;
-            tbxSaldoTotalMes.TextAlign = HorizontalAlignment.Right;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(626, 2);
-            label3.Name = "label3";
-            label3.Size = new Size(105, 15);
-            label3.TabIndex = 95;
-            label3.Text = "Saldo total no mês";
             // 
             // dgvCategorias
             // 
@@ -448,8 +402,8 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(splitContainer2);
-            splitContainer1.Size = new Size(2463, 846);
-            splitContainer1.SplitterDistance = 1278;
+            splitContainer1.Size = new Size(1924, 846);
+            splitContainer1.SplitterDistance = 694;
             splitContainer1.TabIndex = 124;
             splitContainer1.SplitterMoved += splitContainer1_SplitterMoved;
             // 
@@ -472,7 +426,7 @@
             splitContainer3.Panel2.Controls.Add(panelMesesCriados);
             splitContainer3.Panel2.Controls.Add(dgvMeses);
             splitContainer3.Panel2.Controls.Add(lblTituloMesesCriados);
-            splitContainer3.Size = new Size(1278, 846);
+            splitContainer3.Size = new Size(694, 846);
             splitContainer3.SplitterDistance = 376;
             splitContainer3.TabIndex = 0;
             splitContainer3.SplitterMoved += splitContainer3_SplitterMoved;
@@ -529,7 +483,7 @@
             splitContainer2.Panel2.Controls.Add(panelSaidasCategoria);
             splitContainer2.Panel2.Controls.Add(dgvSaidasCategoria);
             splitContainer2.Panel2.Controls.Add(lblTituloSaidasCategoria);
-            splitContainer2.Size = new Size(1181, 846);
+            splitContainer2.Size = new Size(1226, 846);
             splitContainer2.SplitterDistance = 375;
             splitContainer2.TabIndex = 0;
             splitContainer2.SplitterMoved += splitContainer2_SplitterMoved;
@@ -560,26 +514,16 @@
             panelVerbasPorMes.Controls.Add(label8);
             panelVerbasPorMes.Controls.Add(tbxNaoDistribuido);
             panelVerbasPorMes.Controls.Add(label7);
-            panelVerbasPorMes.Controls.Add(tbxSaidaTotalMes);
-            panelVerbasPorMes.Controls.Add(label6);
-            panelVerbasPorMes.Controls.Add(tbxVerbaAdicionalMes);
-            panelVerbasPorMes.Controls.Add(label5);
-            panelVerbasPorMes.Controls.Add(tbxVerbaOriginal);
-            panelVerbasPorMes.Controls.Add(label4);
             panelVerbasPorMes.Controls.Add(dtpMesRefVerbaTotal);
-            panelVerbasPorMes.Controls.Add(tbxSaldoTotalMes);
-            panelVerbasPorMes.Controls.Add(label3);
-            panelVerbasPorMes.Controls.Add(tbxVerbaTotalMes);
             panelVerbasPorMes.Controls.Add(label1);
-            panelVerbasPorMes.Controls.Add(label2);
             panelVerbasPorMes.Location = new Point(25, 3);
             panelVerbasPorMes.Name = "panelVerbasPorMes";
-            panelVerbasPorMes.Size = new Size(1143, 49);
+            panelVerbasPorMes.Size = new Size(731, 49);
             panelVerbasPorMes.TabIndex = 123;
             // 
             // tbxNaoDistribuidoMes
             // 
-            tbxNaoDistribuidoMes.Location = new Point(737, 19);
+            tbxNaoDistribuidoMes.Location = new Point(137, 21);
             tbxNaoDistribuidoMes.Margin = new Padding(3, 2, 3, 2);
             tbxNaoDistribuidoMes.Name = "tbxNaoDistribuidoMes";
             tbxNaoDistribuidoMes.Size = new Size(101, 23);
@@ -589,7 +533,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(733, 2);
+            label9.Location = new Point(133, 4);
             label9.Name = "label9";
             label9.Size = new Size(131, 15);
             label9.TabIndex = 107;
@@ -597,7 +541,7 @@
             // 
             // tbxParcelasFuturas
             // 
-            tbxParcelasFuturas.Location = new Point(1020, 19);
+            tbxParcelasFuturas.Location = new Point(420, 21);
             tbxParcelasFuturas.Margin = new Padding(3, 2, 3, 2);
             tbxParcelasFuturas.Name = "tbxParcelasFuturas";
             tbxParcelasFuturas.Size = new Size(101, 23);
@@ -607,7 +551,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(1016, 2);
+            label8.Location = new Point(416, 4);
             label8.Name = "label8";
             label8.Size = new Size(90, 15);
             label8.TabIndex = 105;
@@ -615,7 +559,7 @@
             // 
             // tbxNaoDistribuido
             // 
-            tbxNaoDistribuido.Location = new Point(900, 19);
+            tbxNaoDistribuido.Location = new Point(300, 21);
             tbxNaoDistribuido.Margin = new Padding(3, 2, 3, 2);
             tbxNaoDistribuido.Name = "tbxNaoDistribuido";
             tbxNaoDistribuido.Size = new Size(101, 23);
@@ -625,65 +569,11 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(896, 2);
+            label7.Location = new Point(296, 4);
             label7.Name = "label7";
             label7.Size = new Size(118, 15);
             label7.TabIndex = 103;
             label7.Text = "Não distribuído geral";
-            // 
-            // tbxSaidaTotalMes
-            // 
-            tbxSaidaTotalMes.Location = new Point(523, 19);
-            tbxSaidaTotalMes.Margin = new Padding(3, 2, 3, 2);
-            tbxSaidaTotalMes.Name = "tbxSaidaTotalMes";
-            tbxSaidaTotalMes.Size = new Size(101, 23);
-            tbxSaidaTotalMes.TabIndex = 102;
-            tbxSaidaTotalMes.TextAlign = HorizontalAlignment.Right;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(520, 2);
-            label6.Name = "label6";
-            label6.Size = new Size(104, 15);
-            label6.TabIndex = 101;
-            label6.Text = "Saída total no mês";
-            // 
-            // tbxVerbaAdicionalMes
-            // 
-            tbxVerbaAdicionalMes.Location = new Point(278, 20);
-            tbxVerbaAdicionalMes.Margin = new Padding(3, 2, 3, 2);
-            tbxVerbaAdicionalMes.Name = "tbxVerbaAdicionalMes";
-            tbxVerbaAdicionalMes.Size = new Size(131, 23);
-            tbxVerbaAdicionalMes.TabIndex = 100;
-            tbxVerbaAdicionalMes.TextAlign = HorizontalAlignment.Right;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(278, 3);
-            label5.Name = "label5";
-            label5.Size = new Size(129, 15);
-            label5.TabIndex = 99;
-            label5.Text = "Verba adicional no mês";
-            // 
-            // tbxVerbaOriginal
-            // 
-            tbxVerbaOriginal.Location = new Point(137, 20);
-            tbxVerbaOriginal.Margin = new Padding(3, 2, 3, 2);
-            tbxVerbaOriginal.Name = "tbxVerbaOriginal";
-            tbxVerbaOriginal.Size = new Size(131, 23);
-            tbxVerbaOriginal.TabIndex = 98;
-            tbxVerbaOriginal.TextAlign = HorizontalAlignment.Right;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(137, 3);
-            label4.Name = "label4";
-            label4.Size = new Size(121, 15);
-            label4.TabIndex = 97;
-            label4.Text = "Verba original no mês";
             // 
             // panelSaidasCategoria
             // 
@@ -699,7 +589,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(2463, 846);
+            ClientSize = new Size(1924, 846);
             Controls.Add(splitContainer1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "TelaCategorias";
@@ -740,11 +630,7 @@
         #endregion
         private Label label1;
         private DateTimePicker dtpMesRefVerbaTotal;
-        private TextBox tbxVerbaTotalMes;
-        private Label label2;
         private DataGridView dgvVerbasPorMes;
-        private TextBox tbxSaldoTotalMes;
-        private Label label3;
         private DataGridView dgvCategorias;
         private Label label21;
         private TextBox tbxDescCategoria;
@@ -778,12 +664,6 @@
         private Panel panelCategorias;
         private Panel panelVerbasPorMes;
         private Panel panelSaidasCategoria;
-        private TextBox tbxVerbaOriginal;
-        private Label label4;
-        private TextBox tbxVerbaAdicionalMes;
-        private Label label5;
-        private TextBox tbxSaidaTotalMes;
-        private Label label6;
         private TextBox tbxNaoDistribuido;
         private Label label7;
         private TextBox tbxParcelasFuturas;

@@ -4,6 +4,7 @@ using OrganizacaoFinanceira.Objetos;
 using OrganizacaoFinanceira.Recursos;
 using OrganizacaoFinanceira.Telas;
 using System.Data;
+using System.Windows.Forms;
 
 namespace OrganizacaoFinanceira
 {
@@ -442,13 +443,7 @@ namespace OrganizacaoFinanceira
             SortableBindingList<VerbaCategorias> verbasCategorias = new();
 
             Mes mesAux;
-            double verbaOriginalMes = 0;
-            double verbaAdicionalMes = 0;
-            double verbaTotalMes = 0;
-            double saldoTotalMes = 0;
             double saidasMes = 0;
-            double saidasTotalMes = 0;
-            double naoDistribuido = 0;
 
             foreach (Categoria categoria in DadosGerais.categorias)
             {
@@ -469,30 +464,24 @@ namespace OrganizacaoFinanceira
                 novo.verbaMesCategoria = mesAux.verbaMes;
                 novo.gastoMes = saidasMes;
                 novo.saldoMes = mesAux.saldoMes;
-                novo.saldoTotal = categoria.saldoTotal;
+                novo.saldoGeral = categoria.saldoTotal;
+
+                double saidaFutura = DadosGerais.saidas == null ? 0 : DadosGerais.saidas.Where(x => x.chaveCategoria == categoria.chave && !DataMenorIgual(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valorParcela);
+                novo.saldoTotal = novo.saldoGeral + saidaFutura;
 
                 verbasCategorias.Add(novo);
-                verbaOriginalMes += novo.verbaOriginalMesCategoria;
-                verbaAdicionalMes += novo.verbaAdicionalMesCategoria;
-                verbaTotalMes += novo.verbaMesCategoria;
-                saidasTotalMes += novo.gastoMes;
-                saldoTotalMes += novo.saldoMes;
-            }
-
-            tbxVerbaOriginal.Text = verbaOriginalMes.ToString("N2");
-            tbxVerbaAdicionalMes.Text = verbaAdicionalMes.ToString("N2");
-            tbxVerbaTotalMes.Text = verbaTotalMes.ToString("N2");
-            tbxSaidaTotalMes.Text = saidasTotalMes.ToString("N2");
-            tbxSaldoTotalMes.Text = saldoTotalMes.ToString("N2");
+            }            
 
             tbxNaoDistribuidoMes.Text = (DadosGerais.entradas.Where(x => x.mesReferencia.Month == mes.Month && x.mesReferencia.Year == mes.Year).Sum(x => x.valor) - DadosGerais.meses.Where(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year).Select(x => x.verbaMes).Sum()).ToString("N2");
             tbxParcelasFuturas.Text = DadosGerais.saidas.Where(x => x.mesReferencia.Year > mes.Year || (x.mesReferencia.Year == mes.Year && x.mesReferencia.Month > mes.Month)).Select(x => x.valorParcela).Sum().ToString("N2");
 
             // vou pegar como valor inicial o que foi distribuido a mais no primeiro mês
-            DateTime primeiroMes = DadosGerais.meses.Min(x => x.mes);
-            double valorInicial = -1 * (DadosGerais.entradas.Where(x => x.mesReferencia.Month == primeiroMes.Month && x.mesReferencia.Year == primeiroMes.Year).Sum(x => x.valor) - DadosGerais.meses.Where(x => x.mes.Month == primeiroMes.Month && x.mes.Year == primeiroMes.Year).Select(x => x.verbaMes).Sum());
-            tbxNaoDistribuido.Text = ((DadosGerais.entradas.Sum(x => x.valor) + valorInicial) - DadosGerais.meses.Where(x => x.mes.Year < DateTime.Now.Year || (x.mes.Year == DateTime.Now.Year && x.mes.Month <= DateTime.Now.Month)).Select(x => x.verbaMes).Sum()).ToString("N2");
+            //DateTime primeiroMes = DadosGerais.meses.Min(x => x.mes);
+            //double valorInicial = -1 * (DadosGerais.entradas.Where(x => x.mesReferencia.Month == primeiroMes.Month && x.mesReferencia.Year == primeiroMes.Year).Sum(x => x.valor) - DadosGerais.meses.Where(x => x.mes.Month == primeiroMes.Month && x.mes.Year == primeiroMes.Year).Select(x => x.verbaMes).Sum());
+            //valorInicial+= 1444.21; //coloquei esse valor fixo, pois no primeiro mês 01/2024 eu reduzi a verba dos eletronicos/moveis.
+            tbxNaoDistribuido.Text = ((DadosGerais.entradas.Where(x=> DataMenorIgual(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valor) + DadosGerais.valorInicial) - DadosGerais.meses.Where(x => DataMenorIgual(x.mes.Date, DateTime.Now.Date)).Select(x => x.verbaMes).Sum()).ToString("N2");
 
+            AdicionarLinhaTotal(verbasCategorias);
             bindingSourceVerbasCategorias.DataSource = verbasCategorias;
 
             if (dgvVerbasPorMes != null && dgvVerbasPorMes.Rows.Count > 0)
@@ -506,6 +495,39 @@ namespace OrganizacaoFinanceira
                     dgvVerbasPorMes.Rows[0].Selected = true;
                 }
             }
+        }
+
+        public void AdicionarLinhaTotal(SortableBindingList<VerbaCategorias> listaOriginal)
+        {
+            // Calcula os totais (ignorando colunas não numéricas)
+            var total = new VerbaCategorias
+            {
+                descricaoCategoria = "TOTAL",
+                verbaOriginalMesCategoria = listaOriginal.Sum(v => v.verbaOriginalMesCategoria),
+                verbaAdicionalMesCategoria = listaOriginal.Sum(v => v.verbaAdicionalMesCategoria),
+                verbaMesCategoria = listaOriginal.Sum(v => v.verbaMesCategoria),
+                gastoMes = listaOriginal.Sum(v => v.gastoMes),
+                saldoMes = listaOriginal.Sum(v => v.saldoMes),
+                saldoTotal = listaOriginal.Sum(v => v.saldoTotal),
+                saldoGeral = listaOriginal.Sum(v => v.saldoGeral)
+            };
+
+            // Adiciona o total à lista
+            listaOriginal.Add(total);
+
+            /*
+            // Atualiza o DataGridView
+            var bindingSource = new BindingSource { DataSource = listaComTotal };
+            dataGridView.DataSource = bindingSource;
+
+            // Formata a linha de total (opcional)
+            if (dataGridView.Rows.Count > 0)
+            {
+                DataGridViewRow totalRow = dataGridView.Rows[dataGridView.Rows.Count - 1];
+                totalRow.DefaultCellStyle.BackColor = Color.LightGray;
+                totalRow.DefaultCellStyle.Font = new Font(dataGridView.Font, FontStyle.Bold);
+            }
+            */
         }
 
         #endregion
@@ -531,7 +553,8 @@ namespace OrganizacaoFinanceira
         private void dgvVerbasPorMes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             if ((dgvVerbasPorMes.Columns[e.ColumnIndex].DataPropertyName == "saldoMes" ||
-                 dgvVerbasPorMes.Columns[e.ColumnIndex].DataPropertyName == "saldoTotal") && e.Value != null && e.Value is double)
+                 dgvVerbasPorMes.Columns[e.ColumnIndex].DataPropertyName == "saldoTotal" ||
+                 dgvVerbasPorMes.Columns[e.ColumnIndex].DataPropertyName == "saldoGeral") && e.Value != null && e.Value is double)
             {
                 double saldo = (double)e.Value;
                 if (saldo < 0)
@@ -544,6 +567,15 @@ namespace OrganizacaoFinanceira
                     e.CellStyle.ForeColor = dgvVerbasPorMes.DefaultCellStyle.ForeColor;
                     e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Regular);
                 }
+            }
+
+            var row = dgvVerbasPorMes.Rows[e.RowIndex];
+            var cell = row.Cells[0]; // Substitua pelo nome da sua coluna de texto
+            if (cell?.Value?.ToString() == "TOTAL")
+            {
+                // Formatação para a linha de TOTAL
+                e.CellStyle.BackColor = Color.Gray;
+                e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Bold);
             }
         }
 

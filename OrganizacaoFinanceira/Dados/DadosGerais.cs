@@ -7,11 +7,26 @@ namespace OrganizacaoFinanceira.Dados
 {
     public static class DadosGerais
     {
+        //Produção
+        
+        //public static double valorInicial = 4187.72;
+        public static double valorInicial = 7565.08;
         public static IFirebaseConfig config = new FirebaseConfig
         {
             AuthSecret = "WIjBhJwJ5rlUBzzPRFEkvY3Ib35hKZpbWHkTqO9n",
             BasePath = "https://organizacaofinanceira-9160c-default-rtdb.firebaseio.com/"
         };
+        
+
+        //Teste
+        /*
+        public static double valorInicial = 1000;
+        public static IFirebaseConfig config = new FirebaseConfig
+        {
+            AuthSecret = "mLpflE6AJ7Y4GMtCEdppg3HZwL0JcTIKU7lt5kgm",
+            BasePath = "https://organizacaofinanceiroteste-default-rtdb.firebaseio.com/"
+        };
+        */
 
         public static IFirebaseClient client;
 

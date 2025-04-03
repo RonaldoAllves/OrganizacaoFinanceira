@@ -44,6 +44,8 @@
             lblDataFinal = new Label();
             panelDadosCategorias = new Panel();
             panelPeriodo = new Panel();
+            lblSaldoTotalComCreditoAtual = new Label();
+            label2 = new Label();
             panelPeriodo.SuspendLayout();
             SuspendLayout();
             // 
@@ -52,9 +54,9 @@
             lblDividaTotal.AutoSize = true;
             lblDividaTotal.Location = new Point(12, 9);
             lblDividaTotal.Name = "lblDividaTotal";
-            lblDividaTotal.Size = new Size(136, 15);
+            lblDividaTotal.Size = new Size(109, 15);
             lblDividaTotal.TabIndex = 0;
-            lblDividaTotal.Text = "Dívida crédito atual total";
+            lblDividaTotal.Text = "Dívida crédito geral";
             // 
             // lblValorDividaTotal
             // 
@@ -198,11 +200,31 @@
             panelPeriodo.Size = new Size(757, 506);
             panelPeriodo.TabIndex = 15;
             // 
+            // lblSaldoTotalComCreditoAtual
+            // 
+            lblSaldoTotalComCreditoAtual.AutoSize = true;
+            lblSaldoTotalComCreditoAtual.Location = new Point(410, 34);
+            lblSaldoTotalComCreditoAtual.Name = "lblSaldoTotalComCreditoAtual";
+            lblSaldoTotalComCreditoAtual.Size = new Size(44, 15);
+            lblSaldoTotalComCreditoAtual.TabIndex = 17;
+            lblSaldoTotalComCreditoAtual.Text = "R$ 0,00";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(410, 9);
+            label2.Name = "label2";
+            label2.Size = new Size(215, 15);
+            label2.TabIndex = 16;
+            label2.Text = "Saldo total (considerando crédito atual)";
+            // 
             // TelaGeral
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1063, 740);
+            Controls.Add(lblSaldoTotalComCreditoAtual);
+            Controls.Add(label2);
             Controls.Add(panelPeriodo);
             Controls.Add(lblValorSaldoTotal);
             Controls.Add(lblSaldoTotal);
@@ -236,5 +258,7 @@
         private Label lblDataFinal;
         private Panel panelDadosCategorias;
         private Panel panelPeriodo;
+        private Label lblSaldoTotalComCreditoAtual;
+        private Label label2;
     }
 }

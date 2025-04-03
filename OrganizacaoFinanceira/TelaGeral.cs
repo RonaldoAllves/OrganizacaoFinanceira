@@ -25,12 +25,14 @@ namespace OrganizacaoFinanceira
             lblValorSaidasRecentes.ForeColor = Color.FromArgb(181, 230, 29);
             lblValorDividaTotal.ForeColor = Color.FromArgb(181, 230, 29);
             lblValorSaldoTotal.ForeColor = Color.FromArgb(181, 230, 29);
+            lblSaldoTotalComCreditoAtual.ForeColor = Color.FromArgb(181, 230, 29);
 
             lblValorRendimentosRecentes.Font = new Font("Arial", 16, FontStyle.Bold);
             lblValorEntradasRecentes.Font = new Font("Arial", 16, FontStyle.Bold);
             lblValorSaidasRecentes.Font = new Font("Arial", 16, FontStyle.Bold);
             lblValorDividaTotal.Font = new Font("Arial", 16, FontStyle.Bold);
             lblValorSaldoTotal.Font = new Font("Arial", 16, FontStyle.Bold);
+            lblSaldoTotalComCreditoAtual.Font = new Font("Arial", 16, FontStyle.Bold);
 
             jaPodePreencherValores = true;
             PreencherValores();
@@ -61,6 +63,7 @@ namespace OrganizacaoFinanceira
             double entradas = 0;
             double saidas = 0;
             double dividaTotal = 0;
+            double creditoMes = 0;
             double saldo = 0;
 
             // Ajustar início e fim do período com base nos DateTimePicker
@@ -95,6 +98,12 @@ namespace OrganizacaoFinanceira
                     .Select(x => x.valorParcela)
                     .DefaultIfEmpty(0)
                     .Sum();
+
+                creditoMes = DadosGerais.saidas
+                    .Where(x => x.tipoSaida == 0 && x.mesReferencia.Month == DateTime.Now.Date.Month && x.mesReferencia.Year == DateTime.Now.Date.Year)
+                    .Select(x => x.valorParcela)
+                    .DefaultIfEmpty(0)
+                    .Sum();
             }
 
             if (DadosGerais.contas != null && DadosGerais.contas.Count > 0)
@@ -107,6 +116,7 @@ namespace OrganizacaoFinanceira
             lblValorSaidasRecentes.Text = saidas.ToString("C2", new CultureInfo("pt-BR"));
             lblValorDividaTotal.Text = dividaTotal.ToString("C2", new CultureInfo("pt-BR"));
             lblValorSaldoTotal.Text = saldo.ToString("C2", new CultureInfo("pt-BR"));
+            lblSaldoTotalComCreditoAtual.Text = (saldo-creditoMes).ToString("C2", new CultureInfo("pt-BR"));
         }
 
         private int CalcularQuantidadeDeMeses(DateTime dataInicial, DateTime dataFinal)

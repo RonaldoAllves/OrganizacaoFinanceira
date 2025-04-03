@@ -162,6 +162,7 @@
                 ("gastoMes", "Gasto do mês", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("saldoMes", "Saldo do mês", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("saldoTotal", "Saldo total", DataGridViewContentAlignment.MiddleCenter, 150, true),
+                ("saldoGeral", "Saldo geral", DataGridViewContentAlignment.MiddleCenter, 150, true),
             };
             return colunas;
         }
