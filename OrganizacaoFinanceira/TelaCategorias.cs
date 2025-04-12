@@ -760,6 +760,8 @@ namespace OrganizacaoFinanceira
                 obsMes.mes = dtpMesRefVerbaTotal.Value.Date;
                 obsMes.observacacao = textObsMes.Text;
                 salvarMes(obsMes);
+                this.Enabled = true;
+                cursor = Cursors.Default;
                 return;
             }
 
@@ -772,6 +774,8 @@ namespace OrganizacaoFinanceira
                 obsMes.mes = dtpMesRefVerbaTotal.Value.Date;
                 obsMes.observacacao = textObsMes.Text;
                 salvarMes(obsMes);
+                this.Enabled = true;
+                cursor = Cursors.Default;
                 return;
             }
 
