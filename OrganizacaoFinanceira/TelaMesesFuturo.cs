@@ -84,7 +84,7 @@ namespace OrganizacaoFinanceira
         {
             if (DadosGerais.lancamentosRecorrentes == null || DadosGerais.saidas == null || DadosGerais.saidas.Count == 0) return;
 
-            foreach(LancamentoRecorrente lanc in DadosGerais.lancamentosRecorrentes.Where(x=>x.tipoLancamento == 0).ToList())
+            foreach (LancamentoRecorrente lanc in DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0).ToList())
             {
                 lanc.saldo = lanc.valor - DadosGerais.saidas.Where(x => x.chaveCategoriaMesFuturo == lanc.chave && x.mesReferencia.Month == DateTime.Now.Month && x.mesReferencia.Year == DateTime.Now.Year).Select(x => x.valorParcela).Sum();
             }
@@ -177,12 +177,12 @@ namespace OrganizacaoFinanceira
 
             foreach (Categoria categoria in DadosGerais.categorias)
             {
-                valorObrigatorioPrevistoCat = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
+                valorObrigatorioPrevistoCat = ObterValorSaidaCategoria(categoria, data, true);
                 valorObrigatorioRegistradoCat = saidasComSimulacao.Where(x => x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
                 valorExtrapoladoCategoria = saidasComSimulacao.Where(x => x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorExtrapolado);
                 valorFaltaGastarCategoria = valorObrigatorioPrevistoCat - valorObrigatorioRegistradoCat + valorExtrapoladoCategoria; //Adiciona o valor extrapolado, pois ele foi considerado em valorObrigatorioRegistradoCat.
 
-                valorNaoObrigatorioPrevistoCat = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && !x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
+                valorNaoObrigatorioPrevistoCat = ObterValorSaidaCategoria(categoria, data, false);
                 valorNaoObrigatorioRegistradoCategoria = saidasComSimulacao.Where(x => !x.gastoObrigatorio && x.chaveCategoria == categoria.chave && x.mesReferencia.Month == data.Month && x.mesReferencia.Year == data.Year).Sum(x => x.valorParcela);
                 valorFaltaGastarCategoria += Math.Max(valorNaoObrigatorioPrevistoCat - valorNaoObrigatorioRegistradoCategoria, 0);
 
@@ -201,12 +201,32 @@ namespace OrganizacaoFinanceira
             return valorFaltaGastar;
         }
 
+        private double ObterValorSaidaCategoria(Categoria categoria, DateTime data, bool obrigatorio)
+        {
+            LancamentoRecorrente lancRec = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio == obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).FirstOrDefault();
+
+            if (lancRec == null) return 0;
+
+            LancamentoRecorrenteDetalhado lancRecDet = null;
+            if (DadosGerais.lancamentosRecorrentesDetalhado != null)
+            {
+                lancRecDet = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.tipoLancamento == 0 && x.chaveLancRecorrente == lancRec.chave && x.mes == 1).FirstOrDefault();
+            }
+
+            if (lancRecDet != null)
+            {
+                return lancRecDet.valor;
+            }
+
+            return DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio == obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).Sum(x => x.valor);
+        }
+
         private double CalcularPrevisaoSaidasTotaisMes(DateTime data)
         {
             double saidatotal = 0;
             double saidasCategoria;
             double saidasMesCategoria;
-            
+
             foreach (Categoria categoria in DadosGerais.categorias)
             {
                 List<LancamentoRecorrente> lancRec = DadosGerais.lancamentosRecorrentes.Where(x => x.tipoLancamento == 0 && x.obrigatorio && x.chaveCategoria == categoria.chave && (x.dataFinal == DateTime.MinValue || MesMenorIgual(data, x.dataFinal))).ToList();
@@ -215,7 +235,7 @@ namespace OrganizacaoFinanceira
                 {
                     foreach (LancamentoRecorrente lanc in lancRec)
                     {
-                        LancamentoRecorrenteDetalhado lancRecDet = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.chaveLancRecorrente == lanc.chave && DateTime.Now.AddMonths(x.mes-1).Date == data.Date).FirstOrDefault();
+                        LancamentoRecorrenteDetalhado lancRecDet = DadosGerais.lancamentosRecorrentesDetalhado.Where(x => x.chaveLancRecorrente == lanc.chave && DateTime.Now.AddMonths(x.mes - 1).Date == data.Date).FirstOrDefault();
                         if (lancRecDet != null)
                         {
                             valor += lancRecDet.valor;
@@ -224,11 +244,11 @@ namespace OrganizacaoFinanceira
                         {
                             valor += lanc.valor;
                         }
-                    }                    
+                    }
                 }
                 else
                 {
-                    valor = lancRec.Sum(x=>x.valor);
+                    valor = lancRec.Sum(x => x.valor);
                 }
 
                 saidatotal += valor;
@@ -324,10 +344,10 @@ namespace OrganizacaoFinanceira
                     MessageBox.Show("Erro ao gravar lançamento recorrente.\n" + response.Exception);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Erro ao gravar lançamento recorrente.\n" + ex.Message);
-            }            
+            }
         }
 
         private async Task SalvarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado, bool mostrarMensagem)
@@ -363,7 +383,7 @@ namespace OrganizacaoFinanceira
             }
         }
 
-        private async Task AtualizarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado, bool mostrarMensagem)
+        private async Task AtualizarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado, bool mostrarMensagem, bool atualizarTela = true)
         {
             if (lancamentoDetalhado == null || lancamentoDetalhado.chave == 0)
                 return;
@@ -384,7 +404,7 @@ namespace OrganizacaoFinanceira
                     return; // Parar o processo em caso de erro
                 }
                 if (mostrarMensagem) MessageBox.Show("Lançamentos recorrentes detalhados atualizados com sucesso!");
-                AtualizarTela();
+                if (atualizarTela) AtualizarTela();
             }
             catch (Exception ex)
             {
@@ -428,7 +448,7 @@ namespace OrganizacaoFinanceira
                 panelLancRecorrente.Visible = true;
                 int x = (this.ClientSize.Width - panelLancRecorrente.Size.Width) / 2;
                 int y = (this.ClientSize.Height - panelLancRecorrente.Size.Height) / 2;
-                panelLancRecorrente.Location = new Point(x, y);                
+                panelLancRecorrente.Location = new Point(x, y);
 
                 tbxIdLancRecorrente.Text = lancRecorrenteSelecionado.chave.ToString();
                 tbxDescLancRecorrente.Text = lancRecorrenteSelecionado.descricao.ToString();
@@ -438,7 +458,8 @@ namespace OrganizacaoFinanceira
                 cbxCategoriaLancRecorrente.SelectedValue = lancRecorrenteSelecionado.chaveCategoria;
                 chkLancObrigatorio.Checked = lancRecorrenteSelecionado.obrigatorio;
                 chkMesFixo.Checked = lancRecorrenteSelecionado.usaMesFixo;
-                if (lancRecorrenteSelecionado.dataFinal != null && lancRecorrenteSelecionado.dataFinal.Date > DateTime.MinValue) {
+                if (lancRecorrenteSelecionado.dataFinal != null && lancRecorrenteSelecionado.dataFinal.Date > DateTime.MinValue)
+                {
                     dtpMesFinal.Value = lancRecorrenteSelecionado.dataFinal;
                 }
 
@@ -506,7 +527,7 @@ namespace OrganizacaoFinanceira
                 this.Cursor = Cursors.WaitCursor;
 
                 // Caso não haja detalhes, criar novos registros
-                int qtdM = lancRecorrenteSelecionado.tipoLancamento == 0? qtdMeses+1: 13;
+                int qtdM = lancRecorrenteSelecionado.tipoLancamento == 0 ? qtdMeses + 1 : 13;
 
                 for (byte i = 1; i < qtdM; i++)
                 {
@@ -534,7 +555,7 @@ namespace OrganizacaoFinanceira
                                                           MessageBoxButtons.YesNo,
                                                           MessageBoxIcon.Question);
 
-                int qtdM = lancRecorrenteSelecionado.tipoLancamento == 0 ? qtdMeses+1 : 13;
+                int qtdM = lancRecorrenteSelecionado.tipoLancamento == 0 ? qtdMeses + 1 : 13;
 
                 if (result == DialogResult.Yes)
                 {
@@ -543,7 +564,7 @@ namespace OrganizacaoFinanceira
 
                     // Caso não haja detalhes, criar novos registros
                     for (byte i = 1; i < qtdM; i++)
-                    {                       
+                    {
                         var detalhe = detalhesExistentes.Where(x => x.mes == i).FirstOrDefault();
                         if (detalhe != null)
                         {
@@ -563,7 +584,7 @@ namespace OrganizacaoFinanceira
                             DadosGerais.lancamentosRecorrentesDetalhado.Add(detalhe);
                         }
 
-                        await AtualizarLancamentosRecorrentesDetalhadosAsync(detalhe, false);
+                        await AtualizarLancamentosRecorrentesDetalhadosAsync(detalhe, false, false);
                     }
 
                     this.Enabled = true;
@@ -697,7 +718,7 @@ namespace OrganizacaoFinanceira
                         {
                             if (e.Value is byte mesSaida && mesSaida >= 0 && mesSaida <= qtdMeses)
                             {
-                                DateTime dataReferencia = DateTime.Now.AddMonths(mesSaida-1);
+                                DateTime dataReferencia = DateTime.Now.AddMonths(mesSaida - 1);
                                 e.Value = dataReferencia.ToString("MM-yyyy");
                                 e.FormattingApplied = true;
                             }
@@ -1084,6 +1105,31 @@ namespace OrganizacaoFinanceira
 
             CarregarEntradaSaidaExtra();
             InicializarMesesFuturos();
+        }
+
+        private async void dgvLancRecorrenteDetalhado_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (dgvLancRecorrenteDetalhado.SelectedRows.Count > 0)
+                {
+                    LancamentoRecorrenteDetalhado lancRecorrenteDetSelecionado = dgvLancRecorrenteDetalhado.SelectedRows[0].DataBoundItem as LancamentoRecorrenteDetalhado;
+
+                    this.Enabled = false;
+                    FirebaseResponse response = await DadosGerais.client.DeleteTaskAsync("LancamentosRecorrentesDetalhados/" + "chave-" + lancRecorrenteDetSelecionado.chave);
+                    this.Enabled = true;
+
+                    if (response.Exception == null)
+                    {
+                        DadosGerais.lancamentosRecorrentesDetalhado = await CRUD.BuscarLancamentosRecorrentesDetalhado();
+                        FiltrarLancamentosRecorrentesDetalhado();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Falha ao excluir a lançamento recorrente detalhado.");
+                    }
+                }
+            }
         }
     }
 }

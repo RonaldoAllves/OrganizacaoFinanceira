@@ -654,6 +654,7 @@
             dgvLancRecorrenteDetalhado.CellFormatting += dgvLancRecorrenteDetalhado_CellFormatting;
             dgvLancRecorrenteDetalhado.CellValidating += dgvLancRecorrenteDetalhado_CellValidating;
             dgvLancRecorrenteDetalhado.CellValueChanged += dgvLancRecorrenteDetalhado_CellValueChanged;
+            dgvLancRecorrenteDetalhado.KeyDown += dgvLancRecorrenteDetalhado_KeyDown;
             // 
             // panelEntradaSaidaExtra
             // 
