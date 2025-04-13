@@ -350,7 +350,7 @@ namespace OrganizacaoFinanceira
             }
         }
 
-        private async Task SalvarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado, bool mostrarMensagem)
+        private async Task SalvarLancamentosRecorrentesDetalhadosAsync(LancamentoRecorrenteDetalhado lancamentoDetalhado, bool mostrarMensagem, bool atualizarTela = true)
         {
             if (lancamentoDetalhado == null)
                 return;
@@ -375,7 +375,7 @@ namespace OrganizacaoFinanceira
                     return; // Parar o processo em caso de erro
                 }
                 if (mostrarMensagem) MessageBox.Show("Lançamentos recorrentes detalhados gravados com sucesso!");
-                AtualizarTela();
+                if (atualizarTela) AtualizarTela();
             }
             catch (Exception ex)
             {
@@ -539,7 +539,7 @@ namespace OrganizacaoFinanceira
                         tipoLancamento = lancRecorrenteSelecionado.tipoLancamento,
                         mes = i
                     };
-                    await SalvarLancamentosRecorrentesDetalhadosAsync(novoDetalhe, false);
+                    await SalvarLancamentosRecorrentesDetalhadosAsync(novoDetalhe, false, false);
                     DadosGerais.lancamentosRecorrentesDetalhado.Add(novoDetalhe);
                 }
 
@@ -600,8 +600,6 @@ namespace OrganizacaoFinanceira
 
             AtualizarTela();
         }
-
-
 
         private void dgvLancamentosRecorrentes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
