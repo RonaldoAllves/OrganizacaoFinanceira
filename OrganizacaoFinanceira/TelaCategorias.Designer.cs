@@ -141,6 +141,8 @@
             dgvCategorias.TabIndex = 99;
             dgvCategorias.CellDoubleClick += dgvCategorias_CellDoubleClick;
             dgvCategorias.CellFormatting += dgvCategorias_CellFormatting;
+            dgvCategorias.CellParsing += dgvCategorias_CellParsing;
+            dgvCategorias.CellValueChanged += dgvCategorias_CellValueChanged;
             dgvCategorias.ColumnWidthChanged += dgvCategorias_ColumnWidthChanged;
             dgvCategorias.SelectionChanged += dgvCategorias_SelectionChanged;
             dgvCategorias.KeyDown += dgvCategorias_KeyDown;

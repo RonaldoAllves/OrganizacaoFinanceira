@@ -238,7 +238,7 @@ namespace OrganizacaoFinanceira.Dados
                 if (firebaseResponse.Body == "null") return new SortableBindingList<Categoria>();
 
                 chavesCategorias = firebaseResponse.ResultAs<Dictionary<string, Categoria>>();
-                categoriasAux = chavesCategorias.Select(x => x.Value).ToList();
+                categoriasAux = chavesCategorias.Select(x => x.Value).OrderBy(x=>x.prioridade).ToList();
 
                 return new SortableBindingList<Categoria>(categoriasAux);
             }

@@ -495,6 +495,7 @@ namespace OrganizacaoFinanceira
                 bindingSourceLancRecorrentesDetalhado.DataSource = new SortableBindingList<LancamentoRecorrenteDetalhado>();
                 funcoesGrid.ConfigurarGrid(dgvLancRecorrenteDetalhado, bindingSourceLancRecorrentesDetalhado, funcoesGrid.ColunasGridLancamentosRecorrentesDetalhado(), false);
                 dgvLancRecorrenteDetalhado.Columns[1].ReadOnly = false;
+                dgvLancRecorrenteDetalhado.MultiSelect = true;
                 return;
             }
 
@@ -1111,23 +1112,46 @@ namespace OrganizacaoFinanceira
             {
                 if (dgvLancRecorrenteDetalhado.SelectedRows.Count > 0)
                 {
-                    LancamentoRecorrenteDetalhado lancRecorrenteDetSelecionado = dgvLancRecorrenteDetalhado.SelectedRows[0].DataBoundItem as LancamentoRecorrenteDetalhado;
+                    var confirmResult = MessageBox.Show("Deseja realmente excluir os lançamentos selecionados?",
+                                                        "Confirmar Exclusão",
+                                                        MessageBoxButtons.YesNo,
+                                                        MessageBoxIcon.Question);
 
-                    this.Enabled = false;
-                    FirebaseResponse response = await DadosGerais.client.DeleteTaskAsync("LancamentosRecorrentesDetalhados/" + "chave-" + lancRecorrenteDetSelecionado.chave);
-                    this.Enabled = true;
+                    if (confirmResult == DialogResult.Yes)
+                    {
+                        this.Enabled = false;
 
-                    if (response.Exception == null)
-                    {
-                        DadosGerais.lancamentosRecorrentesDetalhado = await CRUD.BuscarLancamentosRecorrentesDetalhado();
-                        FiltrarLancamentosRecorrentesDetalhado();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Falha ao excluir a lançamento recorrente detalhado.");
+                        bool houveErro = false;
+
+                        foreach (DataGridViewRow row in dgvLancRecorrenteDetalhado.SelectedRows)
+                        {
+                            var lancRecorrenteDet = row.DataBoundItem as LancamentoRecorrenteDetalhado;
+                            if (lancRecorrenteDet != null)
+                            {
+                                var response = await DadosGerais.client.DeleteTaskAsync("LancamentosRecorrentesDetalhados/" + "chave-" + lancRecorrenteDet.chave);
+                                if (response.Exception != null)
+                                {
+                                    houveErro = true;
+                                }
+                            }
+                        }
+
+                        this.Enabled = true;
+
+                        if (!houveErro)
+                        {
+                            DadosGerais.lancamentosRecorrentesDetalhado = await CRUD.BuscarLancamentosRecorrentesDetalhado();
+                            FiltrarLancamentosRecorrentesDetalhado();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Alguns lançamentos não puderam ser excluídos.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
             }
         }
+
+
     }
 }

@@ -147,6 +147,8 @@
                 ("descricao", "Descrição", DataGridViewContentAlignment.MiddleCenter, 150, false),
                 ("verbaPadrao", "Verba padrão", DataGridViewContentAlignment.MiddleCenter, 150, true),
                 ("saldoTotal", "Saldo geral", DataGridViewContentAlignment.MiddleCenter, 150, true),
+                ("prioridade", "Prioridade", DataGridViewContentAlignment.MiddleCenter, 150, false),
+                ("gastoFlexivel", "Gasto flexível", DataGridViewContentAlignment.MiddleCenter, 150, false),
             };
             return colunas;
         }

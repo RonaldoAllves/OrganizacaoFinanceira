@@ -89,6 +89,8 @@ namespace OrganizacaoFinanceira
 
             funcoesGrid.ConfigurarGrid(dgvCategorias, bindingSourceCategorias, funcoesGrid.ColunasGridCategorias(), false);
             bindingSourceCategorias.DataSource = DadosGerais.categorias;
+            dgvCategorias.Columns[3].ReadOnly = false;
+            dgvCategorias.Columns[4].ReadOnly = false;
 
             funcoesGrid.ConfigurarGrid(dgvMeses, bindingSourceMeses, funcoesGrid.ColunasGridMeses(), false);
             FiltrarMeses();
@@ -199,7 +201,7 @@ namespace OrganizacaoFinanceira
             foreach (Mes mes in mesesDaCategoria)
             {
                 CRUD.PreencherValoresMes(mes);
-            }            
+            }
 
             bindingSourceMeses.DataSource = mesesDaCategoria;
         }
@@ -470,7 +472,7 @@ namespace OrganizacaoFinanceira
                 novo.saldoTotal = novo.saldoGeral + saidaFutura;
 
                 verbasCategorias.Add(novo);
-            }            
+            }
 
             tbxNaoDistribuidoMes.Text = (DadosGerais.entradas.Where(x => x.mesReferencia.Month == mes.Month && x.mesReferencia.Year == mes.Year).Sum(x => x.valor) - DadosGerais.meses.Where(x => x.mes.Month == mes.Month && x.mes.Year == mes.Year).Select(x => x.verbaMes).Sum()).ToString("N2");
             tbxParcelasFuturas.Text = DadosGerais.saidas.Where(x => x.mesReferencia.Year > mes.Year || (x.mesReferencia.Year == mes.Year && x.mesReferencia.Month > mes.Month)).Select(x => x.valorParcela).Sum().ToString("N2");
@@ -479,7 +481,7 @@ namespace OrganizacaoFinanceira
             //DateTime primeiroMes = DadosGerais.meses.Min(x => x.mes);
             //double valorInicial = -1 * (DadosGerais.entradas.Where(x => x.mesReferencia.Month == primeiroMes.Month && x.mesReferencia.Year == primeiroMes.Year).Sum(x => x.valor) - DadosGerais.meses.Where(x => x.mes.Month == primeiroMes.Month && x.mes.Year == primeiroMes.Year).Select(x => x.verbaMes).Sum());
             //valorInicial+= 1444.21; //coloquei esse valor fixo, pois no primeiro mês 01/2024 eu reduzi a verba dos eletronicos/moveis.
-            tbxNaoDistribuido.Text = ((DadosGerais.entradas.Where(x=> DataMenorIgual(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valor) + DadosGerais.valorInicial) - DadosGerais.meses.Where(x => DataMenorIgual(x.mes.Date, DateTime.Now.Date)).Select(x => x.verbaMes).Sum()).ToString("N2");
+            tbxNaoDistribuido.Text = ((DadosGerais.entradas.Where(x => DataMenorIgual(x.mesReferencia.Date, DateTime.Now.Date)).Sum(x => x.valor) + DadosGerais.valorInicial) - DadosGerais.meses.Where(x => DataMenorIgual(x.mes.Date, DateTime.Now.Date)).Select(x => x.verbaMes).Sum()).ToString("N2");
 
             AdicionarLinhaTotal(verbasCategorias);
             bindingSourceVerbasCategorias.DataSource = verbasCategorias;
@@ -548,6 +550,14 @@ namespace OrganizacaoFinanceira
                     e.CellStyle.Font = new Font(e.CellStyle.Font, FontStyle.Regular);
                 }
             }
+
+            if (dgvCategorias.Columns[e.ColumnIndex].DataPropertyName == "gastoFlexivel" && e.Value != null && e.Value is bool)
+            {
+                bool valor = (bool)e.Value;
+                e.Value = valor ? "Sim" : "Não";
+                e.FormattingApplied = true;
+            }
+
         }
 
         private void dgvVerbasPorMes_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -789,6 +799,76 @@ namespace OrganizacaoFinanceira
         {
             await CRUD.SalvarObsMes(obsMes);
             DadosGerais.obsMes = await CRUD.BuscarObsMeses();
+        }
+
+        private async void dgvCategorias_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // Verificar se a célula alterada é da coluna que queremos monitorar
+            if (dgvCategorias.Columns[e.ColumnIndex].DataPropertyName == "prioridade" ||
+                dgvCategorias.Columns[e.ColumnIndex].DataPropertyName == "gastoFlexivel")
+            {
+                // Obter o objeto que foi alterado (linha)
+                var linha = dgvCategorias.Rows[e.RowIndex];
+                var objetoAlterado = linha.DataBoundItem as Categoria;
+
+                if (objetoAlterado != null)
+                {
+                    this.Cursor = Cursors.WaitCursor;
+                    await AtualizarPrioridadeCategoria(objetoAlterado);
+                    this.Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private async Task AtualizarPrioridadeCategoria(Categoria categoria)
+        {
+            this.Enabled = false;
+            SetResponse response = await DadosGerais.client.SetTaskAsync("Categorias/" + "chave-" + categoria.chave.ToString(), categoria);
+
+            if (response.Exception == null)
+            {
+                MessageBox.Show("Categoria gravada.");
+
+                DadosGerais.categorias = await CRUD.BuscarCategorias();
+                funcoesGrid.ConfigurarGrid(dgvCategorias, bindingSourceCategorias, funcoesGrid.ColunasGridCategorias(), false);
+                bindingSourceCategorias.DataSource = DadosGerais.categorias;
+                dgvCategorias.Columns[3].ReadOnly = false;
+                dgvCategorias.Columns[4].ReadOnly = false;
+
+                AtualizarCategorias();
+            }
+            else
+            {
+                MessageBox.Show("Erro ao gravar categoria.\n" + response.Exception);
+            }
+            this.Enabled = true;
+        }
+
+        private void dgvCategorias_CellParsing(object sender, DataGridViewCellParsingEventArgs e)
+        {
+            if (dgvCategorias.Columns[e.ColumnIndex].DataPropertyName == "gastoFlexivel")
+            {
+                if (e.Value != null)
+                {
+                    string texto = e.Value.ToString().Trim().ToLower();
+
+                    if (texto == "sim")
+                    {
+                        e.Value = true;
+                        e.ParsingApplied = true;
+                    }
+                    else if (texto == "não" || texto == "nao")
+                    {
+                        e.Value = false;
+                        e.ParsingApplied = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Digite 'Sim' ou 'Não'.", "Valor inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        e.ParsingApplied = false;
+                    }
+                }
+            }
         }
     }
 }
